@@ -9,55 +9,79 @@
 #import "MQTTInspectorDetailViewController.h"
 
 @interface MQTTInspectorDetailViewController ()
+@property (weak, nonatomic) IBOutlet UILabel *url;
+@property (weak, nonatomic) IBOutlet UILabel *error;
+@property (weak, nonatomic) IBOutlet UILabel *event;
+@property (weak, nonatomic) IBOutlet UITableView *messages;
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
-- (void)configureView;
+
+@property (strong, nonatomic) MQTTSession *mqttSession;
 @end
 
 @implementation MQTTInspectorDetailViewController
 
+- (IBAction)connect:(UIButton *)sender {
+    self.mqttSession = [[MQTTSession alloc] initWithClientId:self.session.clientid
+                                                    userName:self.session.user
+                                                    password:self.session.passwd
+                                                   keepAlive:[self.session.keepalive intValue]
+                                                cleanSession:[self.session.cleansession boolValue]
+                                                        will:NO
+                                                   willTopic:nil
+                                                     willMsg:nil
+                                                     willQoS:0
+                                              willRetainFlag:NO
+                                                     runLoop:[NSRunLoop currentRunLoop]
+                                                     forMode:NSRunLoopCommonModes];
+    self.mqttSession.delegate = self;
+
+    [self.mqttSession connectToHost:self.session.host port:[self.session.port integerValue] usingSSL:[self.session.tls boolValue]];
+}
+
+- (IBAction)disconnect:(UIButton *)sender {
+    [self.mqttSession close];
+}
 #pragma mark - Managing the detail item
 
-- (void)setDetailItem:(id)newDetailItem
+- (void)setSession:(Session *)session
 {
-    if (_detailItem != newDetailItem) {
-        _detailItem = newDetailItem;
-        
-        // Update the view.
-        [self configureView];
-    }
-
+    _session = session;
+    
+    self.url.text = [session description];
+    
     if (self.masterPopoverController != nil) {
         [self.masterPopoverController dismissPopoverAnimated:YES];
     }        
 }
 
-- (void)configureView
+#pragma mark - MQTTSessionDelegate
+- (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
 {
-    // Update the user interface for the detail item.
-
-    if (self.detailItem) {
-        self.detailDescriptionLabel.text = [[self.detailItem valueForKey:@"timeStamp"] description];
-    }
+    const NSDictionary *events = @{
+                                   @(MQTTSessionEventConnected): @"connected",
+                                   @(MQTTSessionEventConnectionRefused): @"connection refused",
+                                   @(MQTTSessionEventConnectionClosed): @"connection closed",
+                                   @(MQTTSessionEventConnectionError): @"connection error",
+                                   @(MQTTSessionEventProtocolError): @"protocoll error"
+                                   };
+        
+    self.event.text = [NSString stringWithFormat:@"%@ (%d)",  events[@(eventCode)], eventCode];
+    if (error) self.error.text = [error description];
 }
-
-- (void)viewDidLoad
+- (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic
 {
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-    [self configureView];
+    
 }
-
-- (void)didReceiveMemoryWarning
+- (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
 }
 
 #pragma mark - Split view
 
 - (void)splitViewController:(UISplitViewController *)splitController willHideViewController:(UIViewController *)viewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)popoverController
 {
-    barButtonItem.title = NSLocalizedString(@"Master", @"Master");
+    barButtonItem.title = NSLocalizedString(@"Setup", @"Setup");
     [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
     self.masterPopoverController = popoverController;
 }

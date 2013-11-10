@@ -1,9 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="Test1.xcdatamodel" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="Event">
-        <attribute name="timeStamp" optional="YES" attributeType="Date"/>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3400" systemVersion="13A603" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Message" representedClassName="Message" syncable="YES">
+        <attribute name="data" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="dup" optional="YES" attributeType="Boolean" defaultValueString="0" syncable="YES"/>
+        <attribute name="length" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="outbound" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="qos" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="retained" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="belongsTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Session" inverseName="hasMesssages" inverseEntity="Session" syncable="YES"/>
     </entity>
+    <entity name="Publication" syncable="YES"/>
+    <entity name="Session" representedClassName="Session" syncable="YES">
+        <attribute name="auth" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="cleansession" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="clientid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="host" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="keepalive" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="passwd" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="port" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="tls" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="user" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="hasMesssages" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Message" inverseName="belongsTo" inverseEntity="Message" syncable="YES"/>
+    </entity>
+    <entity name="Subscription" syncable="YES"/>
     <elements>
-        <element name="Event" positionX="261" positionY="189" width="128" height="60"/>
+        <element name="Session" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Subscription" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Publication" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Message" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

@@ -13,9 +13,7 @@
 #import <CoreData/CoreData.h>
 
 @interface MQTTInspectorMasterViewController : UITableViewController <NSFetchedResultsControllerDelegate>
-
-@property (strong, nonatomic) MQTTInspectorDetailViewController *detailViewController;
-
+@property (weak, nonatomic) MQTTInspectorDetailViewController *detailViewController;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 

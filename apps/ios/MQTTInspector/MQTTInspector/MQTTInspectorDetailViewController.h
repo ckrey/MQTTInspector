@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Session+Create.h"
+#import "MQTTSession.h"
 
-@interface MQTTInspectorDetailViewController : UIViewController <UISplitViewControllerDelegate>
 
-@property (strong, nonatomic) id detailItem;
+@interface MQTTInspectorDetailViewController : UIViewController <UISplitViewControllerDelegate, MQTTSessionDelegate>
 
-@property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
+@property (strong, nonatomic) Session *session;
+
 @end

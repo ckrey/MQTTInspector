@@ -27,6 +27,10 @@
         UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
         MQTTInspectorMasterViewController *controller = (MQTTInspectorMasterViewController *)masterNavigationController.topViewController;
         controller.managedObjectContext = self.managedObjectContext;
+
+        UINavigationController *detailNavigationController = [splitViewController.viewControllers lastObject];
+        MQTTInspectorDetailViewController *detailController = (MQTTInspectorDetailViewController *)detailNavigationController.topViewController;
+        controller.detailViewController = detailController;
     } else {
         UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
         MQTTInspectorMasterViewController *controller = (MQTTInspectorMasterViewController *)navigationController.topViewController;
@@ -92,6 +96,7 @@
         _managedObjectContext = [[NSManagedObjectContext alloc] init];
         [_managedObjectContext setPersistentStoreCoordinator:coordinator];
     }
+    
     return _managedObjectContext;
 }
 
