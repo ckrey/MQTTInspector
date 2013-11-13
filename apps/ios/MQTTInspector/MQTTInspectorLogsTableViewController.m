@@ -183,7 +183,7 @@
                            [NSDateFormatter localizedStringFromDate:message.timestamp
                                                           dateStyle:NSDateFormatterShortStyle
                                                           timeStyle:NSDateFormatterMediumStyle]];
-    cell.detailTextLabel.text = [self dataToString:message.data.bytes];
+    cell.detailTextLabel.text = [self dataToString:message.data];
 }
 
 - (NSString *)dataToString:(NSData *)data
