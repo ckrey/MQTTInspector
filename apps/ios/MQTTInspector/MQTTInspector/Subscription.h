@@ -1,5 +1,5 @@
 //
-//  Message.h
+//  Subscription.h
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 12.11.13.
@@ -11,11 +11,10 @@
 
 @class Session;
 
-@interface Message : NSManagedObject
+@interface Subscription : NSManagedObject
 
-@property (nonatomic, retain) NSData * data;
+@property (nonatomic, retain) NSNumber * qos;
 @property (nonatomic, retain) NSNumber * state;
-@property (nonatomic, retain) NSDate * timestamp;
 @property (nonatomic, retain) NSString * topic;
 @property (nonatomic, retain) Session *belongsTo;
 

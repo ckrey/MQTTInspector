@@ -1,19 +1,19 @@
 //
-//  Message.m
+//  Topic.m
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 12.11.13.
 //  Copyright (c) 2013 Christoph Krey. All rights reserved.
 //
 
-#import "Message.h"
+#import "Topic.h"
 #import "Session.h"
 
 
-@implementation Message
+@implementation Topic
 
+@dynamic count;
 @dynamic data;
-@dynamic state;
 @dynamic timestamp;
 @dynamic topic;
 @dynamic belongsTo;

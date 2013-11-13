@@ -259,6 +259,10 @@
     }
 }
 
+- (void)encoder:(MQTTEncoder *)sender sending:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped data:(NSData *)data{
+    [self.delegate sending:type qos:qos retained:retained duped:duped data:data];
+}
+
 - (void)decoder:(MQTTDecoder*)sender handleEvent:(MQTTDecoderEvent)eventCode error:(NSError *)error
 {
     MQTTSessionEvent event;
@@ -278,6 +282,8 @@
 
 - (void)decoder:(MQTTDecoder*)sender newMessage:(MQTTMessage*)msg
 {
+    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag data:msg.data];
+    
     switch (self.status) {
         case MQTTSessionStatusConnecting:
             switch ([msg type]) {

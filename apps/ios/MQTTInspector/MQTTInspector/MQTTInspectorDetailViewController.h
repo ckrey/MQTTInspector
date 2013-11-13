@@ -11,8 +11,11 @@
 #import "MQTTSession.h"
 
 
+
 @interface MQTTInspectorDetailViewController : UIViewController <UISplitViewControllerDelegate, MQTTSessionDelegate>
 
 @property (strong, nonatomic) Session *session;
+@property (strong, nonatomic) MQTTSession *mqttSession;
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @end

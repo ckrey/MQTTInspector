@@ -1,20 +1,19 @@
 //
-//  Message.m
+//  Subscription.m
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 12.11.13.
 //  Copyright (c) 2013 Christoph Krey. All rights reserved.
 //
 
-#import "Message.h"
+#import "Subscription.h"
 #import "Session.h"
 
 
-@implementation Message
+@implementation Subscription
 
-@dynamic data;
+@dynamic qos;
 @dynamic state;
-@dynamic timestamp;
 @dynamic topic;
 @dynamic belongsTo;
 

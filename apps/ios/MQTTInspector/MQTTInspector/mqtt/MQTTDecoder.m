@@ -120,6 +120,10 @@
                                                  retainFlag:retainFlag
                                                     dupFlag:isDuplicate
                                                        data:self.dataBuffer];
+#ifdef DEBUG
+                    NSLog(@"MQTTDecoder received (%d)=%@", self.dataBuffer.length, [self.dataBuffer description]);
+#endif
+
                     [self.delegate decoder:self newMessage:msg];
                     self.dataBuffer = NULL;
                     self.status = MQTTDecoderStatusDecodingHeader;

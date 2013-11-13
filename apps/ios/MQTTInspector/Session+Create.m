@@ -24,7 +24,13 @@
     Session *session = nil;
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Session"];
-    request.predicate = [NSPredicate predicateWithFormat:@"host = %@ AND port = %d AND user = %@", host, port, user];
+    request.predicate = [NSPredicate predicateWithFormat:@"host = %@ AND port = %@ AND user = %@ AND tls = %@ and auth = %@ and passwd = %@",
+                         host,
+                         @(port),
+                         user,
+                         @(tls),
+                         @(auth),
+                         passwd];
     
     NSError *error = nil;
     
@@ -48,13 +54,18 @@
         } else {
             session = [matches lastObject];
         }
+        session.state = @(-1);
     }
     
     return session;
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@@%@:%@", self.user, self.host, self.port];
+    return [NSString stringWithFormat:@"%@%@%@:%@?cid=%@&cln=%@&kpa=%@",
+            [self.tls boolValue] ? @"mqtts://" : @"mqtt://",
+            [self.auth boolValue] ? [NSString stringWithFormat:@"%@:%@@", self.user, self.passwd] : @"",
+            self.host, self.port,
+            self.clientid, self.cleansession, self.keepalive];
 }
 
 @end

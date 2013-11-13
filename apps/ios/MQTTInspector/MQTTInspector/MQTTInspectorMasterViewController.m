@@ -11,6 +11,8 @@
 #import "MQTTInspectorDetailViewController.h"
 
 #import "Session+Create.h"
+#import "Subscription+Create.h"
+#import "Publication+Create.h"
 
 @interface MQTTInspectorMasterViewController ()
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -20,9 +22,34 @@
 
 - (void)viewDidLoad
 {
-    Session *session;
-    session = [Session sessionWithHost:@"roo.jpmens.net" port:1883 tls:NO auth:YES user:@"dt27" passwd:@"foobar" clientid:@"MQTTInspector" cleansession:NO keepalive:60 inManagedObjectContext:self.managedObjectContext];
-    session = [Session sessionWithHost:@"192.168.178.38" port:1883 tls:NO auth:YES user:@"dt27" passwd:@"foobar" clientid:@"A1001" cleansession:NO keepalive:60 inManagedObjectContext:self.managedObjectContext];
+    /* DEMO DB SETUP */
+    Session *session1 = [Session sessionWithHost:@"roo.jpmens.net" port:1883 tls:NO auth:NO user:@"" passwd:@"" clientid:@"MQTTInspector" cleansession:NO keepalive:60 inManagedObjectContext:self.managedObjectContext];
+    Session *session2 = [Session sessionWithHost:@"http://fzvtoshindhfdqqo.myfritz.net" port:8883 tls:YES auth:YES user:@"dt27" passwd:@"xyz" clientid:@"MQTTInspector" cleansession:NO keepalive:60 inManagedObjectContext:self.managedObjectContext];
+    Session *session3 = [Session sessionWithHost:@"test.mosquitto.org" port:1883 tls:NO auth:NO user:@"" passwd:@"" clientid:@"MQTTInspector" cleansession:NO keepalive:60 inManagedObjectContext:self.managedObjectContext];
+    
+    Subscription *subscription;
+    subscription = [Subscription subscriptionWithTopic:@"#" qos:2 session:session1 inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"loc/#" qos:2 session:session1 inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"mqttitude/#" qos:2 session:session1 inManagedObjectContext:self.managedObjectContext];
+    
+    subscription = [Subscription subscriptionWithTopic:@"mqttitude/#" qos:2 session:session2 inManagedObjectContext:self.managedObjectContext];
+
+    subscription = [Subscription subscriptionWithTopic:@"#" qos:2 session:session3 inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"loc/#" qos:2 session:session3 inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"mqttitude/#" qos:2 session:session3 inManagedObjectContext:self.managedObjectContext];
+
+    Publication *publication;
+    publication = [Publication publicationWithTopic:@"mqttitude/dt27/inspector1" qos:0 retained:NO data:[@"MQTTInspector" dataUsingEncoding:NSUTF8StringEncoding] session:session1 inManagedObjectContext:self.managedObjectContext];
+    publication = [Publication publicationWithTopic:@"mqttitude/dt27/inspector2" qos:0 retained:NO data:[@"MQTTInspector" dataUsingEncoding:NSUTF8StringEncoding] session:session1 inManagedObjectContext:self.managedObjectContext];
+    publication = [Publication publicationWithTopic:@"mqttitude/dt27/inspector3" qos:0 retained:NO data:[@"MQTTInspector" dataUsingEncoding:NSUTF8StringEncoding] session:session1 inManagedObjectContext:self.managedObjectContext];
+    
+    publication = [Publication publicationWithTopic:@"mqttitude/dt27/inspector" qos:0 retained:NO data:[@"MQTTInspector" dataUsingEncoding:NSUTF8StringEncoding] session:session2 inManagedObjectContext:self.managedObjectContext];
+    
+    publication = [Publication publicationWithTopic:@"mqttitude/dt27/inspector3" qos:0 retained:NO data:[@"MQTTInspector" dataUsingEncoding:NSUTF8StringEncoding] session:session3 inManagedObjectContext:self.managedObjectContext];
+    publication = [Publication publicationWithTopic:@"mqttitude/dt27/inspector1" qos:0 retained:NO data:[@"MQTTInspector" dataUsingEncoding:NSUTF8StringEncoding] session:session3 inManagedObjectContext:self.managedObjectContext];
+    publication = [Publication publicationWithTopic:@"mqttitude/dt27/inspector2" qos:0 retained:NO data:[@"MQTTInspector" dataUsingEncoding:NSUTF8StringEncoding] session:session3 inManagedObjectContext:self.managedObjectContext];
+
+    self.detailViewController.managedObjectContext = self.managedObjectContext;
 }
 
 #pragma mark - Table View
@@ -71,23 +98,6 @@
 {
     // The table view should not be re-orderable.
     return NO;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        Session *session = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        self.detailViewController.session = session;
-    }
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:@"setSession:"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        Session *session = [[self fetchedResultsController] objectAtIndexPath:indexPath];
- //       [[segue destinationViewController] setDetailItem:object];
-    }
 }
 
 #pragma mark - Fetched results controller

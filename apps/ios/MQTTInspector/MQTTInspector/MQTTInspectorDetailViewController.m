@@ -7,74 +7,382 @@
 //
 
 #import "MQTTInspectorDetailViewController.h"
+#import "Message+Create.h"
+#import "Topic+Create.h"
+#import "Command+Create.h"
+#import "MQTTInspectorSessionsTableViewController.h"
+#import "MQTTInspectorLogsTableViewController.h"
+#import "MQTTInspectorTopicsTableViewController.h"
+#import "MQTTInspectorCommandsTableViewController.h"
+#import "MQTTInspectorSubsTableViewController.h"
+#import "MQTTInspectorPubsTableViewController.h"
 
 @interface MQTTInspectorDetailViewController ()
-@property (weak, nonatomic) IBOutlet UILabel *url;
-@property (weak, nonatomic) IBOutlet UILabel *error;
-@property (weak, nonatomic) IBOutlet UILabel *event;
+@property (weak, nonatomic) IBOutlet UIProgressView *progress;
+@property (weak, nonatomic) IBOutlet UITableView *sessions;
 @property (weak, nonatomic) IBOutlet UITableView *messages;
+@property (weak, nonatomic) IBOutlet UITableView *subs;
+@property (weak, nonatomic) IBOutlet UITableView *pubs;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *level;
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 
-@property (strong, nonatomic) MQTTSession *mqttSession;
+@property (strong, nonatomic) MQTTInspectorSessionsTableViewController *sessionsTVC;
+@property (strong, nonatomic) MQTTInspectorLogsTableViewController *logsTVC;
+@property (strong, nonatomic) MQTTInspectorTopicsTableViewController *topicsTVC;
+@property (strong, nonatomic) MQTTInspectorCommandsTableViewController *commandsTVC;
+@property (strong, nonatomic) MQTTInspectorSubsTableViewController *subsTVC;
+@property (strong, nonatomic) MQTTInspectorPubsTableViewController *pubsTVC;
+
+@property (strong, nonatomic) UIAlertView *alertView;
+@property (strong, nonatomic) NSManagedObjectContext *queueManagedObjectContext;
+@property (nonatomic) float queueIn;
+@property (nonatomic) float queueOut;
+
 @end
 
 @implementation MQTTInspectorDetailViewController
 
-- (IBAction)connect:(UIButton *)sender {
-    self.mqttSession = [[MQTTSession alloc] initWithClientId:self.session.clientid
-                                                    userName:self.session.user
-                                                    password:self.session.passwd
-                                                   keepAlive:[self.session.keepalive intValue]
-                                                cleanSession:[self.session.cleansession boolValue]
-                                                        will:NO
-                                                   willTopic:nil
-                                                     willMsg:nil
-                                                     willQoS:0
-                                              willRetainFlag:NO
-                                                     runLoop:[NSRunLoop currentRunLoop]
-                                                     forMode:NSRunLoopCommonModes];
-    self.mqttSession.delegate = self;
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.sessionsTVC = [[MQTTInspectorSessionsTableViewController alloc] init];
+    self.sessionsTVC.mother = self;
+    self.sessionsTVC.tableView = self.sessions;
+}
 
-    [self.mqttSession connectToHost:self.session.host port:[self.session.port integerValue] usingSSL:[self.session.tls boolValue]];
+- (IBAction)connect:(UIButton *)sender {
+    if (self.session) {
+        self.mqttSession = [[MQTTSession alloc] initWithClientId:self.session.clientid
+                                                        userName:self.session.user
+                                                        password:self.session.passwd
+                                                       keepAlive:[self.session.keepalive intValue]
+                                                    cleanSession:[self.session.cleansession boolValue]
+                                                            will:NO
+                                                       willTopic:nil
+                                                         willMsg:nil
+                                                         willQoS:0
+                                                  willRetainFlag:NO
+                                                         runLoop:[NSRunLoop currentRunLoop]
+                                                         forMode:NSRunLoopCommonModes];
+        self.mqttSession.delegate = self;
+        
+        [self.mqttSession connectToHost:self.session.host port:[self.session.port integerValue] usingSSL:[self.session.tls boolValue]];
+    }
 }
 
 - (IBAction)disconnect:(UIButton *)sender {
-    [self.mqttSession close];
+    if (self.session) {
+        [self.mqttSession close];
+    }
 }
-#pragma mark - Managing the detail item
 
+- (IBAction)viewChanged:(UISegmentedControl *)sender {
+    if (self.session) {
+        [self.logsTVC dismissViewControllerAnimated:YES completion:nil];
+        self.logsTVC = nil;
+        [self.topicsTVC dismissViewControllerAnimated:YES completion:nil];
+        self.topicsTVC = nil;
+        [self.commandsTVC dismissViewControllerAnimated:YES completion:nil];
+        self.commandsTVC = nil;
+        switch (self.level.selectedSegmentIndex) {
+            case 2:
+                self.commandsTVC = [[MQTTInspectorCommandsTableViewController alloc] init];
+                self.commandsTVC.mother = self;
+                self.commandsTVC.tableView = self.messages;
+                break;
+            case 1:
+                self.logsTVC = [[MQTTInspectorLogsTableViewController alloc] init];
+                self.logsTVC.mother = self;
+                self.logsTVC.tableView = self.messages;
+                break;
+            case 0:
+            default:
+                self.topicsTVC = [[MQTTInspectorTopicsTableViewController alloc] init];
+                self.topicsTVC.mother = self;
+                self.topicsTVC.tableView = self.messages;
+                break;
+        }
+    }
+}
+
+- (IBAction)clear:(UIButton *)sender {
+    if (self.session) {
+        for (Message *message in self.session.hasMesssages) {
+            [self.managedObjectContext deleteObject:message];
+        }
+        for (Topic *topic in self.session.hasTopics) {
+            [self.managedObjectContext deleteObject:topic];
+        }
+        for (Command *command in self.session.hasCommands) {
+            [self.managedObjectContext deleteObject:command];
+        }
+    }
+}
+
+#pragma mark - Managing the detail item
 - (void)setSession:(Session *)session
 {
-    _session = session;
-    
-    self.url.text = [session description];
+    if (_session != session) {
+        if (_session) {
+            if (self.mqttSession)
+            {
+                [self.mqttSession close];
+            }
+        }
+        _session = session;
+        
+        self.subsTVC = nil;
+        UITableViewController *stvc = [[UITableViewController alloc] init];
+        stvc.tableView = self.subs;
+        [stvc.tableView reloadData];
+        self.pubsTVC = nil;
+        UITableViewController *ptvc = [[UITableViewController alloc] init];
+        ptvc.tableView = self.pubs;
+        [ptvc.tableView reloadData];
+
+        [self viewChanged:nil];
+    }
     
     if (self.masterPopoverController != nil) {
         [self.masterPopoverController dismissPopoverAnimated:YES];
-    }        
+    }
+        
 }
 
 #pragma mark - MQTTSessionDelegate
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
 {
-    const NSDictionary *events = @{
-                                   @(MQTTSessionEventConnected): @"connected",
-                                   @(MQTTSessionEventConnectionRefused): @"connection refused",
-                                   @(MQTTSessionEventConnectionClosed): @"connection closed",
-                                   @(MQTTSessionEventConnectionError): @"connection error",
-                                   @(MQTTSessionEventProtocolError): @"protocoll error"
-                                   };
+    NSLog(@"handleEvent: %d %@", eventCode, [error description]);
+    self.session.state = @(eventCode);
+    if ([self.session.state intValue] == MQTTSessionEventConnected) {
+        self.subsTVC = [[MQTTInspectorSubsTableViewController alloc] init];
+        self.subsTVC.mother = self;
+        self.subsTVC.tableView = self.subs;
         
-    self.event.text = [NSString stringWithFormat:@"%@ (%d)",  events[@(eventCode)], eventCode];
-    if (error) self.error.text = [error description];
+        self.pubsTVC = [[MQTTInspectorPubsTableViewController alloc] init];
+        self.pubsTVC.mother = self;
+        self.pubsTVC.tableView = self.pubs;
+    } else {
+        self.subsTVC = nil;
+        UITableViewController *stvc = [[UITableViewController alloc] init];
+        stvc.tableView = self.subs;
+        [stvc.tableView reloadData];
+
+        self.pubsTVC = nil;
+        UITableViewController *ptvc = [[UITableViewController alloc] init];
+        ptvc.tableView = self.pubs;
+        [ptvc.tableView reloadData];
+
+    }
+    if (error) {
+        [self disappearingAlert:[error description]];
+    }
 }
+
+#define MAX_LOG 512
+#define MAX_TOPIC 256
+#define MAX_COMMAND 1024
+
+- (NSManagedObjectContext *)queueManagedObjectContext
+{
+    if (!_queueManagedObjectContext) {
+        _queueManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [_queueManagedObjectContext setParentContext:self.managedObjectContext];
+    }
+    return _queueManagedObjectContext;
+}
+- (void)startQueue
+{
+    self.queueIn += 1;
+    [self.progress setProgress:self.queueOut/self.queueIn animated:YES];
+}
+- (void)finishQueue
+{
+    [self performSelectorOnMainThread:@selector(showQueue) withObject:nil waitUntilDone:NO];
+}
+
+- (void)showQueue
+{
+    self.queueOut += 1;
+    if (self.queueIn == self.queueOut) {
+        self.queueIn = 1;
+        self.queueOut = 1;
+    }
+    [self.progress setProgress:self.queueOut/self.queueIn animated:YES];
+}
+
+- (void)limit:(NSArray *)array max:(int)max
+{
+#ifdef DEBUG
+    NSLog(@"#count %d/%d", [array count], max);
+#endif
+    
+    for (NSInteger i = [array count]; i > max; i--) {
+        NSManagedObject *object = array[i - 1];
+#ifdef DEBUG
+        NSLog(@"delete %@", object);
+#endif
+        [object.managedObjectContext deleteObject:object];
+    }
+}
+
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic
 {
-    
+    NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
+    NSString *host = self.session.host;
+    int port = [self.session.port intValue];
+    BOOL tls = [self.session.tls boolValue];
+    BOOL auth = [self.session.auth boolValue];
+    NSString *user = self.session.user;
+    NSString *passwd = self.session.passwd;
+    NSString *clientid = self.session.clientid;
+    BOOL cleansession = [self.session.cleansession boolValue];
+    int keepalive = [self.session.keepalive intValue];
+
+    [self startQueue];
+    [self.queueManagedObjectContext performBlock:^{
+#ifdef DEBUG
+        NSLog(@"newLog");
+#endif
+        Session *mySession = [Session sessionWithHost:host
+                                                 port:port
+                                                  tls:tls
+                                                 auth:auth
+                                                 user:user
+                                               passwd:passwd
+                                             clientid:clientid
+                                         cleansession:cleansession
+                                            keepalive:keepalive
+                               inManagedObjectContext:self.queueManagedObjectContext];
+
+        [Message messageAt:timestamp
+                     topic:topic
+                      data:data
+                   session:mySession
+    inManagedObjectContext:self.queueManagedObjectContext];
+        
+        [self limit:[Message allMessagesOfSession:mySession
+                           inManagedObjectContext:self.queueManagedObjectContext]
+                max:MAX_LOG];
+        
+#ifdef DEBUG
+        NSLog(@"newTopic");
+#endif
+        [Topic topicNamed:topic
+                timestamp:timestamp
+                     data:data
+                  session:mySession
+   inManagedObjectContext:self.queueManagedObjectContext];
+        
+        [self limit:[Topic allTopicsOfSession:mySession
+                       inManagedObjectContext:self.queueManagedObjectContext]
+                max:MAX_TOPIC];
+
+        [self.queueManagedObjectContext save:NULL];
+        [self finishQueue];
+    }];
 }
+
+- (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped data:(NSData *)data
+{
+    NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];    NSString *host = self.session.host;
+    int port = [self.session.port intValue];
+    BOOL tls = [self.session.tls boolValue];
+    BOOL auth = [self.session.auth boolValue];
+    NSString *user = self.session.user;
+    NSString *passwd = self.session.passwd;
+    NSString *clientid = self.session.clientid;
+    BOOL cleansession = [self.session.cleansession boolValue];
+    int keepalive = [self.session.keepalive intValue];
+
+    [self startQueue];
+    [self.queueManagedObjectContext performBlock:^{
+#ifdef DEBUG
+        NSLog(@"newCommand in");
+#endif
+        Session *mySession = [Session sessionWithHost:host
+                                                 port:port
+                                                  tls:tls
+                                                 auth:auth
+                                                 user:user
+                                               passwd:passwd
+                                             clientid:clientid
+                                         cleansession:cleansession
+                                            keepalive:keepalive
+                               inManagedObjectContext:self.queueManagedObjectContext];
+
+        [Command commandAt:timestamp
+                   inbound:YES
+                      type:type
+                     duped:duped
+                       qos:qos
+                  retained:retained
+                      data:data
+                   session:mySession
+    inManagedObjectContext:self.queueManagedObjectContext];
+        
+        [self limit:[Command allCommandsOfSession:mySession
+                           inManagedObjectContext:self.queueManagedObjectContext]
+                max:MAX_COMMAND];
+        
+        [self.queueManagedObjectContext save:NULL];
+        [self finishQueue];
+    }];
+}
+
+- (void)sending:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped data:(NSData *)data
+{
+    NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
+    NSString *host = self.session.host;
+    int port = [self.session.port intValue];
+    BOOL tls = [self.session.tls boolValue];
+    BOOL auth = [self.session.auth boolValue];
+    NSString *user = self.session.user;
+    NSString *passwd = self.session.passwd;
+    NSString *clientid = self.session.clientid;
+    BOOL cleansession = [self.session.cleansession boolValue];
+    int keepalive = [self.session.keepalive intValue];
+
+    [self startQueue];
+    [self.queueManagedObjectContext performBlock:^{
+#ifdef DEBUG
+        NSLog(@"newCommand out");
+#endif
+
+        Session *mySession = [Session sessionWithHost:host
+                                                 port:port
+                                                  tls:tls
+                                                 auth:auth
+                                                 user:user
+                                               passwd:passwd
+                                             clientid:clientid
+                                         cleansession:cleansession
+                                            keepalive:keepalive
+                               inManagedObjectContext:self.queueManagedObjectContext];
+
+        [Command commandAt:timestamp
+                   inbound:NO
+                      type:type
+                     duped:duped
+                       qos:qos
+                  retained:retained
+                      data:data
+                   session:mySession
+    inManagedObjectContext:self.queueManagedObjectContext];
+        
+        [self limit:[Command allCommandsOfSession:mySession
+                           inManagedObjectContext:self.queueManagedObjectContext]
+                max:MAX_COMMAND];
+        
+        [self.queueManagedObjectContext save:NULL];
+        [self finishQueue];
+    }];
+}
+
 - (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID
 {
-    
+    //
 }
 
 #pragma mark - Split view
@@ -92,5 +400,61 @@
     [self.navigationItem setLeftBarButtonItem:nil animated:YES];
     self.masterPopoverController = nil;
 }
+
+- (BOOL)splitViewController:(UISplitViewController *)svc shouldHideViewController:(UIViewController *)vc inOrientation:(UIInterfaceOrientation)orientation
+{
+    return YES;
+}
+
+#pragma mark - Alerts
+
+#define DISMISS_AFTER 1
+
+- (void)disappearingAlert:(NSString *)message
+{
+    [self anyAlert:message dismissAfter:DISMISS_AFTER];
+}
+
+- (void)alert:(NSString *)message
+{
+    [self anyAlert:message dismissAfter:0];
+}
+
+- (void)anyAlert:(NSString *)message dismissAfter:(NSTimeInterval)interval
+{
+#ifdef DEBUG
+    NSLog(@"App alert %@ dismissAfter %f", message, interval);
+#endif
+    
+    self.alertView = [[UIAlertView alloc] initWithTitle:[NSBundle mainBundle].infoDictionary[@"CFBundleName"]
+                                                message:message
+                                               delegate:self
+                                      cancelButtonTitle:interval ? nil : @"OK"
+                                      otherButtonTitles:nil];
+    self.alertView.delegate = self;
+    
+    [self.alertView show];
+    
+    if (interval) {
+        [self performSelector:@selector(dismissAfterDelay:) withObject:self.alertView afterDelay:interval];
+    }
+}
+
+- (void)dismissAfterDelay:(UIAlertView *)alertView
+{
+#ifdef DEBUG
+    NSLog(@"AlertView dismissAfterDelay");
+#endif
+    [alertView dismissWithClickedButtonIndex:0 animated:YES];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+#ifdef DEBUG
+    NSLog(@"AlertView clickedButtonAtIndex %d", buttonIndex);
+#endif
+}
+
+
 
 @end
