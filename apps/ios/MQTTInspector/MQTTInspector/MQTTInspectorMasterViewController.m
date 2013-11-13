@@ -37,6 +37,7 @@
     subscription = [Subscription subscriptionWithTopic:@"#" qos:0 session:session3 inManagedObjectContext:self.managedObjectContext];
     subscription = [Subscription subscriptionWithTopic:@"loc/#" qos:1 session:session3 inManagedObjectContext:self.managedObjectContext];
     subscription = [Subscription subscriptionWithTopic:@"mqttitude/#" qos:2 session:session3 inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"system/+/chronos/#" qos:0 session:session3 inManagedObjectContext:self.managedObjectContext];
 
     Publication *publication;
     publication = [Publication publicationWithTopic:@"mqttitude/dt27/inspector1" qos:0 retained:NO data:[@"MQTTInspector" dataUsingEncoding:NSUTF8StringEncoding] session:session1 inManagedObjectContext:self.managedObjectContext];

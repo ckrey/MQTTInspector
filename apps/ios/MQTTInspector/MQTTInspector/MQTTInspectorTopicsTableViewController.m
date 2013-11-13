@@ -184,7 +184,19 @@
                                                           dateStyle:NSDateFormatterShortStyle
                                                           timeStyle:NSDateFormatterMediumStyle],
                            topic.count];
-    cell.detailTextLabel.text = [NSString stringWithUTF8String:topic.data.bytes];
+    cell.detailTextLabel.text = [self dataToString:topic.data];
+}
+
+- (NSString *)dataToString:(NSData *)data
+{
+    /* the following lines are necessary to convert data which is possibly not null-terminated into a string */
+    NSString *message = [[NSString alloc] init];
+    for (int i = 0; i < data.length; i++) {
+        char c;
+        [data getBytes:&c range:NSMakeRange(i, 1)];
+        message = [message stringByAppendingFormat:@"%c", c];
+    }
+    return message;
 }
 
 @end
