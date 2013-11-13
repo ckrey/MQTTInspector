@@ -10,7 +10,6 @@
 #import "Message+Create.h"
 #import "Topic+Create.h"
 #import "Command+Create.h"
-#import "MQTTInspectorSessionsTableViewController.h"
 #import "MQTTInspectorLogsTableViewController.h"
 #import "MQTTInspectorTopicsTableViewController.h"
 #import "MQTTInspectorCommandsTableViewController.h"
@@ -18,15 +17,16 @@
 #import "MQTTInspectorPubsTableViewController.h"
 
 @interface MQTTInspectorDetailViewController ()
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *disconnectButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *connectButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *clearButton;
 @property (weak, nonatomic) IBOutlet UIProgressView *progress;
-@property (weak, nonatomic) IBOutlet UITableView *sessions;
 @property (weak, nonatomic) IBOutlet UITableView *messages;
 @property (weak, nonatomic) IBOutlet UITableView *subs;
 @property (weak, nonatomic) IBOutlet UITableView *pubs;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *level;
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 
-@property (strong, nonatomic) MQTTInspectorSessionsTableViewController *sessionsTVC;
 @property (strong, nonatomic) MQTTInspectorLogsTableViewController *logsTVC;
 @property (strong, nonatomic) MQTTInspectorTopicsTableViewController *topicsTVC;
 @property (strong, nonatomic) MQTTInspectorCommandsTableViewController *commandsTVC;
@@ -45,15 +45,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.sessionsTVC = [[MQTTInspectorSessionsTableViewController alloc] init];
-    self.sessionsTVC.mother = self;
-    self.sessionsTVC.tableView = self.sessions;
+    //
 }
 
 - (IBAction)connect:(UIButton *)sender {
     if (self.session) {
-        self.mqttSession = [[MQTTSession alloc] initWithClientId:self.session.clientid
+        NSString *clientId;
+        if ((!self.session.clientid) || ([self.session.clientid isEqualToString:@""])) {
+            clientId = [NSString stringWithFormat:@"MQTTInspector-%d", getpid()];
+        } else {
+            clientId = self.session.clientid;
+        }
+
+        self.mqttSession = [[MQTTSession alloc] initWithClientId:clientId
                                                         userName:self.session.user
                                                         password:self.session.passwd
                                                        keepAlive:[self.session.keepalive intValue]
@@ -132,6 +136,11 @@
         }
         _session = session;
         
+        self.title = [session description];
+        self.clearButton.enabled = TRUE;
+        self.level.enabled = TRUE;
+        self.connectButton.enabled = TRUE;
+        
         self.subsTVC = nil;
         UITableViewController *stvc = [[UITableViewController alloc] init];
         stvc.tableView = self.subs;
@@ -163,6 +172,9 @@
         self.pubsTVC = [[MQTTInspectorPubsTableViewController alloc] init];
         self.pubsTVC.mother = self;
         self.pubsTVC.tableView = self.pubs;
+        
+        self.connectButton.enabled = FALSE;
+        self.disconnectButton.enabled = TRUE;
     } else {
         self.subsTVC = nil;
         UITableViewController *stvc = [[UITableViewController alloc] init];
@@ -173,10 +185,12 @@
         UITableViewController *ptvc = [[UITableViewController alloc] init];
         ptvc.tableView = self.pubs;
         [ptvc.tableView reloadData];
-
+        
+        self.connectButton.enabled = TRUE;
+        self.disconnectButton.enabled = FALSE;
     }
     if (error) {
-        [self disappearingAlert:[error description]];
+        [self alert:[error description]];
     }
 }
 
@@ -197,6 +211,7 @@
     self.queueIn += 1;
     [self.progress setProgress:self.queueOut/self.queueIn animated:YES];
 }
+
 - (void)finishQueue
 {
     [self performSelectorOnMainThread:@selector(showQueue) withObject:nil waitUntilDone:NO];

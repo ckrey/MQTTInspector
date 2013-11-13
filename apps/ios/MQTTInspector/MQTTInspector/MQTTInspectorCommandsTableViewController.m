@@ -178,12 +178,32 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Command *command = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@ t%@ d%@ q%@ r%@",
-                           command.inbound,
+    
+    const NSArray *commandNames = @[
+                                    @"Reserved0",
+                                    @"CONNECT",
+                                    @"CONNACK",
+                                    @"PUBLISH",
+                                    @"PUBACK",
+                                    @"PUBREC",
+                                    @"PUBREL",
+                                    @"PUBCOMP",
+                                    @"SUBSCRIBE",
+                                    @"SUBACK",
+                                    @"UNSUBSCRIBE",
+                                    @"UNSUBACK",
+                                    @"PINGREQ",
+                                    @"PINGRESP",
+                                    @"DISCONNECT",
+                                    @"Reserved15"
+                                    ];
+    
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@ %@ d%@ q%@ r%@",
+                           [command.inbound boolValue] ? @">" : @"<",
                            [NSDateFormatter localizedStringFromDate:command.timestamp
                                                           dateStyle:NSDateFormatterShortStyle
                                                           timeStyle:NSDateFormatterMediumStyle],
-                           command.type,
+                           commandNames[[command.type intValue]],
                            command.duped,
                            command.qos,
                            command.retained];

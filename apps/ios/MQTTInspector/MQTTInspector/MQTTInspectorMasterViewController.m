@@ -23,19 +23,19 @@
 - (void)viewDidLoad
 {
     /* DEMO DB SETUP */
-    Session *session1 = [Session sessionWithHost:@"roo.jpmens.net" port:1883 tls:NO auth:NO user:@"" passwd:@"" clientid:@"MQTTInspector" cleansession:NO keepalive:60 inManagedObjectContext:self.managedObjectContext];
-    Session *session2 = [Session sessionWithHost:@"http://fzvtoshindhfdqqo.myfritz.net" port:8883 tls:YES auth:YES user:@"dt27" passwd:@"xyz" clientid:@"MQTTInspector" cleansession:NO keepalive:60 inManagedObjectContext:self.managedObjectContext];
-    Session *session3 = [Session sessionWithHost:@"test.mosquitto.org" port:1883 tls:NO auth:NO user:@"" passwd:@"" clientid:@"MQTTInspector" cleansession:NO keepalive:60 inManagedObjectContext:self.managedObjectContext];
+    Session *session1 = [Session sessionWithHost:@"roo.jpmens.net" port:1883 tls:NO auth:YES user:@"abc" passwd:@"xyz" clientid:nil cleansession:NO keepalive:60 inManagedObjectContext:self.managedObjectContext];
+    Session *session2 = [Session sessionWithHost:@"http://fzvtoshindhfdqqo.myfritz.net" port:8883 tls:YES auth:YES user:@"abc" passwd:@"xyz" clientid:nil cleansession:NO keepalive:60 inManagedObjectContext:self.managedObjectContext];
+    Session *session3 = [Session sessionWithHost:@"test.mosquitto.org" port:1883 tls:NO auth:NO user:@"" passwd:@"" clientid:nil cleansession:YES keepalive:60 inManagedObjectContext:self.managedObjectContext];
     
     Subscription *subscription;
-    subscription = [Subscription subscriptionWithTopic:@"#" qos:2 session:session1 inManagedObjectContext:self.managedObjectContext];
-    subscription = [Subscription subscriptionWithTopic:@"loc/#" qos:2 session:session1 inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"#" qos:0 session:session1 inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"loc/#" qos:1 session:session1 inManagedObjectContext:self.managedObjectContext];
     subscription = [Subscription subscriptionWithTopic:@"mqttitude/#" qos:2 session:session1 inManagedObjectContext:self.managedObjectContext];
     
     subscription = [Subscription subscriptionWithTopic:@"mqttitude/#" qos:2 session:session2 inManagedObjectContext:self.managedObjectContext];
 
-    subscription = [Subscription subscriptionWithTopic:@"#" qos:2 session:session3 inManagedObjectContext:self.managedObjectContext];
-    subscription = [Subscription subscriptionWithTopic:@"loc/#" qos:2 session:session3 inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"#" qos:0 session:session3 inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"loc/#" qos:1 session:session3 inManagedObjectContext:self.managedObjectContext];
     subscription = [Subscription subscriptionWithTopic:@"mqttitude/#" qos:2 session:session3 inManagedObjectContext:self.managedObjectContext];
 
     Publication *publication;
@@ -71,6 +71,13 @@
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Session *session = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+    self.detailViewController.session = session;
+}
+
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
