@@ -2,7 +2,7 @@
 //  Message.h
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 12.11.13.
+//  Created by Christoph Krey on 14.11.13.
 //  Copyright (c) 2013 Christoph Krey. All rights reserved.
 //
 

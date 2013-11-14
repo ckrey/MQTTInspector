@@ -8,6 +8,7 @@
 
 #import "MQTTInspectorTopicsTableViewController.h"
 #import "Topic+Create.h"
+#import "Subscription+Create.h"
 
 @interface MQTTInspectorTopicsTableViewController ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
@@ -103,6 +104,8 @@
             
         case NSFetchedResultsChangeUpdate:
             [self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+            [tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
             break;
             
         case NSFetchedResultsChangeMove:
@@ -178,13 +181,15 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Topic *topic = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@ %@",
-                           topic.topic,
-                           [NSDateFormatter localizedStringFromDate:topic.timestamp
-                                                          dateStyle:NSDateFormatterShortStyle
-                                                          timeStyle:NSDateFormatterMediumStyle],
-                           topic.count];
-    cell.detailTextLabel.text = [self dataToString:topic.data];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ :%@ #%@",
+                                 [NSDateFormatter localizedStringFromDate:topic.timestamp
+                                                                dateStyle:NSDateFormatterShortStyle
+                                                                timeStyle:NSDateFormatterMediumStyle],
+                                 topic.topic,
+                                 topic.count];
+    cell.textLabel.text = [self dataToString:topic.data];
+    
+    cell.backgroundColor = [self matchingSubscriptionColor:topic];
 }
 
 - (NSString *)dataToString:(NSData *)data
@@ -198,5 +203,33 @@
     }
     return message;
 }
+
+- (UIColor *)matchingSubscriptionColor:(Topic *)topic
+{
+    UIColor *color = [UIColor whiteColor];
+    
+    for (Subscription *subscription in topic.belongsTo.hasSubs) {
+        NSArray *subscriptionComponents = [subscription.topic pathComponents];
+        NSArray *topicComponents = [topic.topic pathComponents];
+        for (int i = 0; i < [topicComponents count]; i++) {
+            if ([subscriptionComponents[i] isEqualToString:@"#"]) {
+                color = [subscription getColor];
+                break;
+            }
+            if ([subscriptionComponents[i] isEqualToString:@"+"]) {
+                continue;
+            }
+            if (![subscriptionComponents[i] isEqualToString:topicComponents[i]]) {
+                break;
+            } else {
+                if (i == [topicComponents count] - 1) {
+                    color = [subscription getColor];
+                }
+            }
+        }
+    }
+    return color;
+}
+
 
 @end

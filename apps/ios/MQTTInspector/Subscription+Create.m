@@ -37,9 +37,15 @@
 
         }
         subscription.state = @(0);
+        subscription.color = @(-1);
     }
 
     return subscription;
+}
+
+- (UIColor *)getColor
+{
+    return [UIColor colorWithHue:[self.color floatValue] saturation:0.3 brightness:1.0 alpha:1.0];
 }
 
 @end

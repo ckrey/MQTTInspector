@@ -8,6 +8,7 @@
 
 #import "MQTTInspectorLogsTableViewController.h"
 #import "Message+Create.h"
+#import "Subscription+Create.h"
 
 @interface MQTTInspectorLogsTableViewController ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
@@ -178,12 +179,16 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Message *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@",
-                           message.topic,
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ :%@ q%d",
                            [NSDateFormatter localizedStringFromDate:message.timestamp
                                                           dateStyle:NSDateFormatterShortStyle
-                                                          timeStyle:NSDateFormatterMediumStyle]];
-    cell.detailTextLabel.text = [self dataToString:message.data];
+                                                          timeStyle:NSDateFormatterMediumStyle],
+                           message.topic,
+                           -1];
+
+    cell.textLabel.text = [self dataToString:message.data];
+    
+    cell.backgroundColor = [self matchingSubscriptionColor:message];
 }
 
 - (NSString *)dataToString:(NSData *)data
@@ -198,4 +203,31 @@
     return message;
 }
 
+- (UIColor *)matchingSubscriptionColor:(Message *)message
+{
+    UIColor *color = [UIColor whiteColor];
+    
+    for (Subscription *subscription in message.belongsTo.hasSubs) {
+        NSArray *subscriptionComponents = [subscription.topic pathComponents];
+        NSArray *messageComponents = [message.topic pathComponents];
+        for (int i = 0; i < [messageComponents count]; i++) {
+            if ([subscriptionComponents[i] isEqualToString:@"#"]) {
+                color = [subscription getColor];
+                break;
+            }
+            if ([subscriptionComponents[i] isEqualToString:@"+"]) {
+                continue;
+            }
+            if (![subscriptionComponents[i] isEqualToString:messageComponents[i]]) {
+                break;
+            } else {
+                if (i == [messageComponents count] - 1) {
+                    color = [subscription getColor];
+                }
+            }
+        }
+    }
+    return color;
+}
+                        
 @end

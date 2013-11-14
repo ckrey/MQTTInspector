@@ -198,18 +198,20 @@
                                     @"Reserved15"
                                     ];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@ %@ d%@ q%@ r%@",
-                           [command.inbound boolValue] ? @">" : @"<",
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@ %@ d%@ q%@ r%@ i%d",
                            [NSDateFormatter localizedStringFromDate:command.timestamp
                                                           dateStyle:NSDateFormatterShortStyle
                                                           timeStyle:NSDateFormatterMediumStyle],
+                                 [command.inbound boolValue] ? @">" : @"<",
                            commandNames[[command.type intValue]],
                            command.duped,
                            command.qos,
-                           command.retained];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"(%d) %@",
+                           command.retained,
+                           -1];
+    cell.textLabel.text = [NSString stringWithFormat:@"(%d) %@",
                                  command.data.length,
                                  [command.data description]];
+    cell.backgroundColor = [UIColor lightGrayColor];
 }
 
 @end

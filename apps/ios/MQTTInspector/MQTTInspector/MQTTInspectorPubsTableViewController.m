@@ -43,7 +43,7 @@
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"topic" ascending:NO];
+    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:NO];
     NSArray *sortDescriptors = @[sortDescriptor1];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -176,12 +176,13 @@
                                  onTopic:publication.topic
                                   retain:[publication.retained boolValue]
                                      qos:[publication.qos intValue]];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Publication *publication = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = publication.topic;
+    cell.textLabel.text = publication.name;
     cell.detailTextLabel.text = [self dataAsString:publication.data];
 }
 

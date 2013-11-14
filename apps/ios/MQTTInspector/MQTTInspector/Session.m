@@ -2,11 +2,12 @@
 //  Session.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 12.11.13.
+//  Created by Christoph Krey on 14.11.13.
 //  Copyright (c) 2013 Christoph Krey. All rights reserved.
 //
 
 #import "Session.h"
+#import "Command.h"
 #import "Message.h"
 #import "Publication.h"
 #import "Subscription.h"
@@ -25,10 +26,11 @@
 @dynamic state;
 @dynamic tls;
 @dynamic user;
+@dynamic name;
+@dynamic hasCommands;
 @dynamic hasMesssages;
 @dynamic hasPubs;
 @dynamic hasSubs;
 @dynamic hasTopics;
-@dynamic hasCommands;
 
 @end

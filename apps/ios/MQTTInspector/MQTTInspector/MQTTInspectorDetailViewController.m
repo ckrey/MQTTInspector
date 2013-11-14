@@ -136,7 +136,7 @@
         }
         _session = session;
         
-        self.title = [session description];
+        self.title = session.name;
         self.clearButton.enabled = TRUE;
         self.level.enabled = TRUE;
         self.connectButton.enabled = TRUE;
@@ -245,6 +245,7 @@
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic
 {
     NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
+    NSString *name = self.session.name;
     NSString *host = self.session.host;
     int port = [self.session.port intValue];
     BOOL tls = [self.session.tls boolValue];
@@ -260,7 +261,8 @@
 #ifdef DEBUG
         NSLog(@"newLog");
 #endif
-        Session *mySession = [Session sessionWithHost:host
+        Session *mySession = [Session sessionWithName:name
+                                                 host:host
                                                  port:port
                                                   tls:tls
                                                  auth:auth
@@ -301,7 +303,9 @@
 
 - (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped data:(NSData *)data
 {
-    NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];    NSString *host = self.session.host;
+    NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
+    NSString *name = self.session.name;
+    NSString *host = self.session.host;
     int port = [self.session.port intValue];
     BOOL tls = [self.session.tls boolValue];
     BOOL auth = [self.session.auth boolValue];
@@ -316,7 +320,8 @@
 #ifdef DEBUG
         NSLog(@"newCommand in");
 #endif
-        Session *mySession = [Session sessionWithHost:host
+        Session *mySession = [Session sessionWithName:name
+                                                  host:host
                                                  port:port
                                                   tls:tls
                                                  auth:auth
@@ -349,6 +354,7 @@
 - (void)sending:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped data:(NSData *)data
 {
     NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
+    NSString *name = self.session.name;
     NSString *host = self.session.host;
     int port = [self.session.port intValue];
     BOOL tls = [self.session.tls boolValue];
@@ -365,7 +371,8 @@
         NSLog(@"newCommand out");
 #endif
 
-        Session *mySession = [Session sessionWithHost:host
+        Session *mySession = [Session sessionWithName:name
+                                                  host:host
                                                  port:port
                                                   tls:tls
                                                  auth:auth

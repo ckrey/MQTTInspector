@@ -2,14 +2,14 @@
 //  Session.h
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 12.11.13.
+//  Created by Christoph Krey on 14.11.13.
 //  Copyright (c) 2013 Christoph Krey. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Message, Publication, Subscription, Topic;
+@class Command, Message, Publication, Subscription, Topic;
 
 @interface Session : NSManagedObject
 
@@ -23,15 +23,26 @@
 @property (nonatomic, retain) NSNumber * state;
 @property (nonatomic, retain) NSNumber * tls;
 @property (nonatomic, retain) NSString * user;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSOrderedSet *hasCommands;
 @property (nonatomic, retain) NSOrderedSet *hasMesssages;
 @property (nonatomic, retain) NSOrderedSet *hasPubs;
 @property (nonatomic, retain) NSOrderedSet *hasSubs;
 @property (nonatomic, retain) NSOrderedSet *hasTopics;
-@property (nonatomic, retain) NSOrderedSet *hasCommands;
 @end
 
 @interface Session (CoreDataGeneratedAccessors)
 
+- (void)insertObject:(Command *)value inHasCommandsAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromHasCommandsAtIndex:(NSUInteger)idx;
+- (void)insertHasCommands:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeHasCommandsAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInHasCommandsAtIndex:(NSUInteger)idx withObject:(Command *)value;
+- (void)replaceHasCommandsAtIndexes:(NSIndexSet *)indexes withHasCommands:(NSArray *)values;
+- (void)addHasCommandsObject:(Command *)value;
+- (void)removeHasCommandsObject:(Command *)value;
+- (void)addHasCommands:(NSOrderedSet *)values;
+- (void)removeHasCommands:(NSOrderedSet *)values;
 - (void)insertObject:(Message *)value inHasMesssagesAtIndex:(NSUInteger)idx;
 - (void)removeObjectFromHasMesssagesAtIndex:(NSUInteger)idx;
 - (void)insertHasMesssages:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
@@ -72,14 +83,4 @@
 - (void)removeHasTopicsObject:(Topic *)value;
 - (void)addHasTopics:(NSOrderedSet *)values;
 - (void)removeHasTopics:(NSOrderedSet *)values;
-- (void)insertObject:(NSManagedObject *)value inHasCommandsAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromHasCommandsAtIndex:(NSUInteger)idx;
-- (void)insertHasCommands:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeHasCommandsAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInHasCommandsAtIndex:(NSUInteger)idx withObject:(NSManagedObject *)value;
-- (void)replaceHasCommandsAtIndexes:(NSIndexSet *)indexes withHasCommands:(NSArray *)values;
-- (void)addHasCommandsObject:(NSManagedObject *)value;
-- (void)removeHasCommandsObject:(NSManagedObject *)value;
-- (void)addHasCommands:(NSOrderedSet *)values;
-- (void)removeHasCommands:(NSOrderedSet *)values;
 @end

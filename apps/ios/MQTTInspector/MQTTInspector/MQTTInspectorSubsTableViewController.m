@@ -180,6 +180,7 @@
                                               atLevel:[subscription.qos intValue]];
         subscription.state = @(2); // assuming subscribe works
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
@@ -187,14 +188,23 @@
     Subscription *subscription = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = [NSString stringWithFormat:@"%@", subscription.topic];
     
-    const NSDictionary *states = @{
-                                   @(0): @"unsubscribed",
-                                   @(1): @"subscribing",
-                                   @(2): @"subscribed"
-                                   };
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%d)",
-                                 states[subscription.state],
-                                 [subscription.state intValue]];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"q%@",
+                                 subscription.qos];
+    
+    if ([subscription.state boolValue]) {
+        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    } else {
+        [cell setAccessoryType:UITableViewCellAccessoryNone];
+    }
+    
+    if ([subscription.color floatValue] < 0)
+    {
+        float r = rand();
+        float f = r / INT_MAX;
+        float hue = fmod(f,1);
+        subscription.color = @(hue);
+    }
+    cell.backgroundColor = [subscription getColor];
 }
 
 

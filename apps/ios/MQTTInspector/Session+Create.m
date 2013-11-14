@@ -10,7 +10,8 @@
 
 @implementation Session (Create)
 
-+ (Session *)sessionWithHost:(NSString *)host
++ (Session *)sessionWithName:(NSString *)name
+                        host:(NSString *)host
                         port:(int)port
                          tls:(BOOL)tls
                         auth:(BOOL)auth
@@ -24,13 +25,7 @@
     Session *session = nil;
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Session"];
-    request.predicate = [NSPredicate predicateWithFormat:@"host = %@ AND port = %@ AND user = %@ AND tls = %@ and auth = %@ and passwd = %@",
-                         host,
-                         @(port),
-                         user,
-                         @(tls),
-                         @(auth),
-                         passwd];
+    request.predicate = [NSPredicate predicateWithFormat:@"name = %@", name];
     
     NSError *error = nil;
     
@@ -42,6 +37,7 @@
         if (![matches count]) {
             session = [NSEntityDescription insertNewObjectForEntityForName:@"Session" inManagedObjectContext:context];
             
+            session.name = name;
             session.host = host;
             session.port = @(port);
             session.tls = @(tls);
@@ -58,14 +54,6 @@
     }
     
     return session;
-}
-
-- (NSString *)description {
-    return [NSString stringWithFormat:@"%@%@%@:%@?cid=%@&cln=%@&kpa=%@",
-            [self.tls boolValue] ? @"mqtts://" : @"mqtt://",
-            [self.auth boolValue] ? [NSString stringWithFormat:@"%@:%@@", self.user, self.passwd] : @"",
-            self.host, self.port,
-            self.clientid, self.cleansession, self.keepalive];
 }
 
 @end

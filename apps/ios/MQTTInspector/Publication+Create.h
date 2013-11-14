@@ -10,11 +10,12 @@
 #import "Session.h"
 
 @interface Publication (Create)
-+ (Publication *)publicationWithTopic:(NSString *)topic
-                            qos:(int)qos
-                      retained:(BOOL)retained
-                          data:(NSData *)data
-                       session:(Session *)session
-         inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
++ (Publication *)publicationWithName:(NSString *)name
+                               topic:(NSString *)topic
+                                 qos:(int)qos
+                            retained:(BOOL)retained
+                                data:(NSData *)data
+                             session:(Session *)session
+              inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end

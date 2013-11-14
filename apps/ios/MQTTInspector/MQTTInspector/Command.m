@@ -2,7 +2,7 @@
 //  Command.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 12.11.13.
+//  Created by Christoph Krey on 14.11.13.
 //  Copyright (c) 2013 Christoph Krey. All rights reserved.
 //
 
@@ -12,13 +12,13 @@
 
 @implementation Command
 
-@dynamic timestamp;
-@dynamic inbound;
-@dynamic type;
+@dynamic data;
 @dynamic duped;
+@dynamic inbound;
 @dynamic qos;
 @dynamic retained;
-@dynamic data;
+@dynamic timestamp;
+@dynamic type;
 @dynamic belongsTo;
 
 @end

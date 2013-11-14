@@ -14,4 +14,5 @@
                             qos:(int)qos
                         session:(Session *)session
          inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+- (UIColor *)getColor;
 @end
