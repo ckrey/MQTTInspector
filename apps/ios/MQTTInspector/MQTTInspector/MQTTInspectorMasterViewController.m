@@ -53,6 +53,25 @@
     self.detailViewController.managedObjectContext = self.managedObjectContext;
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSIndexPath *indexPath = nil;
+    
+    if ([sender isKindOfClass:[UITableViewCell class]]) {
+        indexPath = [self.tableView indexPathForCell:sender];
+    }
+    
+    if (indexPath) {
+        if ([segue.identifier isEqualToString:@"setSession:"]) {
+            Session *session = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+            if ([segue.destinationViewController respondsToSelector:@selector(setSession:)]) {
+                [segue.destinationViewController performSelector:@selector(setSession:)
+                                                      withObject:session];
+            }
+        }
+    }
+}
+
 #pragma mark - Table View
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

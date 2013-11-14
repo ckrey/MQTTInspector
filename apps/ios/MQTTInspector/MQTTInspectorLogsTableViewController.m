@@ -191,14 +191,39 @@
     cell.backgroundColor = [self matchingSubscriptionColor:message];
 }
 
+#define MAX_LEN 64
 - (NSString *)dataToString:(NSData *)data
 {
-    /* the following lines are necessary to convert data which is possibly not null-terminated into a string */
-    NSString *message = [[NSString alloc] init];
+    BOOL binary = FALSE;
+    
     for (int i = 0; i < data.length; i++) {
         char c;
         [data getBytes:&c range:NSMakeRange(i, 1)];
+    }
+    
+    NSString *message = [[NSString alloc] init];
+    
+    for (int i = 0; i < data.length; i++) {
+        char c;
+        [data getBytes:&c range:NSMakeRange(i, 1)];
+        if (!isprint(c)) {
+            binary = TRUE;
+            break;
+        }
+        if (i > MAX_LEN) {
+            message = [message stringByAppendingString:@" <...>"];
+            break;
+        }
         message = [message stringByAppendingFormat:@"%c", c];
+    }
+    
+    if (binary) {
+        NSString *hexString = [data description];
+        if ([hexString length] > MAX_LEN) {
+            return [NSString stringWithFormat:@"%@ <...>", [hexString substringToIndex:MAX_LEN]];
+        } else {
+            return hexString;
+        }
     }
     return message;
 }

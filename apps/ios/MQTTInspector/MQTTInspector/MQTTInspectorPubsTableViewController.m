@@ -43,7 +43,7 @@
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:NO];
+    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor1];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -183,23 +183,6 @@
 {
     Publication *publication = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = publication.name;
-    cell.detailTextLabel.text = [self dataAsString:publication.data];
 }
-
-- (NSString *)dataAsString:(NSData *)data
-{
-    NSString *message = [[NSString alloc] init];
-    for (int i = 0; i < data.length; i++) {
-        char c;
-        [data getBytes:&c range:NSMakeRange(i, 1)];
-        message = [message stringByAppendingFormat:@"%c", c];
-    }
-    return message;
-}
-
-
-
-
-
 
 @end
