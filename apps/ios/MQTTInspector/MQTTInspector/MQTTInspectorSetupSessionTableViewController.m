@@ -7,6 +7,7 @@
 //
 
 #import "MQTTInspectorSetupSessionTableViewController.h"
+#import "Session+Create.h"
 
 @interface MQTTInspectorSetupSessionTableViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *nameText;
@@ -27,20 +28,17 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (self.session) {
-        
-        self.nameText.text = self.session.name;
-        self.hostText.text = self.session.host;
-        self.portText.text = [NSString stringWithFormat:@"%@", self.session.port];
-        self.tlsSwitch.on = [self.session.tls boolValue];
-        self.authSwitch.on = [self.session.auth boolValue];
-        self.userText.text = self.session.user;
-        self.passwdText.text = self.session.passwd;
-        self.clientIdText.text = self.session.clientid;
-        self.cleansessionSwitch.on = [self.session.cleansession boolValue];
-        self.keepaliveText.text = [NSString stringWithFormat:@"%@", self.session.keepalive];
-        
-    }
+    
+    self.nameText.text = self.session.name;
+    self.hostText.text = self.session.host;
+    self.portText.text = [NSString stringWithFormat:@"%@", self.session.port];
+    self.tlsSwitch.on = [self.session.tls boolValue];
+    self.authSwitch.on = [self.session.auth boolValue];
+    self.userText.text = self.session.user;
+    self.passwdText.text = self.session.passwd;
+    self.clientIdText.text = self.session.clientid;
+    self.cleansessionSwitch.on = [self.session.cleansession boolValue];
+    self.keepaliveText.text = [NSString stringWithFormat:@"%@", self.session.keepalive];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -53,9 +51,5 @@
     }
 }
 
-
-- (IBAction)save:(UIBarButtonItem *)sender {
-    NSLog(@"save");
-}
 
 @end

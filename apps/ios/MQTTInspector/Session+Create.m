@@ -22,6 +22,30 @@
                    keepalive:(int)keepalive
       inManagedObjectContext:(NSManagedObjectContext *)context;
 {
+    Session *session = [Session ExistSessionWithName:name inManagedObjectContext:context];
+    
+    if (!session) {
+        session = [NSEntityDescription insertNewObjectForEntityForName:@"Session" inManagedObjectContext:context];
+        
+        session.name = name;
+        session.host = host;
+        session.port = @(port);
+        session.tls = @(tls);
+        session.auth = @(auth);
+        session.user = user;
+        session.passwd = passwd;
+        session.clientid = clientid;
+        session.cleansession = @(cleansession);
+        session.keepalive = @(keepalive);
+        session.state = @(-1);
+    }
+    
+    return session;
+}
+
++ (Session *)ExistSessionWithName:(NSString *)name
+           inManagedObjectContext:(NSManagedObjectContext *)context
+{
     Session *session = nil;
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Session"];
@@ -34,23 +58,10 @@
     if (!matches) {
         // handle error
     } else {
-        if (![matches count]) {
-            session = [NSEntityDescription insertNewObjectForEntityForName:@"Session" inManagedObjectContext:context];
-            
-            session.name = name;
-            session.host = host;
-            session.port = @(port);
-            session.tls = @(tls);
-            session.auth = @(auth);
-            session.user = user;
-            session.passwd = passwd;
-            session.clientid = clientid;
-            session.cleansession = @(cleansession);
-            session.keepalive = @(keepalive);
-        } else {
+        if ([matches count]) {
             session = [matches lastObject];
+            session.state = @(-1);
         }
-        session.state = @(-1);
     }
     
     return session;

@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface MQTTInspectorDataViewController : UIViewController
++ (NSString *)dataToString:(NSData *)data;
+
 @property (strong, nonatomic) NSString *topic;
 @property (strong, nonatomic) NSData *data;
 @end

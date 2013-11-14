@@ -619,7 +619,7 @@
                     <navigationItem key="navigationItem" title="Session" id="nGR-3e-Yfu">
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="6SM-Af-Va5">
                             <connections>
-                                <action selector="save:" destination="bJC-yq-4xu" id="FID-co-a2Q"/>
+                                <segue destination="afX-xV-g13" kind="unwind" unwindAction="saveSession:" id="s3I-43-e99"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -637,6 +637,7 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4r1-DR-kF1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="afX-xV-g13" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1873" y="-630"/>
         </scene>
@@ -953,7 +954,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="W4N-oW-rBT"/>
-        <segue reference="Tei-Q8-3oK"/>
         <segue reference="84b-2r-mUt"/>
+        <segue reference="Tei-Q8-3oK"/>
     </inferredMetricsTieBreakers>
 </document>

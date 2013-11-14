@@ -9,6 +9,7 @@
 #import "MQTTInspectorLogsTableViewController.h"
 #import "Message+Create.h"
 #import "Subscription+Create.h"
+#import "MQTTInspectorDataViewController.h"
 
 @interface MQTTInspectorLogsTableViewController ()
 
@@ -181,36 +182,11 @@
                            message.topic,
                            -1];
 
-    cell.textLabel.text = [self dataToString:message.data];
+    cell.textLabel.text = [MQTTInspectorDataViewController dataToString:message.data];
     
     cell.backgroundColor = [self matchingSubscriptionColor:message];
-}
-
-- (NSString *)dataToString:(NSData *)data
-{
-    BOOL binary = FALSE;
     
-    for (int i = 0; i < data.length; i++) {
-        char c;
-        [data getBytes:&c range:NSMakeRange(i, 1)];
-    }
-    
-    NSString *message = [[NSString alloc] init];
-    
-    for (int i = 0; i < data.length; i++) {
-        char c;
-        [data getBytes:&c range:NSMakeRange(i, 1)];
-        if (!isprint(c)) {
-            binary = TRUE;
-            break;
-        }
-        message = [message stringByAppendingFormat:@"%c", c];
-    }
-    
-    if (binary) {
-        return [data description];
-    }
-    return message;
+    [cell setAccessoryType:UITableViewCellAccessoryDetailButton];
 }
 
 - (UIColor *)matchingSubscriptionColor:(Message *)message

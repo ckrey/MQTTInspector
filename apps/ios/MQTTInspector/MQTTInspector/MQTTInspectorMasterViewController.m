@@ -55,14 +55,33 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSIndexPath *indexPath = nil;
-    
-    if ([sender isKindOfClass:[UITableViewCell class]]) {
-        indexPath = [self.tableView indexPathForCell:sender];
+    if ([segue.identifier isEqualToString:@"newSession"]) {
+        Session *session = [Session sessionWithName:@"<new session>"
+                                               host:@"host"
+                                               port:1883
+                                                tls:NO
+                                               auth:NO
+                                               user:@""
+                                             passwd:@""
+                                           clientid:@""
+                                       cleansession:YES
+                                          keepalive:60
+                             inManagedObjectContext:self.managedObjectContext];
+        if ([segue.destinationViewController respondsToSelector:@selector(setSession:)]) {
+            [segue.destinationViewController performSelector:@selector(setSession:)
+                                                  withObject:session];
+        }
     }
     
-    if (indexPath) {
-        if ([segue.identifier isEqualToString:@"setSession:"]) {
+    if ([segue.identifier isEqualToString:@"setSession:"]) {
+        
+        NSIndexPath *indexPath = nil;
+        
+        if ([sender isKindOfClass:[UITableViewCell class]]) {
+            indexPath = [self.tableView indexPathForCell:sender];
+        }
+        
+        if (indexPath) {
             Session *session = [[self fetchedResultsController] objectAtIndexPath:indexPath];
             if ([segue.destinationViewController respondsToSelector:@selector(setSession:)]) {
                 [segue.destinationViewController performSelector:@selector(setSession:)
@@ -70,6 +89,22 @@
             }
         }
     }
+}
+
+- (IBAction)saveSession:(UIStoryboardSegue *)segue
+{
+    NSLog(@"save");
+    /*
+    NSString *newName = self.nameText.text;
+    Session *existingSession = [Session ExistSessionWithName:newName inManagedObjectContext:self.session.managedObjectContext];
+    if (!existingSession || (existingSession == self.session)) {
+        self.session.name = newName;
+        self.session.host = self.hostText.text;
+        self.
+    } else {
+        NSLog(@"Duplicate");
+    }
+     */
 }
 
 #pragma mark - Table View

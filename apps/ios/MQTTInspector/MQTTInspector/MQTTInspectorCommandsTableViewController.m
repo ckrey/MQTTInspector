@@ -212,6 +212,8 @@
                                  command.data.length,
                                  [command.data description]];
     cell.backgroundColor = [UIColor lightGrayColor];
+    
+    [cell setAccessoryType:UITableViewCellAccessoryNone];
 }
 
 @end
