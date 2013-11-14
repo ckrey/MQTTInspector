@@ -17,6 +17,30 @@
                              session:(Session *)session
               inManagedObjectContext:(NSManagedObjectContext *)context
 {
+    Publication *publication = [Publication existsPublicationWithName:name session:session inManagedObjectContext:context];
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Publication"];
+    request.predicate = [NSPredicate predicateWithFormat:@"name = %@ AND belongsTo = %@", name, session];
+    
+    if (!publication) {
+        publication = [NSEntityDescription insertNewObjectForEntityForName:@"Publication" inManagedObjectContext:context];
+        
+        publication.name = name;
+        publication.topic = topic;
+        publication.data = data;
+        publication.qos = @(qos);
+        publication.retained = @(retained);
+        publication.belongsTo = session;
+        publication.state = @(0);
+    }
+    
+    return publication;
+}
+
++ (Publication *)existsPublicationWithName:(NSString *)name
+                                   session:(Session *)session
+                    inManagedObjectContext:(NSManagedObjectContext *)context
+{
     Publication *publication = nil;
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Publication"];
@@ -29,24 +53,15 @@
     if (!matches) {
         // handle error
     } else {
-        if (![matches count]) {
-            publication = [NSEntityDescription insertNewObjectForEntityForName:@"Publication" inManagedObjectContext:context];
-            
-            publication.name = name;
-            publication.topic = topic;
-            publication.data = data;
-            publication.qos = @(qos);
-            publication.retained = @(retained);
-            publication.belongsTo = session;
-        } else {
+        if ([matches count]) {
             publication = [matches lastObject];
+            publication.state = @(0);
         }
-        publication.state = @(0);
     }
     
     return publication;
     
-
+    
 }
 
 @end

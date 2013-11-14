@@ -59,7 +59,9 @@
         if (self.topicsTVC) {
             indexPath = [self.topicsTVC.tableView indexPathForCell:sender];
         }
-
+        if (self.commandsTVC) {
+            indexPath = [self.commandsTVC.tableView indexPathForCell:sender];
+        }
     }
     
     if (indexPath) {
@@ -77,6 +79,14 @@
                 theData = topic.data;
                 theTopic = topic.topic;
             }
+            if (self.commandsTVC) {
+                Command *command = [[self.commandsTVC fetchedResultsController] objectAtIndexPath:indexPath];
+                theData = command.data;
+                theTopic = [NSDateFormatter localizedStringFromDate:command.timestamp
+                                                          dateStyle:NSDateFormatterShortStyle
+                                                          timeStyle:NSDateFormatterMediumStyle];
+            }
+
 
             if ([segue.destinationViewController respondsToSelector:@selector(setTopic:)]) {
                 [segue.destinationViewController performSelector:@selector(setTopic:)
@@ -235,7 +245,7 @@
         self.disconnectButton.enabled = FALSE;
     }
     if (error) {
-        [self alert:[error description]];
+        [MQTTInspectorDetailViewController alert:[error description]];
     }
 }
 
@@ -475,53 +485,14 @@
 
 #pragma mark - Alerts
 
-#define DISMISS_AFTER 1
-
-- (void)disappearingAlert:(NSString *)message
++ (void)alert:(NSString *)message
 {
-    [self anyAlert:message dismissAfter:DISMISS_AFTER];
-}
-
-- (void)alert:(NSString *)message
-{
-    [self anyAlert:message dismissAfter:0];
-}
-
-- (void)anyAlert:(NSString *)message dismissAfter:(NSTimeInterval)interval
-{
-#ifdef DEBUG
-    NSLog(@"App alert %@ dismissAfter %f", message, interval);
-#endif
-    
-    self.alertView = [[UIAlertView alloc] initWithTitle:[NSBundle mainBundle].infoDictionary[@"CFBundleName"]
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSBundle mainBundle].infoDictionary[@"CFBundleName"]
                                                 message:message
-                                               delegate:self
-                                      cancelButtonTitle:interval ? nil : @"OK"
+                                               delegate:nil
+                                      cancelButtonTitle:@"OK"
                                       otherButtonTitles:nil];
-    self.alertView.delegate = self;
-    
-    [self.alertView show];
-    
-    if (interval) {
-        [self performSelector:@selector(dismissAfterDelay:) withObject:self.alertView afterDelay:interval];
-    }
+    [alertView show];
 }
-
-- (void)dismissAfterDelay:(UIAlertView *)alertView
-{
-#ifdef DEBUG
-    NSLog(@"AlertView dismissAfterDelay");
-#endif
-    [alertView dismissWithClickedButtonIndex:0 animated:YES];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-#ifdef DEBUG
-    NSLog(@"AlertView clickedButtonAtIndex %d", buttonIndex);
-#endif
-}
-
-
 
 @end

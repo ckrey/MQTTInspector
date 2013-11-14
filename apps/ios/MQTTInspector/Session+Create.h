@@ -9,7 +9,7 @@
 #import "Session.h"
 
 @interface Session (Create)
-+ (Session *)ExistSessionWithName:(NSString *)name
++ (Session *)existSessionWithName:(NSString *)name
            inManagedObjectContext:(NSManagedObjectContext *)context;
 + (Session *)sessionWithName:(NSString *)name
                         host:(NSString *)host

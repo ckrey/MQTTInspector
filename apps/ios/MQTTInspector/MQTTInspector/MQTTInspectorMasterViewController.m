@@ -7,7 +7,6 @@
 //
 
 #import "MQTTInspectorMasterViewController.h"
-
 #import "MQTTInspectorDetailViewController.h"
 
 #import "Session+Create.h"
@@ -56,7 +55,14 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"newSession"]) {
-        Session *session = [Session sessionWithName:@"<new session>"
+        int i = 1;
+        NSString *newName;
+
+        do {
+            newName = [NSString stringWithFormat:@"new-session-%d", i++];
+        } while ([Session existSessionWithName:newName inManagedObjectContext:self.managedObjectContext]);
+        
+        Session *session = [Session sessionWithName:newName
                                                host:@"host"
                                                port:1883
                                                 tls:NO
@@ -89,22 +95,6 @@
             }
         }
     }
-}
-
-- (IBAction)saveSession:(UIStoryboardSegue *)segue
-{
-    NSLog(@"save");
-    /*
-    NSString *newName = self.nameText.text;
-    Session *existingSession = [Session ExistSessionWithName:newName inManagedObjectContext:self.session.managedObjectContext];
-    if (!existingSession || (existingSession == self.session)) {
-        self.session.name = newName;
-        self.session.host = self.hostText.text;
-        self.
-    } else {
-        NSLog(@"Duplicate");
-    }
-     */
 }
 
 #pragma mark - Table View
@@ -179,10 +169,8 @@
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"host" ascending:NO];
-    NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"port" ascending:NO];
-    NSSortDescriptor *sortDescriptor3 = [[NSSortDescriptor alloc] initWithKey:@"user" ascending:NO];
-    NSArray *sortDescriptors = @[sortDescriptor1, sortDescriptor2, sortDescriptor3];
+    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+    NSArray *sortDescriptors = @[sortDescriptor1];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
     

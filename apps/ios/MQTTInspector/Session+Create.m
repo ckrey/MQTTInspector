@@ -22,7 +22,7 @@
                    keepalive:(int)keepalive
       inManagedObjectContext:(NSManagedObjectContext *)context;
 {
-    Session *session = [Session ExistSessionWithName:name inManagedObjectContext:context];
+    Session *session = [Session existSessionWithName:name inManagedObjectContext:context];
     
     if (!session) {
         session = [NSEntityDescription insertNewObjectForEntityForName:@"Session" inManagedObjectContext:context];
@@ -43,7 +43,7 @@
     return session;
 }
 
-+ (Session *)ExistSessionWithName:(NSString *)name
++ (Session *)existSessionWithName:(NSString *)name
            inManagedObjectContext:(NSManagedObjectContext *)context
 {
     Session *session = nil;

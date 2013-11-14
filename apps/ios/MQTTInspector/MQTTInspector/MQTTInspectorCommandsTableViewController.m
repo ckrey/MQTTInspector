@@ -10,7 +10,6 @@
 #import "Command+Create.h"
 
 @interface MQTTInspectorCommandsTableViewController ()
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 @end
 
@@ -198,7 +197,35 @@
                                     @"Reserved15"
                                     ];
     
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@ %@ d%@ q%@ r%@ i%d",
+    NSMutableAttributedString *as =
+    [[NSMutableAttributedString alloc] initWithString:[NSDateFormatter localizedStringFromDate:command.timestamp
+                                                                                     dateStyle:NSDateFormatterShortStyle
+                                                                                     timeStyle:NSDateFormatterMediumStyle]
+                                           attributes:@{}];
+    
+    [as appendAttributedString:
+     [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@ :",
+                                                 [command.inbound boolValue] ? @">" : @"<"]
+                                     attributes:@{}]];
+    
+    UIFont *font = [UIFont boldSystemFontOfSize:16.0];
+    NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:font
+                                                                forKey:NSFontAttributeName];
+    [as appendAttributedString:
+     [[NSAttributedString alloc] initWithString:commandNames[[command.type intValue]] attributes:attrsDictionary]];
+    
+    
+    [as appendAttributedString:
+     [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" d%@ q%@ r%@ i%d",
+                                                 command.duped,
+                                                 command.qos,
+                                                 command.retained,
+                                                 -1]
+                                     attributes:@{}]];
+    cell.detailTextLabel.attributedText = as;
+
+    /*
+     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@ %@ d%@ q%@ r%@ i%d",
                            [NSDateFormatter localizedStringFromDate:command.timestamp
                                                           dateStyle:NSDateFormatterShortStyle
                                                           timeStyle:NSDateFormatterMediumStyle],
@@ -208,12 +235,14 @@
                            command.qos,
                            command.retained,
                            -1];
+     */
+    
     cell.textLabel.text = [NSString stringWithFormat:@"(%d) %@",
                                  command.data.length,
                                  [command.data description]];
     cell.backgroundColor = [UIColor lightGrayColor];
     
-    [cell setAccessoryType:UITableViewCellAccessoryNone];
+    [cell setAccessoryType:UITableViewCellAccessoryDetailButton];
 }
 
 @end

@@ -360,6 +360,9 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="nameChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="m8J-ri-rJY"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -425,6 +428,9 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="URL"/>
+                                                    <connections>
+                                                        <action selector="hostChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="bDy-sW-JxQ"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -447,6 +453,9 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                                    <connections>
+                                                        <action selector="portChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="djv-E0-Ci4"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -467,6 +476,9 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gio-7J-cc9">
                                                     <rect key="frame" x="251" y="6" width="51" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <connections>
+                                                        <action selector="tlsChanged:" destination="bJC-yq-4xu" eventType="valueChanged" id="vVd-1A-g5q"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -492,6 +504,9 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k4T-hX-Mec">
                                                     <rect key="frame" x="251" y="6" width="51" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <connections>
+                                                        <action selector="authChanged:" destination="bJC-yq-4xu" eventType="valueChanged" id="BDa-Qd-6t0"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -514,6 +529,9 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="userChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="HvJ-ng-Oja"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -536,6 +554,9 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                                    <connections>
+                                                        <action selector="passwdChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="2ad-nG-qYY"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -562,6 +583,9 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="clientIdChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="Kag-yD-zpT"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -582,6 +606,9 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lib-5r-pdF">
                                                     <rect key="frame" x="251" y="6" width="51" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <connections>
+                                                        <action selector="cleansessionChanged:" destination="bJC-yq-4xu" eventType="valueChanged" id="9IH-b2-7yq"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -604,6 +631,9 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                                    <connections>
+                                                        <action selector="keepalvieChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="F3O-cG-C38"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -616,13 +646,7 @@
                             <outlet property="delegate" destination="bJC-yq-4xu" id="UvX-Zt-qa5"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Session" id="nGR-3e-Yfu">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="6SM-Af-Va5">
-                            <connections>
-                                <segue destination="afX-xV-g13" kind="unwind" unwindAction="saveSession:" id="s3I-43-e99"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Session" id="nGR-3e-Yfu"/>
                     <connections>
                         <outlet property="authSwitch" destination="k4T-hX-Mec" id="5hE-YG-Baq"/>
                         <outlet property="cleansessionSwitch" destination="Lib-5r-pdF" id="1cu-fN-87w"/>
@@ -637,14 +661,13 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4r1-DR-kF1" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="afX-xV-g13" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1873" y="-630"/>
         </scene>
-        <!--Table View Controller - SUBs-->
+        <!--Inspector Setup Subs Table View Controller - SUBs-->
         <scene sceneID="3OK-yM-EgE">
             <objects>
-                <tableViewController id="r2c-F7-Pff" sceneMemberID="viewController">
+                <tableViewController id="r2c-F7-Pff" customClass="MQTTInspectorSetupSubsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="L45-zN-NNC">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -671,7 +694,7 @@
                     <navigationItem key="navigationItem" title="SUBs" id="uHa-vq-4ui">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="vjv-ou-syn">
                             <connections>
-                                <segue destination="K2c-pS-zMv" kind="push" identifier="newPub" id="84b-2r-mUt"/>
+                                <segue destination="K2c-pS-zMv" kind="push" identifier="newSub" id="84b-2r-mUt"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -680,10 +703,10 @@
             </objects>
             <point key="canvasLocation" x="2541" y="-259"/>
         </scene>
-        <!--Table View Controller - SUB-->
+        <!--Inspector Setup Sub Table View Controller - SUB-->
         <scene sceneID="85E-ZH-2X3">
             <objects>
-                <tableViewController id="K2c-pS-zMv" sceneMemberID="viewController">
+                <tableViewController id="K2c-pS-zMv" customClass="MQTTInspectorSetupSubTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="o1U-gq-sEZ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -710,6 +733,9 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="topicChanged:" destination="K2c-pS-zMv" eventType="editingDidEnd" id="TwK-xm-pu0"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -728,13 +754,16 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="f04-DN-3JL">
-                                                    <rect key="frame" x="177" y="8" width="123" height="29"/>
+                                                    <rect key="frame" x="232" y="8" width="68" height="29"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <segments>
-                                                        <segment title="First"/>
-                                                        <segment title="Second"/>
-                                                        <segment title=""/>
+                                                        <segment title="0"/>
+                                                        <segment title="1"/>
+                                                        <segment title="2"/>
                                                     </segments>
+                                                    <connections>
+                                                        <action selector="qosChanged:" destination="K2c-pS-zMv" eventType="valueChanged" id="Kk4-iT-0ZG"/>
+                                                    </connections>
                                                 </segmentedControl>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -747,9 +776,11 @@
                             <outlet property="delegate" destination="K2c-pS-zMv" id="OCj-Cf-b0R"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="SUB" id="buZ-Ky-vow">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="BgI-oa-gsR"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="SUB" id="buZ-Ky-vow"/>
+                    <connections>
+                        <outlet property="qosSegment" destination="f04-DN-3JL" id="9cf-O6-aPF"/>
+                        <outlet property="topicText" destination="jaf-6V-Ndn" id="fej-mt-CI1"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3eE-SX-Nth" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -779,6 +810,9 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="nameChanged:" destination="RxM-Na-37F" eventType="editingDidEnd" id="s1k-e6-8rX"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -799,6 +833,9 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="topicChanged:" destination="RxM-Na-37F" eventType="editingDidEnd" id="zUN-zr-d57"/>
+                                                    </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Topic" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0uG-d7-O9L">
                                                     <rect key="frame" x="20" y="11" width="41" height="21"/>
@@ -821,6 +858,9 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="dataChanged:" destination="RxM-Na-37F" eventType="editingDidEnd" id="q6O-g0-MIt"/>
+                                                    </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Data" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eKL-4s-u9l">
                                                     <rect key="frame" x="20" y="11" width="36" height="21"/>
@@ -839,13 +879,16 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="iEa-ge-liS">
-                                                    <rect key="frame" x="177" y="8" width="123" height="29"/>
+                                                    <rect key="frame" x="232" y="8" width="68" height="29"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <segments>
-                                                        <segment title="First"/>
-                                                        <segment title="Second"/>
-                                                        <segment title=""/>
+                                                        <segment title="0"/>
+                                                        <segment title="1"/>
+                                                        <segment title="2"/>
                                                     </segments>
+                                                    <connections>
+                                                        <action selector="qosChanged:" destination="RxM-Na-37F" eventType="valueChanged" id="5Fl-fJ-50h"/>
+                                                    </connections>
                                                 </segmentedControl>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="QoS" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sYh-wj-eS1">
                                                     <rect key="frame" x="20" y="11" width="34" height="21"/>
@@ -866,6 +909,9 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6dB-zM-yZp">
                                                     <rect key="frame" x="251" y="6" width="51" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <connections>
+                                                        <action selector="retainChanged:" destination="RxM-Na-37F" eventType="valueChanged" id="anp-Eg-A7i"/>
+                                                    </connections>
                                                 </switch>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Retain" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LHH-13-Sdp">
                                                     <rect key="frame" x="20" y="11" width="49" height="21"/>
@@ -884,9 +930,14 @@
                             <outlet property="delegate" destination="RxM-Na-37F" id="bU2-vB-Pjq"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="PUB" id="YYf-DZ-6l9">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="0vq-QR-3ca"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="PUB" id="YYf-DZ-6l9"/>
+                    <connections>
+                        <outlet property="dataText" destination="BOA-OF-3su" id="a4K-NS-b6X"/>
+                        <outlet property="nameText" destination="PzX-TH-uLH" id="X03-Sw-E3V"/>
+                        <outlet property="qosSegment" destination="iEa-ge-liS" id="pdc-A9-8nC"/>
+                        <outlet property="retainSwitch" destination="6dB-zM-yZp" id="aPZ-6q-ZgI"/>
+                        <outlet property="topicText" destination="6Z4-ND-5hg" id="ZWm-Og-upS"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i4J-zO-bvN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

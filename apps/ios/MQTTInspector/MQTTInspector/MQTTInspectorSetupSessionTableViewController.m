@@ -8,6 +8,7 @@
 
 #import "MQTTInspectorSetupSessionTableViewController.h"
 #import "Session+Create.h"
+#import "MQTTInspectorDetailViewController.h"
 
 @interface MQTTInspectorSetupSessionTableViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *nameText;
@@ -28,6 +29,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    self.title = self.session.name;
     
     self.nameText.text = self.session.name;
     self.hostText.text = self.session.host;
@@ -50,6 +53,44 @@
         }
     }
 }
-
+- (IBAction)nameChanged:(UITextField *)sender {
+    
+    NSString *newName = sender.text;
+    
+    Session *existingSession = [Session existSessionWithName:newName inManagedObjectContext:self.session.managedObjectContext];
+    if (!existingSession || (existingSession == self.session)) {
+        self.session.name = newName;
+        self.title = self.session.name;
+    } else {
+        [MQTTInspectorDetailViewController alert:@"Duplicate Session"];
+    }
+}
+- (IBAction)hostChanged:(UITextField *)sender {
+    self.session.host = sender.text;
+}
+- (IBAction)portChanged:(UITextField *)sender {
+    self.session.port = @([sender.text intValue]);
+}
+- (IBAction)tlsChanged:(UISwitch *)sender {
+    self.session.tls = @(sender.on);
+}
+- (IBAction)authChanged:(UISwitch *)sender {
+    self.session.auth = @(sender.on);
+}
+- (IBAction)userChanged:(UITextField *)sender {
+    self.session.user = sender.text;
+}
+- (IBAction)passwdChanged:(UITextField *)sender {
+    self.session.passwd = sender.text;
+}
+- (IBAction)clientIdChanged:(UITextField *)sender {
+    self.session.clientid = sender.text;
+}
+- (IBAction)cleansessionChanged:(UISwitch *)sender {
+    self.session.cleansession = @(sender.on);
+}
+- (IBAction)keepalvieChanged:(UITextField *)sender {
+    self.session.keepalive = @([sender.text intValue]);
+}
 
 @end

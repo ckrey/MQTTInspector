@@ -1,25 +1,25 @@
 //
-//  MQTTInspectorSetupPubsTableViewController.m
+//  MQTTInspectorSetupSubsTableViewController.m
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 14.11.13.
 //  Copyright (c) 2013 Christoph Krey. All rights reserved.
 //
 
-#import "MQTTInspectorSetupPubsTableViewController.h"
-#import "MQTTInspectorSetupPubTableViewController.h"
-#import "Publication+Create.h"
+#import "MQTTInspectorSetupSubsTableViewController.h"
+#import "MQTTInspectorSetupSubTableViewController.h"
+#import "Subscription+Create.h"
 
-@interface MQTTInspectorSetupPubsTableViewController ()
+@interface MQTTInspectorSetupSubsTableViewController ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 @end
 
-@implementation MQTTInspectorSetupPubsTableViewController
+@implementation MQTTInspectorSetupSubsTableViewController
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"setPub:"]) {
+    if ([segue.identifier isEqualToString:@"setSub:"]) {
         
         NSIndexPath *indexPath = nil;
         
@@ -28,34 +28,22 @@
         }
         
         if (indexPath) {
-            Publication *pub = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-            if ([segue.destinationViewController respondsToSelector:@selector(setPub:)]) {
-                [segue.destinationViewController performSelector:@selector(setPub:)
-                                                      withObject:pub];
+            Subscription *sub = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+            if ([segue.destinationViewController respondsToSelector:@selector(setSub:)]) {
+                [segue.destinationViewController performSelector:@selector(setSub:)
+                                                      withObject:sub];
             }
         }
     }
-
-    if ([segue.identifier isEqualToString:@"newPub"]) {
-        int i = 1;
-        NSString *newName;
-        
-        do {
-            newName = [NSString stringWithFormat:@"new-pub-%d", i++];
-        } while ([Publication existsPublicationWithName:newName
-                                       session:self.session
-                        inManagedObjectContext:self.session.managedObjectContext]);
-        
-        Publication *pub = [Publication publicationWithName:newName
-                                                      topic:@"topic"
-                                                        qos:0
-                                                   retained:NO
-                                                       data:[@"data" dataUsingEncoding:NSUTF8StringEncoding]
-                                               session:self.session
-                             inManagedObjectContext:self.session.managedObjectContext];
-        if ([segue.destinationViewController respondsToSelector:@selector(setPub:)]) {
-            [segue.destinationViewController performSelector:@selector(setPub:)
-                                                  withObject:pub];
+    
+    if ([segue.identifier isEqualToString:@"newSub"]) {
+        Subscription *sub = [Subscription subscriptionWithTopic:@"new-sub"
+                                                            qos:0
+                                                        session:self.session
+                                         inManagedObjectContext:self.session.managedObjectContext];
+        if ([segue.destinationViewController respondsToSelector:@selector(setSub:)]) {
+            [segue.destinationViewController performSelector:@selector(setSub:)
+                                                  withObject:sub];
         }
     }
 }
@@ -75,7 +63,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"pub" forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"sub" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
@@ -118,7 +106,7 @@
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Publication" inManagedObjectContext:self.session.managedObjectContext];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Subscription" inManagedObjectContext:self.session.managedObjectContext];
     [fetchRequest setEntity:entity];
     
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"belongsTo = %@", self.session];
@@ -127,7 +115,7 @@
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"topic" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor1];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -211,8 +199,9 @@
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    Publication *pub = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = pub.name;
+    Subscription *sub = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    cell.textLabel.text = sub.topic;
 }
+
 
 @end

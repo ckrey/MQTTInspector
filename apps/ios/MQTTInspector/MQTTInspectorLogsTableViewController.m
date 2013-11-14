@@ -25,7 +25,6 @@
     [self.tableView reloadData];
 }
 
-
 #pragma mark - Fetched results controller
 
 - (NSFetchedResultsController *)fetchedResultsController
@@ -175,13 +174,43 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Message *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ :%@ q%d",
-                           [NSDateFormatter localizedStringFromDate:message.timestamp
-                                                          dateStyle:NSDateFormatterShortStyle
-                                                          timeStyle:NSDateFormatterMediumStyle],
-                           message.topic,
-                           -1];
+    
+    NSMutableAttributedString *as =
+    [[NSMutableAttributedString alloc] initWithString:[NSDateFormatter localizedStringFromDate:message.timestamp
+                                                                                     dateStyle:NSDateFormatterShortStyle
+                                                                                     timeStyle:NSDateFormatterMediumStyle]
+                                           attributes:@{}];
+    
+    [as appendAttributedString:
+     [[NSAttributedString alloc] initWithString:@" :"
+                                     attributes:@{}]];
+    
+    UIFont *font = [UIFont boldSystemFontOfSize:16.0];
+    NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:font
+                                                                forKey:NSFontAttributeName];
+    [as appendAttributedString:
+     [[NSAttributedString alloc] initWithString:message.topic attributes:attrsDictionary]];
+    
+    
+    [as appendAttributedString:
+     [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" q%d i%d (%d)",
+                                                 -1,
+                                                 -1,
+                                                 message.data.length]
+                                     attributes:@{}]];
+    cell.detailTextLabel.attributedText = as;
 
+    /*
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ :%@ q%d i%d (%d)",
+                                 [NSDateFormatter localizedStringFromDate:message.timestamp
+                                                                dateStyle:NSDateFormatterShortStyle
+                                                                timeStyle:NSDateFormatterMediumStyle],
+                                 message.topic,
+                                 -1,
+                                 -1,
+                                 message.data.length];
+     */
+    
     cell.textLabel.text = [MQTTInspectorDataViewController dataToString:message.data];
     
     cell.backgroundColor = [self matchingSubscriptionColor:message];

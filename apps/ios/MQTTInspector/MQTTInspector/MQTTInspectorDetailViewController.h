@@ -18,4 +18,6 @@
 @property (strong, nonatomic) MQTTSession *mqttSession;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
++ (void)alert:(NSString *)message;
+
 @end

@@ -10,6 +10,10 @@
 #import "Session.h"
 
 @interface Publication (Create)
++ (Publication *)existsPublicationWithName:(NSString *)name
+                                   session:(Session *)session
+                    inManagedObjectContext:(NSManagedObjectContext *)context;
+
 + (Publication *)publicationWithName:(NSString *)name
                                topic:(NSString *)topic
                                  qos:(int)qos
