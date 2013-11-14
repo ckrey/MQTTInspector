@@ -11,7 +11,6 @@
 #import "Subscription+Create.h"
 
 @interface MQTTInspectorTopicsTableViewController ()
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 @end
 
@@ -173,11 +172,6 @@
     return NO;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    //
-}
-
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Topic *topic = [self.fetchedResultsController objectAtIndexPath:indexPath];
@@ -192,7 +186,6 @@
     cell.backgroundColor = [self matchingSubscriptionColor:topic];
 }
 
-#define MAX_LEN 64
 - (NSString *)dataToString:(NSData *)data
 {
     BOOL binary = FALSE;
@@ -211,20 +204,11 @@
             binary = TRUE;
             break;
         }
-        if (i > MAX_LEN) {
-            message = [message stringByAppendingString:@" <...>"];
-            break;
-        }
         message = [message stringByAppendingFormat:@"%c", c];
     }
     
     if (binary) {
-        NSString *hexString = [data description];
-        if ([hexString length] > MAX_LEN) {
-            return [NSString stringWithFormat:@"%@ <...>", [hexString substringToIndex:MAX_LEN]];
-        } else {
-            return hexString;
-        }
+        return [data description];
     }
     return message;
 }

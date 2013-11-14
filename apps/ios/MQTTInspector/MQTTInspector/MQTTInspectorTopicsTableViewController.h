@@ -12,5 +12,6 @@
 @interface MQTTInspectorTopicsTableViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) MQTTInspectorDetailViewController *mother;
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 @end

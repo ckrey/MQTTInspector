@@ -98,11 +98,11 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="message" textLabel="fcE-GB-StQ" detailTextLabel="4kd-WL-9xa" style="IBUITableViewCellStyleSubtitle" id="q8g-bG-W79">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="message" textLabel="fcE-GB-StQ" detailTextLabel="4kd-WL-9xa" style="IBUITableViewCellStyleSubtitle" id="q8g-bG-W79">
                                         <rect key="frame" x="0.0" y="22" width="470" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="q8g-bG-W79" id="M3m-lM-TjI">
-                                            <rect key="frame" x="0.0" y="0.0" width="470" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="423" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fcE-GB-StQ">
@@ -121,6 +121,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="N8D-IB-PEI" kind="push" identifier="setMessage:" trigger="accessoryAction" id="vM3-rD-QBK"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -226,7 +229,46 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1431" y="443"/>
+            <point key="canvasLocation" x="1447" y="873"/>
+        </scene>
+        <!--Inspector Data View Controller-->
+        <scene sceneID="1Y1-yd-zaj">
+            <objects>
+                <viewController id="N8D-IB-PEI" customClass="MQTTInspectorDataViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="hua-VP-EqQ"/>
+                        <viewControllerLayoutGuide type="bottom" id="sNA-N5-vfS"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="aPs-5z-v79">
+                        <rect key="frame" x="0.0" y="0.0" width="703" height="768"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="39j-lk-74x">
+                                <rect key="frame" x="20" y="0.0" width="663" height="760"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" name="CourierNewPSMT" family="Courier New" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="39j-lk-74x" firstAttribute="top" secondItem="aPs-5z-v79" secondAttribute="top" id="102-KJ-MVm"/>
+                            <constraint firstAttribute="trailing" secondItem="39j-lk-74x" secondAttribute="trailing" constant="20" symbolic="YES" id="E51-ET-0gi"/>
+                            <constraint firstItem="sNA-N5-vfS" firstAttribute="top" secondItem="39j-lk-74x" secondAttribute="bottom" constant="20" symbolic="YES" id="Kz4-hV-GUl"/>
+                            <constraint firstItem="39j-lk-74x" firstAttribute="leading" secondItem="aPs-5z-v79" secondAttribute="leading" constant="20" symbolic="YES" id="sFu-ZC-jjf"/>
+                        </constraints>
+                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="vUo-mo-QEM"/>
+                    <connections>
+                        <outlet property="dataTextView" destination="39j-lk-74x" id="2Wf-lY-Tmf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VEx-It-pK1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2549" y="873"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="Nki-YV-4Qg">
@@ -901,7 +943,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SLD-UC-DBI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="514" y="448"/>
+            <point key="canvasLocation" x="536" y="873"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

@@ -48,6 +48,50 @@
     //
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSIndexPath *indexPath = nil;
+    
+    if ([sender isKindOfClass:[UITableViewCell class]]) {
+        if (self.logsTVC) {
+            indexPath = [self.logsTVC.tableView indexPathForCell:sender];
+        }
+        if (self.topicsTVC) {
+            indexPath = [self.topicsTVC.tableView indexPathForCell:sender];
+        }
+
+    }
+    
+    if (indexPath) {
+        if ([segue.identifier isEqualToString:@"setMessage:"]) {
+            NSData *theData;
+            NSString *theTopic;
+            
+            if (self.logsTVC) {
+                Message *message = [[self.logsTVC fetchedResultsController] objectAtIndexPath:indexPath];
+                theData = message.data;
+                theTopic = message.topic;
+            }
+            if (self.topicsTVC) {
+                Topic *topic = [[self.topicsTVC fetchedResultsController] objectAtIndexPath:indexPath];
+                theData = topic.data;
+                theTopic = topic.topic;
+            }
+
+            if ([segue.destinationViewController respondsToSelector:@selector(setTopic:)]) {
+                [segue.destinationViewController performSelector:@selector(setTopic:)
+                                                      withObject:theTopic];
+            }
+            if ([segue.destinationViewController respondsToSelector:@selector(setData:)]) {
+                [segue.destinationViewController performSelector:@selector(setData:)
+                                                      withObject:theData];
+            }
+        }
+    }
+}
+
+
+
 - (IBAction)connect:(UIButton *)sender {
     if (self.session) {
         NSString *clientId;
@@ -145,6 +189,7 @@
         UITableViewController *stvc = [[UITableViewController alloc] init];
         stvc.tableView = self.subs;
         [stvc.tableView reloadData];
+        
         self.pubsTVC = nil;
         UITableViewController *ptvc = [[UITableViewController alloc] init];
         ptvc.tableView = self.pubs;
