@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *disconnectButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *connectButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *clearButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *pubButton;
 @property (weak, nonatomic) IBOutlet UIProgressView *progress;
 @property (weak, nonatomic) IBOutlet UITableView *messages;
 @property (weak, nonatomic) IBOutlet UITableView *subs;
@@ -59,6 +60,14 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    if ([segue.identifier isEqualToString:@"setSession:"]) {
+        if ([segue.destinationViewController respondsToSelector:@selector(setMother:)]) {
+            [segue.destinationViewController performSelector:@selector(setMother:)
+                                                  withObject:self];
+        }
+    }
+
+
     NSIndexPath *indexPath = nil;
     
     if ([sender isKindOfClass:[UITableViewCell class]]) {
@@ -248,6 +257,7 @@
         
         self.connectButton.enabled = FALSE;
         self.disconnectButton.enabled = TRUE;
+        self.pubButton.enabled = TRUE;
     } else {
         self.subsTVC = nil;
         UITableViewController *stvc = [[UITableViewController alloc] init];
@@ -261,6 +271,7 @@
         
         self.connectButton.enabled = TRUE;
         self.disconnectButton.enabled = FALSE;
+        self.pubButton.enabled = FALSE;
     }
     if (error) {
         [MQTTInspectorDetailViewController alert:[error description]];
