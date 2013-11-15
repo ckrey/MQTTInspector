@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "Session+Create.h"
+#include "SRVResolver.h"
 
-@interface MQTTInspectorSetupSessionTableViewController : UITableViewController
+@interface MQTTInspectorSetupSessionTableViewController : UITableViewController <SRVResolverDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 @property (strong, nonatomic) Session *session;
 
 @end

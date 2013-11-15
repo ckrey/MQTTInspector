@@ -22,33 +22,28 @@
 - (void)viewDidLoad
 {
     /* DEMO DB SETUP */
-    Session *session1 = [Session sessionWithName:@"roo" host:@"roo.jpmens.net" port:1883 tls:NO auth:YES user:@"abc" passwd:@"xyz" clientid:nil cleansession:NO keepalive:60 inManagedObjectContext:self.managedObjectContext];
-    Session *session2 = [Session sessionWithName:@"cky" host:@"http://fzvtoshindhfdqqo.myfritz.net" port:8883 tls:YES auth:YES user:@"abc" passwd:@"xyz" clientid:nil cleansession:NO keepalive:60 inManagedObjectContext:self.managedObjectContext];
-    Session *session3 = [Session sessionWithName:@"mosquitto" host:@"test.mosquitto.org" port:1883 tls:NO auth:NO user:@"" passwd:@"" clientid:nil cleansession:YES keepalive:60 inManagedObjectContext:self.managedObjectContext];
+    Session *session3 = [Session sessionWithName:@"mosquitto.org" host:@"test.mosquitto.org" port:1883 tls:NO auth:NO user:@"" passwd:@"" clientid:nil cleansession:YES keepalive:60 inManagedObjectContext:self.managedObjectContext];
+    Session *session1 = [Session sessionWithName:@"eclipse.org" host:@"m2m.eclipse.org" port:1883 tls:NO auth:NO user:@"" passwd:@"" clientid:nil cleansession:YES keepalive:60 inManagedObjectContext:self.managedObjectContext];
     
     Subscription *subscription;
     subscription = [Subscription subscriptionWithTopic:@"#" qos:0 session:session1 inManagedObjectContext:self.managedObjectContext];
     subscription = [Subscription subscriptionWithTopic:@"loc/#" qos:1 session:session1 inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"MQTTInspector/#" qos:1 session:session1 inManagedObjectContext:self.managedObjectContext];
+    
     subscription = [Subscription subscriptionWithTopic:@"mqttitude/#" qos:2 session:session1 inManagedObjectContext:self.managedObjectContext];
     
-    subscription = [Subscription subscriptionWithTopic:@"mqttitude/#" qos:2 session:session2 inManagedObjectContext:self.managedObjectContext];
-
     subscription = [Subscription subscriptionWithTopic:@"#" qos:0 session:session3 inManagedObjectContext:self.managedObjectContext];
     subscription = [Subscription subscriptionWithTopic:@"loc/#" qos:1 session:session3 inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"MQTTInspector/#" qos:1 session:session1 inManagedObjectContext:self.managedObjectContext];
+
     subscription = [Subscription subscriptionWithTopic:@"mqttitude/#" qos:2 session:session3 inManagedObjectContext:self.managedObjectContext];
     subscription = [Subscription subscriptionWithTopic:@"system/+/chronos/#" qos:0 session:session3 inManagedObjectContext:self.managedObjectContext];
 
     Publication *publication;
-    publication = [Publication publicationWithName:@"a1" topic:@"mqttitude/dt27/inspector1" qos:0 retained:NO data:[@"MQTTInspector" dataUsingEncoding:NSUTF8StringEncoding] session:session1 inManagedObjectContext:self.managedObjectContext];
-    publication = [Publication publicationWithName:@"a2" topic:@"mqttitude/dt27/inspector2" qos:0 retained:NO data:[@"MQTTInspector" dataUsingEncoding:NSUTF8StringEncoding] session:session1 inManagedObjectContext:self.managedObjectContext];
-    publication = [Publication publicationWithName:@"a3" topic:@"mqttitude/dt27/inspector3" qos:0 retained:NO data:[@"MQTTInspector" dataUsingEncoding:NSUTF8StringEncoding] session:session1 inManagedObjectContext:self.managedObjectContext];
+    publication = [Publication publicationWithName:@"ping" topic:@"MQTTInspector" qos:0 retained:NO data:[@"ping %t %c" dataUsingEncoding:NSUTF8StringEncoding] session:session1 inManagedObjectContext:self.managedObjectContext];
     
-    publication = [Publication publicationWithName:@"b" topic:@"mqttitude/dt27/inspector" qos:0 retained:NO data:[@"MQTTInspector" dataUsingEncoding:NSUTF8StringEncoding] session:session2 inManagedObjectContext:self.managedObjectContext];
+    publication = [Publication publicationWithName:@"ping" topic:@"MQTTInspector" qos:0 retained:NO data:[@"ping %t %c" dataUsingEncoding:NSUTF8StringEncoding] session:session1 inManagedObjectContext:self.managedObjectContext];
     
-    publication = [Publication publicationWithName:@"c1" topic:@"mqttitude/dt27/inspector3" qos:0 retained:NO data:[@"MQTTInspector" dataUsingEncoding:NSUTF8StringEncoding] session:session3 inManagedObjectContext:self.managedObjectContext];
-    publication = [Publication publicationWithName:@"c2" topic:@"mqttitude/dt27/inspector1" qos:0 retained:NO data:[@"MQTTInspector" dataUsingEncoding:NSUTF8StringEncoding] session:session3 inManagedObjectContext:self.managedObjectContext];
-    publication = [Publication publicationWithName:@"c3" topic:@"mqttitude/dt27/inspector2" qos:0 retained:NO data:[@"MQTTInspector" dataUsingEncoding:NSUTF8StringEncoding] session:session3 inManagedObjectContext:self.managedObjectContext];
-
     self.detailViewController.managedObjectContext = self.managedObjectContext;
 }
 

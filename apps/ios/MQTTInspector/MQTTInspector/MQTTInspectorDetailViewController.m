@@ -10,6 +10,7 @@
 #import "Message+Create.h"
 #import "Topic+Create.h"
 #import "Command+Create.h"
+#import "Subscription+Create.h"
 #import "MQTTInspectorLogsTableViewController.h"
 #import "MQTTInspectorTopicsTableViewController.h"
 #import "MQTTInspectorCommandsTableViewController.h"
@@ -46,6 +47,14 @@
 {
     [super viewDidLoad];
     //
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (!self.session) {
+        [self.masterPopoverController presentPopoverFromBarButtonItem:self.navigationController.navigationItem.backBarButtonItem permittedArrowDirections:(UIPopoverArrowDirectionAny) animated:TRUE];
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -125,7 +134,13 @@
                                                          forMode:NSRunLoopCommonModes];
         self.mqttSession.delegate = self;
         
-        [self.mqttSession connectToHost:self.session.host port:[self.session.port integerValue] usingSSL:[self.session.tls boolValue]];
+        if ([self.session.cleansession boolValue]) {
+            for (Subscription *sub in self.session.hasSubs) {
+                 sub.state = @(0);
+            }
+        }
+        
+        [self.mqttSession connectToHost:self.session.host port:[self.session.port intValue] usingSSL:[self.session.tls boolValue]];
     }
 }
 
@@ -181,6 +196,7 @@
 #pragma mark - Managing the detail item
 - (void)setSession:(Session *)session
 {
+    self.title = session.name;
     if (_session != session) {
         if (_session) {
             if (self.mqttSession)
@@ -190,7 +206,6 @@
         }
         _session = session;
         
-        self.title = session.name;
         self.clearButton.enabled = TRUE;
         self.level.enabled = TRUE;
         self.connectButton.enabled = TRUE;
@@ -466,7 +481,7 @@
 
 - (void)splitViewController:(UISplitViewController *)splitController willHideViewController:(UIViewController *)viewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)popoverController
 {
-    barButtonItem.title = NSLocalizedString(@"Setup", @"Setup");
+    barButtonItem.title = @"Organize";
     [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
     self.masterPopoverController = popoverController;
 }

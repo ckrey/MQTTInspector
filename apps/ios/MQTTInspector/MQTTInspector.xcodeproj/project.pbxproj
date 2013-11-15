@@ -21,6 +21,8 @@
 		84147D011834E06A0018E601 /* MQTTInspectorDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147D001834E06A0018E601 /* MQTTInspectorDataViewController.m */; };
 		84147D041835203D0018E601 /* MQTTInspectorSetupSubsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147D031835203D0018E601 /* MQTTInspectorSetupSubsTableViewController.m */; };
 		84147D071835204F0018E601 /* MQTTInspectorSetupSubTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147D061835204F0018E601 /* MQTTInspectorSetupSubTableViewController.m */; };
+		84147D0E18365A9C0018E601 /* SRVResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147D0D18365A9C0018E601 /* SRVResolver.m */; };
+		84147D1018365C740018E601 /* libresolv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84147D0F18365C740018E601 /* libresolv.dylib */; };
 		84684E8A1832192800AE13B5 /* Subscription+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84684E891832192800AE13B5 /* Subscription+Create.m */; };
 		84684E8D1832193B00AE13B5 /* Publication+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84684E8C1832193B00AE13B5 /* Publication+Create.m */; };
 		84684E9118321D1200AE13B5 /* MQTTInspectorPubsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84684E9018321D1200AE13B5 /* MQTTInspectorPubsTableViewController.m */; };
@@ -95,6 +97,11 @@
 		84147D031835203D0018E601 /* MQTTInspectorSetupSubsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTInspectorSetupSubsTableViewController.m; sourceTree = "<group>"; };
 		84147D051835204F0018E601 /* MQTTInspectorSetupSubTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTInspectorSetupSubTableViewController.h; sourceTree = "<group>"; };
 		84147D061835204F0018E601 /* MQTTInspectorSetupSubTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTInspectorSetupSubTableViewController.m; sourceTree = "<group>"; };
+		84147D0818363BFC0018E601 /* libdns_services.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libdns_services.dylib; path = usr/lib/libdns_services.dylib; sourceTree = SDKROOT; };
+		84147D0A18363C540018E601 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		84147D0C18365A9C0018E601 /* SRVResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRVResolver.h; sourceTree = "<group>"; };
+		84147D0D18365A9C0018E601 /* SRVResolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRVResolver.m; sourceTree = "<group>"; };
+		84147D0F18365C740018E601 /* libresolv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.dylib; path = usr/lib/libresolv.dylib; sourceTree = SDKROOT; };
 		84684E881832192800AE13B5 /* Subscription+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Subscription+Create.h"; path = "../Subscription+Create.h"; sourceTree = "<group>"; };
 		84684E891832192800AE13B5 /* Subscription+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Subscription+Create.m"; path = "../Subscription+Create.m"; sourceTree = "<group>"; };
 		84684E8B1832193B00AE13B5 /* Publication+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Publication+Create.h"; path = "../Publication+Create.h"; sourceTree = "<group>"; };
@@ -154,6 +161,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84147D1018365C740018E601 /* libresolv.dylib in Frameworks */,
 				8492C955182E63D300A40D8B /* CoreGraphics.framework in Frameworks */,
 				8492C959182E63D300A40D8B /* CoreData.framework in Frameworks */,
 				8492C957182E63D300A40D8B /* UIKit.framework in Frameworks */,
@@ -229,6 +237,9 @@
 		8492C951182E63D300A40D8B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				84147D0F18365C740018E601 /* libresolv.dylib */,
+				84147D0A18363C540018E601 /* CFNetwork.framework */,
+				84147D0818363BFC0018E601 /* libdns_services.dylib */,
 				8492C952182E63D300A40D8B /* Foundation.framework */,
 				8492C954182E63D300A40D8B /* CoreGraphics.framework */,
 				8492C956182E63D300A40D8B /* UIKit.framework */,
@@ -243,6 +254,8 @@
 			children = (
 				8492C963182E63D300A40D8B /* MQTTInspectorAppDelegate.h */,
 				8492C964182E63D300A40D8B /* MQTTInspectorAppDelegate.m */,
+				84147D0C18365A9C0018E601 /* SRVResolver.h */,
+				84147D0D18365A9C0018E601 /* SRVResolver.m */,
 				8492C99D182EEEDA00A40D8B /* mqtt */,
 				8492C966182E63D300A40D8B /* Main_iPhone.storyboard */,
 				8492C969182E63D300A40D8B /* Main_iPad.storyboard */,
@@ -431,6 +444,7 @@
 				8492C9A9182EEEDA00A40D8B /* MQTTEncoder.m in Sources */,
 				84147CF71834CDD10018E601 /* MQTTInspectorSetupPubsTableViewController.m in Sources */,
 				84147D071835204F0018E601 /* MQTTInspectorSetupSubTableViewController.m in Sources */,
+				84147D0E18365A9C0018E601 /* SRVResolver.m in Sources */,
 				8492C9A8182EEEDA00A40D8B /* MQTTDecoder.m in Sources */,
 				84684E8D1832193B00AE13B5 /* Publication+Create.m in Sources */,
 				84684E9118321D1200AE13B5 /* MQTTInspectorPubsTableViewController.m in Sources */,
