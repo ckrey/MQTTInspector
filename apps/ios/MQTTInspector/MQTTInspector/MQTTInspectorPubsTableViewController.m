@@ -8,6 +8,7 @@
 
 #import "MQTTInspectorPubsTableViewController.h"
 #import "Publication+Create.h"
+#import "MQTTInspectorDataViewController.h"
 
 @interface MQTTInspectorPubsTableViewController ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
@@ -172,7 +173,23 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Publication *publication = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    [self.mother.mqttSession publishData:publication.data
+    
+    NSString *string = [MQTTInspectorDataViewController dataToString:publication.data];
+    
+    // REPLACE %t with timeIntervalSince1970
+    NSString *nowString = [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]];
+    string = [string stringByReplacingOccurrencesOfString:@"%t" withString:nowString];
+    
+    // REPLACE %c with effective clientId
+    NSString *clientId;
+    if ((!publication.belongsTo.clientid) || ([publication.belongsTo.clientid isEqualToString:@""])) {
+        clientId = [NSString stringWithFormat:@"MQTTInspector-%d", getpid()];
+    } else {
+        clientId = publication.belongsTo.clientid;
+    }
+    string = [string stringByReplacingOccurrencesOfString:@"%c" withString:clientId];
+    
+    [self.mother.mqttSession publishData:[string dataUsingEncoding:NSUTF8StringEncoding]
                                  onTopic:publication.topic
                                   retain:[publication.retained boolValue]
                                      qos:[publication.qos intValue]];

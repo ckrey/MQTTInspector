@@ -109,18 +109,21 @@
     }
 }
 
-
+- (NSString *)effectiveClientId
+{
+    NSString *clientId;
+    if ((!self.session.clientid) || ([self.session.clientid isEqualToString:@""])) {
+        clientId = [NSString stringWithFormat:@"MQTTInspector-%d", getpid()];
+    } else {
+        clientId = self.session.clientid;
+    }
+    return clientId;
+}
 
 - (IBAction)connect:(UIButton *)sender {
     if (self.session) {
-        NSString *clientId;
-        if ((!self.session.clientid) || ([self.session.clientid isEqualToString:@""])) {
-            clientId = [NSString stringWithFormat:@"MQTTInspector-%d", getpid()];
-        } else {
-            clientId = self.session.clientid;
-        }
 
-        self.mqttSession = [[MQTTSession alloc] initWithClientId:clientId
+        self.mqttSession = [[MQTTSession alloc] initWithClientId:[self effectiveClientId]
                                                         userName:self.session.user
                                                         password:self.session.passwd
                                                        keepAlive:[self.session.keepalive intValue]
