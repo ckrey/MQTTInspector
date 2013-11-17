@@ -19,5 +19,7 @@
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 + (void)alert:(NSString *)message;
+- (void)publish:(Publication *)pub;
+
 
 @end

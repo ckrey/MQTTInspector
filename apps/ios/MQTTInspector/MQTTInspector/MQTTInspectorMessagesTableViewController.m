@@ -1,22 +1,20 @@
 //
-//  MQTTInspectorPubsTableViewController.m
+//  MQTTInspectorMessagesTableViewController.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 12.11.13.
+//  Created by Christoph Krey on 17.11.13.
 //  Copyright (c) 2013 Christoph Krey. All rights reserved.
 //
 
-#import "MQTTInspectorPubsTableViewController.h"
-#import "Publication+Create.h"
-#import "MQTTInspectorDataViewController.h"
-#import "MQTTInspectorDetailViewController.h"
+#import "MQTTInspectorMessagesTableViewController.h"
 
-@interface MQTTInspectorPubsTableViewController ()
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-
+@interface MQTTInspectorMessagesTableViewController ()
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+- (NSFetchRequest *)fetchRequestForTableView;
 @end
 
-@implementation MQTTInspectorPubsTableViewController
+@implementation MQTTInspectorMessagesTableViewController
 
 - (void)setTableView:(UITableView *)tableView
 {
@@ -26,7 +24,21 @@
     [self.tableView reloadData];
 }
 
+- (void)setRunning:(BOOL)running
+{
+    _running = running;
+    if (running) {
+        [self.tableView reloadData];
+    }
+}
+
 #pragma mark - Fetched results controller
+
+- (NSFetchRequest *)fetchRequestForTableView
+{
+    // abstract
+    return nil;
+}
 
 - (NSFetchedResultsController *)fetchedResultsController
 {
@@ -34,25 +46,12 @@
         return _fetchedResultsController;
     }
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    // Edit the entity name as appropriate.
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Publication" inManagedObjectContext:self.mother.managedObjectContext];
-    [fetchRequest setEntity:entity];
-    
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"belongsTo = %@", self.mother.session];
-
-    // Set the batch size to a suitable number.
-    [fetchRequest setFetchBatchSize:20];
-    
-    // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
-    NSArray *sortDescriptors = @[sortDescriptor1];
-    
-    [fetchRequest setSortDescriptors:sortDescriptors];
-    
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.mother.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
+                                                             initWithFetchRequest:[self fetchRequestForTableView]
+                                                             managedObjectContext:self.mother.managedObjectContext
+                                                             sectionNameKeyPath:nil cacheName:nil];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     
@@ -76,14 +75,16 @@
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {
-    switch(type) {
-        case NSFetchedResultsChangeInsert:
-            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-            break;
+    if (self.running) {
+        switch(type) {
+            case NSFetchedResultsChangeInsert:
+                [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+                
+            case NSFetchedResultsChangeDelete:
+                [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+        }
     }
 }
 
@@ -91,25 +92,27 @@
        atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath
 {
-    UITableView *tableView = self.tableView;
-    
-    switch(type) {
-        case NSFetchedResultsChangeInsert:
-            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeUpdate:
-            [self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
-            break;
-            
-        case NSFetchedResultsChangeMove:
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
+    if (self.running) {
+        UITableView *tableView = self.tableView;
+        
+        switch(type) {
+            case NSFetchedResultsChangeInsert:
+                [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+                
+            case NSFetchedResultsChangeDelete:
+                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+                
+            case NSFetchedResultsChangeUpdate:
+                [self configureCell:[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+                break;
+                
+            case NSFetchedResultsChangeMove:
+                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+        }
     }
 }
 
@@ -125,11 +128,6 @@
     return [[self.fetchedResultsController sections] count];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return [NSString stringWithFormat:@"PUBs"];
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
@@ -138,7 +136,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"publication" forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"message" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
@@ -171,17 +169,15 @@
     return NO;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    Publication *publication = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    [self.mother publish:publication];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    Publication *publication = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = publication.name;
+    // abstract
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    // abstract
+    return nil;
 }
 
 @end

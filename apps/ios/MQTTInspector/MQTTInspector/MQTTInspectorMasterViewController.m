@@ -21,28 +21,76 @@
 
 - (void)viewDidLoad
 {
-    /* DEMO DB SETUP */
-    Session *session3 = [Session sessionWithName:@"mosquitto.org" host:@"test.mosquitto.org" port:1883 tls:NO auth:NO user:@"" passwd:@"" clientid:nil cleansession:YES keepalive:60 inManagedObjectContext:self.managedObjectContext];
-    Session *session1 = [Session sessionWithName:@"eclipse.org" host:@"m2m.eclipse.org" port:1883 tls:NO auth:NO user:@"" passwd:@"" clientid:nil cleansession:YES keepalive:60 inManagedObjectContext:self.managedObjectContext];
-    
-    Subscription *subscription;
-    subscription = [Subscription subscriptionWithTopic:@"loc/#" qos:1 session:session1 inManagedObjectContext:self.managedObjectContext];
-    subscription = [Subscription subscriptionWithTopic:@"MQTTInspector/#" qos:1 session:session1 inManagedObjectContext:self.managedObjectContext];
-    
-    subscription = [Subscription subscriptionWithTopic:@"mqttitude/#" qos:2 session:session1 inManagedObjectContext:self.managedObjectContext];
-    
-    subscription = [Subscription subscriptionWithTopic:@"loc/#" qos:1 session:session3 inManagedObjectContext:self.managedObjectContext];
-    subscription = [Subscription subscriptionWithTopic:@"MQTTInspector/#" qos:1 session:session3 inManagedObjectContext:self.managedObjectContext];
-
-    subscription = [Subscription subscriptionWithTopic:@"mqttitude/#" qos:2 session:session3 inManagedObjectContext:self.managedObjectContext];
-    subscription = [Subscription subscriptionWithTopic:@"system/+/chronos/#" qos:0 session:session3 inManagedObjectContext:self.managedObjectContext];
-
-    Publication *publication;
-    publication = [Publication publicationWithName:@"ping" topic:@"MQTTInspector" qos:0 retained:NO data:[@"ping %t %c" dataUsingEncoding:NSUTF8StringEncoding] session:session1 inManagedObjectContext:self.managedObjectContext];
-    
-    publication = [Publication publicationWithName:@"ping" topic:@"MQTTInspector" qos:0 retained:NO data:[@"ping %t %c" dataUsingEncoding:NSUTF8StringEncoding] session:session3 inManagedObjectContext:self.managedObjectContext];
-    
     self.detailViewController.managedObjectContext = self.managedObjectContext;
+
+    /* DEMO DB SETUP */
+    Session *session;
+    Subscription *subscription;
+    Publication *publication;
+
+    /* mosquitto.org */
+    session = [Session sessionWithName:@"mosquitto.org"
+                                  host:@"test.mosquitto.org"
+                                  port:1883
+                                   tls:NO
+                                  auth:NO
+                                  user:@""
+                                passwd:@""
+                              clientid:nil
+                          cleansession:YES
+                             keepalive:60
+                inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"loc/#"
+                                                   qos:1
+                                               session:session
+                                inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"MQTTInspector/#"
+                                                   qos:1
+                                               session:session
+                                inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"mqttitude/#"
+                                                   qos:2
+                                               session:session
+                                inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"system/+/chronos/#"
+                                                   qos:0 session:session
+                                inManagedObjectContext:self.managedObjectContext];
+    publication = [Publication publicationWithName:@"ping"
+                                             topic:@"MQTTInspector"
+                                               qos:0
+                                          retained:NO
+                                              data:[@"ping %t %c" dataUsingEncoding:NSUTF8StringEncoding]
+                                           session:session inManagedObjectContext:self.managedObjectContext];
+
+    /* eclipse.org */
+    session = [Session sessionWithName:@"eclipse.org"
+                                  host:@"m2m.eclipse.org"
+                                  port:1883
+                                   tls:NO
+                                  auth:NO
+                                  user:@""
+                                passwd:@""
+                              clientid:nil
+                          cleansession:YES keepalive:60 inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"loc/#"
+                                                   qos:1
+                                               session:session
+                                inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"MQTTInspector/#"
+                                                   qos:1
+                                               session:session
+                                inManagedObjectContext:self.managedObjectContext];
+    
+    subscription = [Subscription subscriptionWithTopic:@"mqttitude/#"
+                                                   qos:2
+                                               session:session
+                                inManagedObjectContext:self.managedObjectContext];
+    publication = [Publication publicationWithName:@"ping"
+                                             topic:@"MQTTInspector"
+                                               qos:0
+                                          retained:NO
+                                              data:[@"ping %t %c" dataUsingEncoding:NSUTF8StringEncoding]
+                                           session:session inManagedObjectContext:self.managedObjectContext];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

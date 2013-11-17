@@ -7,12 +7,16 @@
 //
 
 #import "MQTTInspectorAdHocPubTableViewController.h"
+#import "Publication+Create.h"
+#import "MQTTInspectorDataViewController.h"
 
 @interface MQTTInspectorAdHocPubTableViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *topicText;
 @property (weak, nonatomic) IBOutlet UITextField *dataText;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *qosSegment;
 @property (weak, nonatomic) IBOutlet UISwitch *retainSwitch;
+
+@property (strong, nonatomic) Publication *pub;
 
 @end
 
@@ -22,19 +26,27 @@
 {
     [super viewWillAppear:animated];
     
+    self.pub = [Publication publicationWithName:@"<ad hoc>"
+                                          topic:@"MQTTInspector"
+                                            qos:0
+                                       retained:FALSE
+                                           data:[@"manual ping %t %c" dataUsingEncoding:NSUTF8StringEncoding] session:self.mother.session
+                         inManagedObjectContext:self.mother.session.managedObjectContext];
     
-    self.topicText.text = @"MQTTInspector";
-    self.dataText.text = @"manual ping";
-    self.qosSegment.selectedSegmentIndex = 0;
-    self.retainSwitch.on = FALSE;
+    self.topicText.text = self.pub.topic;
+    self.dataText.text = [MQTTInspectorDataViewController dataToString:self.pub.data];
+    self.qosSegment.selectedSegmentIndex = [self.pub.qos intValue];
+    self.retainSwitch.on = [self.pub.retained boolValue];
 }
 
 
 - (IBAction)pubNow:(UIButton *)sender {
-    [self.mother.mqttSession publishData:[self.dataText.text dataUsingEncoding:NSUTF8StringEncoding]
-                                 onTopic:self.topicText.text
-                                  retain:self.retainSwitch.on
-                                     qos:self.qosSegment.selectedSegmentIndex];
+    self.pub.topic = self.topicText.text;
+    self.pub.data = [self.dataText.text dataUsingEncoding:NSUTF8StringEncoding];
+    self.pub.retained = @(self.retainSwitch.on);
+    self.pub.qos = @(self.qosSegment.selectedSegmentIndex);
+    
+    [self.mother publish:self.pub];
 }
 
 @end

@@ -24,6 +24,7 @@
 		84147D0E18365A9C0018E601 /* SRVResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147D0D18365A9C0018E601 /* SRVResolver.m */; };
 		84147D1018365C740018E601 /* libresolv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84147D0F18365C740018E601 /* libresolv.dylib */; };
 		84147D13183673A70018E601 /* MQTTInspectorAdHocPubTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147D12183673A70018E601 /* MQTTInspectorAdHocPubTableViewController.m */; };
+		84147D161838CB720018E601 /* MQTTInspectorMessagesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147D151838CB720018E601 /* MQTTInspectorMessagesTableViewController.m */; };
 		84684E8A1832192800AE13B5 /* Subscription+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84684E891832192800AE13B5 /* Subscription+Create.m */; };
 		84684E8D1832193B00AE13B5 /* Publication+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84684E8C1832193B00AE13B5 /* Publication+Create.m */; };
 		84684E9118321D1200AE13B5 /* MQTTInspectorPubsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84684E9018321D1200AE13B5 /* MQTTInspectorPubsTableViewController.m */; };
@@ -105,6 +106,8 @@
 		84147D0F18365C740018E601 /* libresolv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.dylib; path = usr/lib/libresolv.dylib; sourceTree = SDKROOT; };
 		84147D11183673A70018E601 /* MQTTInspectorAdHocPubTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTInspectorAdHocPubTableViewController.h; sourceTree = "<group>"; };
 		84147D12183673A70018E601 /* MQTTInspectorAdHocPubTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTInspectorAdHocPubTableViewController.m; sourceTree = "<group>"; };
+		84147D141838CB720018E601 /* MQTTInspectorMessagesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTInspectorMessagesTableViewController.h; sourceTree = "<group>"; };
+		84147D151838CB720018E601 /* MQTTInspectorMessagesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTInspectorMessagesTableViewController.m; sourceTree = "<group>"; };
 		84684E881832192800AE13B5 /* Subscription+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Subscription+Create.h"; path = "../Subscription+Create.h"; sourceTree = "<group>"; };
 		84684E891832192800AE13B5 /* Subscription+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Subscription+Create.m"; path = "../Subscription+Create.m"; sourceTree = "<group>"; };
 		84684E8B1832193B00AE13B5 /* Publication+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Publication+Create.h"; path = "../Publication+Create.h"; sourceTree = "<group>"; };
@@ -262,8 +265,6 @@
 				8492C99D182EEEDA00A40D8B /* mqtt */,
 				8492C966182E63D300A40D8B /* Main_iPhone.storyboard */,
 				8492C969182E63D300A40D8B /* Main_iPad.storyboard */,
-				84147D11183673A70018E601 /* MQTTInspectorAdHocPubTableViewController.h */,
-				84147D12183673A70018E601 /* MQTTInspectorAdHocPubTableViewController.m */,
 				8492C96F182E63D300A40D8B /* MQTTInspectorMasterViewController.h */,
 				8492C970182E63D300A40D8B /* MQTTInspectorMasterViewController.m */,
 				84147CFC1834D3AD0018E601 /* MQTTInspectorSetupSessionTableViewController.h */,
@@ -280,6 +281,8 @@
 				8492C973182E63D300A40D8B /* MQTTInspectorDetailViewController.m */,
 				84147CFF1834E06A0018E601 /* MQTTInspectorDataViewController.h */,
 				84147D001834E06A0018E601 /* MQTTInspectorDataViewController.m */,
+				84147D141838CB720018E601 /* MQTTInspectorMessagesTableViewController.h */,
+				84147D151838CB720018E601 /* MQTTInspectorMessagesTableViewController.m */,
 				84A1986618310FC000A77080 /* MQTTInspectorLogsTableViewController.h */,
 				84A1986718310FC000A77080 /* MQTTInspectorLogsTableViewController.m */,
 				84147CDC183269D50018E601 /* MQTTInspectorCommandsTableViewController.h */,
@@ -290,6 +293,8 @@
 				84684E9318321D2300AE13B5 /* MQTTInspectorSubsTableViewController.m */,
 				84684E8F18321D1200AE13B5 /* MQTTInspectorPubsTableViewController.h */,
 				84684E9018321D1200AE13B5 /* MQTTInspectorPubsTableViewController.m */,
+				84147D11183673A70018E601 /* MQTTInspectorAdHocPubTableViewController.h */,
+				84147D12183673A70018E601 /* MQTTInspectorAdHocPubTableViewController.m */,
 				8492C975182E63D400A40D8B /* Images.xcassets */,
 				84684E8E18321CCD00AE13B5 /* CoreData */,
 				8492C95B182E63D300A40D8B /* Supporting Files */,
@@ -455,6 +460,7 @@
 				84684E9118321D1200AE13B5 /* MQTTInspectorPubsTableViewController.m in Sources */,
 				84147CF41834BAFC0018E601 /* Session.m in Sources */,
 				84147D13183673A70018E601 /* MQTTInspectorAdHocPubTableViewController.m in Sources */,
+				84147D161838CB720018E601 /* MQTTInspectorMessagesTableViewController.m in Sources */,
 				84684E8A1832192800AE13B5 /* Subscription+Create.m in Sources */,
 				8492C9AA182EEEDA00A40D8B /* MQTTMessage.m in Sources */,
 				8492C974182E63D300A40D8B /* MQTTInspectorDetailViewController.m in Sources */,

@@ -11,11 +11,13 @@
 #import "Topic+Create.h"
 #import "Command+Create.h"
 #import "Subscription+Create.h"
+#import "Publication+Create.h"
 #import "MQTTInspectorLogsTableViewController.h"
 #import "MQTTInspectorTopicsTableViewController.h"
 #import "MQTTInspectorCommandsTableViewController.h"
 #import "MQTTInspectorSubsTableViewController.h"
 #import "MQTTInspectorPubsTableViewController.h"
+#import "MQTTInspectorDataViewController.h"
 
 @interface MQTTInspectorDetailViewController ()
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *disconnectButton;
@@ -28,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *pubs;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *level;
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
+@property (weak, nonatomic) IBOutlet UISwitch *runningSwitch;
 
 @property (strong, nonatomic) MQTTInspectorLogsTableViewController *logsTVC;
 @property (strong, nonatomic) MQTTInspectorTopicsTableViewController *topicsTVC;
@@ -53,6 +56,8 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    /* start with organizer if no session selected */
     if (!self.session) {
         [self.masterPopoverController presentPopoverFromBarButtonItem:self.navigationController.navigationItem.backBarButtonItem permittedArrowDirections:(UIPopoverArrowDirectionAny) animated:TRUE];
     }
@@ -118,6 +123,30 @@
     }
 }
 
+- (void)publish:(Publication *)pub
+{
+    NSString *string = [MQTTInspectorDataViewController dataToString:pub.data];
+    
+    // REPLACE %t with timeIntervalSince1970
+    NSString *nowString = [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]];
+    string = [string stringByReplacingOccurrencesOfString:@"%t" withString:nowString];
+    
+    // REPLACE %c with effective clientId
+    NSString *clientId;
+    if ((!pub.belongsTo.clientid) || ([pub.belongsTo.clientid isEqualToString:@""])) {
+        clientId = [NSString stringWithFormat:@"MQTTInspector-%d", getpid()];
+    } else {
+        clientId = pub.belongsTo.clientid;
+    }
+    string = [string stringByReplacingOccurrencesOfString:@"%c" withString:clientId];
+    
+    [self.mqttSession publishData:[string dataUsingEncoding:NSUTF8StringEncoding]
+                                 onTopic:pub.topic
+                                  retain:[pub.retained boolValue]
+                                     qos:[pub.qos intValue]];
+}
+
+
 - (NSString *)effectiveClientId
 {
     NSString *clientId;
@@ -127,6 +156,17 @@
         clientId = self.session.clientid;
     }
     return clientId;
+}
+- (IBAction)runningChanged:(UISwitch *)sender {
+    if (self.topicsTVC) {
+        self.topicsTVC.running = self.runningSwitch.on;
+    }
+    if (self.logsTVC) {
+        self.logsTVC.running = self.runningSwitch.on;
+    }
+    if (self.commandsTVC) {
+        self.commandsTVC.running = self.runningSwitch.on;
+    }
 }
 
 - (IBAction)connect:(UIButton *)sender {
@@ -175,17 +215,20 @@
                 self.commandsTVC = [[MQTTInspectorCommandsTableViewController alloc] init];
                 self.commandsTVC.mother = self;
                 self.commandsTVC.tableView = self.messages;
+                self.commandsTVC.running = self.runningSwitch.on;
                 break;
             case 1:
                 self.logsTVC = [[MQTTInspectorLogsTableViewController alloc] init];
                 self.logsTVC.mother = self;
                 self.logsTVC.tableView = self.messages;
+                self.logsTVC.running = self.runningSwitch.on;
                 break;
             case 0:
             default:
                 self.topicsTVC = [[MQTTInspectorTopicsTableViewController alloc] init];
                 self.topicsTVC.mother = self;
                 self.topicsTVC.tableView = self.messages;
+                self.topicsTVC.running = self.runningSwitch.on;
                 break;
         }
     }
@@ -233,6 +276,8 @@
         [ptvc.tableView reloadData];
 
         [self viewChanged:nil];
+        
+        [self connect:nil];
     }
     
     if (self.masterPopoverController != nil) {

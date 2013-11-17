@@ -8,9 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MQTTInspectorDetailViewController.h"
+#import "MQTTInspectorMessagesTableViewController.h"
 
-@interface MQTTInspectorLogsTableViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
-@property (strong, nonatomic) MQTTInspectorDetailViewController *mother;
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-
+@interface MQTTInspectorLogsTableViewController : MQTTInspectorMessagesTableViewController;
 @end
