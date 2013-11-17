@@ -157,16 +157,9 @@
     }
     return clientId;
 }
+
 - (IBAction)runningChanged:(UISwitch *)sender {
-    if (self.topicsTVC) {
-        self.topicsTVC.running = self.runningSwitch.on;
-    }
-    if (self.logsTVC) {
-        self.logsTVC.running = self.runningSwitch.on;
-    }
-    if (self.commandsTVC) {
-        self.commandsTVC.running = self.runningSwitch.on;
-    }
+    //
 }
 
 - (IBAction)connect:(UIButton *)sender {
@@ -215,20 +208,17 @@
                 self.commandsTVC = [[MQTTInspectorCommandsTableViewController alloc] init];
                 self.commandsTVC.mother = self;
                 self.commandsTVC.tableView = self.messages;
-                self.commandsTVC.running = self.runningSwitch.on;
                 break;
             case 1:
                 self.logsTVC = [[MQTTInspectorLogsTableViewController alloc] init];
                 self.logsTVC.mother = self;
                 self.logsTVC.tableView = self.messages;
-                self.logsTVC.running = self.runningSwitch.on;
                 break;
             case 0:
             default:
                 self.topicsTVC = [[MQTTInspectorTopicsTableViewController alloc] init];
                 self.topicsTVC.mother = self;
                 self.topicsTVC.tableView = self.messages;
-                self.topicsTVC.running = self.runningSwitch.on;
                 break;
         }
     }
@@ -343,6 +333,9 @@
 
 - (void)finishQueue
 {
+    while (!self.runningSwitch.on) {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
+    }
     [self performSelectorOnMainThread:@selector(showQueue) withObject:nil waitUntilDone:NO];
 }
 

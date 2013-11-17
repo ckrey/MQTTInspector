@@ -12,6 +12,5 @@
 @interface MQTTInspectorMessagesTableViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 @property (strong, nonatomic) MQTTInspectorDetailViewController *mother;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic) BOOL running;
 
 @end
