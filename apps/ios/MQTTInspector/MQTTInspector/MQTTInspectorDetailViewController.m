@@ -244,7 +244,7 @@
 - (void)setSession:(Session *)session
 {
     self.title = session.name;
-    if (_session != session) {
+    if ((_session != session) || ([self.session.state intValue] != MQTTSessionEventConnected)) {
         if (_session) {
             if (self.mqttSession)
             {
@@ -256,7 +256,7 @@
         self.clearButton.enabled = TRUE;
         self.level.enabled = TRUE;
         self.connectButton.enabled = TRUE;
-        
+
         self.subsTVC = nil;
         UITableViewController *stvc = [[UITableViewController alloc] init];
         stvc.tableView = self.subs;
@@ -269,7 +269,9 @@
 
         [self viewChanged:nil];
         
-        [self performSelectorOnMainThread:@selector(connect:) withObject:nil waitUntilDone:NO];
+        [self connect:nil];
+//        [self performSelector:@selector(connect:) withObject:nil afterDelay:1];
+        
     }
     
     if (self.masterPopoverController != nil) {
@@ -281,7 +283,16 @@
 #pragma mark - MQTTSessionDelegate
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
 {
+    if (session != self.mqttSession) {
+#ifdef DEBUG
+        NSLog(@"handle Event: old Session");
+#endif
+        return;
+    }
+    
+#ifdef DEBUG
     NSLog(@"handleEvent: %d %@", eventCode, [error description]);
+#endif
     self.session.state = @(eventCode);
     if ([self.session.state intValue] == MQTTSessionEventConnected) {
         self.subsTVC = [[MQTTInspectorSubsTableViewController alloc] init];

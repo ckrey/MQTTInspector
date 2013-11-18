@@ -52,9 +52,9 @@
 		84A1986818310FC000A77080 /* MQTTInspectorLogsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1986718310FC000A77080 /* MQTTInspectorLogsTableViewController.m */; };
 		84A1987A183114BF00A77080 /* Topic+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A19879183114BF00A77080 /* Topic+Create.m */; };
 		84A1987D1831179D00A77080 /* MQTTInspectorTopicsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1987C1831179D00A77080 /* MQTTInspectorTopicsTableViewController.m */; };
+		84BB7124183A478F005AF544 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BB7123183A478F005AF544 /* Session.m */; };
 		84C308F4183A34620031C606 /* Topic.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C308F3183A34620031C606 /* Topic.m */; };
 		84C308F7183A34620031C606 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C308F6183A34620031C606 /* Message.m */; };
-		84C308FA183A34620031C606 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C308F9183A34620031C606 /* Session.m */; };
 		84C308FD183A34620031C606 /* Publication.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C308FC183A34620031C606 /* Publication.m */; };
 		84C30900183A34620031C606 /* Command.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C308FF183A34620031C606 /* Command.m */; };
 		84C30903183A34620031C606 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C30902183A34620031C606 /* Subscription.m */; };
@@ -148,13 +148,14 @@
 		84A19879183114BF00A77080 /* Topic+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Topic+Create.m"; path = "../Topic+Create.m"; sourceTree = "<group>"; };
 		84A1987B1831179D00A77080 /* MQTTInspectorTopicsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTInspectorTopicsTableViewController.h; sourceTree = "<group>"; };
 		84A1987C1831179D00A77080 /* MQTTInspectorTopicsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTInspectorTopicsTableViewController.m; sourceTree = "<group>"; };
-		84C308F1183A2F6B0031C606 /* MQTTInspector 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MQTTInspector 2.xcdatamodel"; sourceTree = "<group>"; };
+		84BB7121183A3EE7005AF544 /* MQTTInspector 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MQTTInspector 3.xcdatamodel"; sourceTree = "<group>"; };
+		84BB7122183A478F005AF544 /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
+		84BB7123183A478F005AF544 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
+		84C308F1183A2F6B0031C606 /* MQTTInspector 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 2.xcdatamodel"; sourceTree = "<group>"; };
 		84C308F2183A34620031C606 /* Topic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Topic.h; sourceTree = "<group>"; };
 		84C308F3183A34620031C606 /* Topic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Topic.m; sourceTree = "<group>"; };
 		84C308F5183A34620031C606 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		84C308F6183A34620031C606 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
-		84C308F8183A34620031C606 /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
-		84C308F9183A34620031C606 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
 		84C308FB183A34620031C606 /* Publication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Publication.h; sourceTree = "<group>"; };
 		84C308FC183A34620031C606 /* Publication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Publication.m; sourceTree = "<group>"; };
 		84C308FE183A34620031C606 /* Command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Command.h; sourceTree = "<group>"; };
@@ -200,12 +201,12 @@
 				84C308FF183A34620031C606 /* Command.m */,
 				84C308FB183A34620031C606 /* Publication.h */,
 				84C308FC183A34620031C606 /* Publication.m */,
-				84C308F8183A34620031C606 /* Session.h */,
-				84C308F9183A34620031C606 /* Session.m */,
 				84C308F5183A34620031C606 /* Message.h */,
 				84C308F6183A34620031C606 /* Message.m */,
 				84C308F3183A34620031C606 /* Topic.m */,
 				8492C96C182E63D300A40D8B /* MQTTInspector.xcdatamodeld */,
+				84BB7122183A478F005AF544 /* Session.h */,
+				84BB7123183A478F005AF544 /* Session.m */,
 				84147CD91832662B0018E601 /* Command+Create.h */,
 				84147CDA1832662B0018E601 /* Command+Create.m */,
 				84A19878183114BF00A77080 /* Topic+Create.h */,
@@ -456,7 +457,7 @@
 				84147CF71834CDD10018E601 /* MQTTInspectorSetupPubsTableViewController.m in Sources */,
 				84147D071835204F0018E601 /* MQTTInspectorSetupSubTableViewController.m in Sources */,
 				84C30900183A34620031C606 /* Command.m in Sources */,
-				84C308FA183A34620031C606 /* Session.m in Sources */,
+				84BB7124183A478F005AF544 /* Session.m in Sources */,
 				84147D0E18365A9C0018E601 /* SRVResolver.m in Sources */,
 				8492C9A8182EEEDA00A40D8B /* MQTTDecoder.m in Sources */,
 				84684E8D1832193B00AE13B5 /* Publication+Create.m in Sources */,
@@ -720,9 +721,10 @@
 			isa = XCVersionGroup;
 			children = (
 				84C308F1183A2F6B0031C606 /* MQTTInspector 2.xcdatamodel */,
+				84BB7121183A3EE7005AF544 /* MQTTInspector 3.xcdatamodel */,
 				8492C96D182E63D300A40D8B /* MQTTInspector.xcdatamodel */,
 			);
-			currentVersion = 84C308F1183A2F6B0031C606 /* MQTTInspector 2.xcdatamodel */;
+			currentVersion = 84BB7121183A3EE7005AF544 /* MQTTInspector 3.xcdatamodel */;
 			path = MQTTInspector.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

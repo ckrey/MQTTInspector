@@ -201,6 +201,7 @@
 {
     Subscription *sub = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = sub.topic;
+    cell.backgroundColor = [sub getColor];
 }
 
 

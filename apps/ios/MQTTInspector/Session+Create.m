@@ -27,6 +27,11 @@
     Session *session = [Session existSessionWithName:name inManagedObjectContext:context];
     
     if (!session) {
+        
+#ifdef DEBUG
+        NSLog(@"insertNewObjectForEntityForName Session %@", name);
+#endif
+
         session = [NSEntityDescription insertNewObjectForEntityForName:@"Session" inManagedObjectContext:context];
         
         session.name = name;
@@ -50,6 +55,10 @@
 + (Session *)existSessionWithName:(NSString *)name
            inManagedObjectContext:(NSManagedObjectContext *)context
 {
+#ifdef DEBUG
+    NSLog(@"existSessionWithName %@", name);
+#endif
+
     Session *session = nil;
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Session"];

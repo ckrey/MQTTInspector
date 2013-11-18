@@ -182,23 +182,12 @@
     NSLog(@"MQTTSession closeInternal");
 #endif 
     
-    /*
-    if (self.encoder) {
-        [self.encoder close];
-        self.encoder = nil;
-    }
-    if (self.decoder) {
-        [self.decoder close];
-        self.decoder = nil;
-    }
-    */
     if (self.keepAliveTimer) {
         [self.keepAliveTimer invalidate];
         self.keepAliveTimer = nil;
     }
     self.status = MQTTSessionStatusClosed;
-    [self.delegate handleEvent:self event:MQTTSessionEventConnectionClosed error:nil];
-
+    //[self.delegate handleEvent:self event:MQTTSessionEventConnectionClosed error:nil];
 }
 
 
@@ -245,7 +234,7 @@
 #ifdef DEBUG
                     NSLog(@"MQTTSession disconnect sent");
 #endif
-                    [self closeInternal];
+                    //[self closeInternal];
                     break;
                 case MQTTSessionStatusClosed:
                     break;
@@ -254,7 +243,7 @@
             }
             break;
         case MQTTEncoderEventErrorOccurred:
-            [self error:MQTTSessionEventConnectionError error:error];
+            //[self error:MQTTSessionEventConnectionError error:error];
             break;
     }
 }

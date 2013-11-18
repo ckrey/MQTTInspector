@@ -19,6 +19,8 @@
 @dynamic auth;
 @dynamic cleansession;
 @dynamic clientid;
+@dynamic dnsdomain;
+@dynamic dnssrv;
 @dynamic host;
 @dynamic keepalive;
 @dynamic name;
@@ -27,8 +29,6 @@
 @dynamic state;
 @dynamic tls;
 @dynamic user;
-@dynamic dnssrv;
-@dynamic dnsdomain;
 @dynamic hasCommands;
 @dynamic hasMesssages;
 @dynamic hasPubs;

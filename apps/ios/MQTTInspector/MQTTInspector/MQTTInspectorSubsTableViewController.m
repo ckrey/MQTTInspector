@@ -197,13 +197,6 @@
         [cell setAccessoryType:UITableViewCellAccessoryNone];
     }
     
-    if ([subscription.color floatValue] < 0)
-    {
-        float r = rand();
-        float f = r / INT_MAX;
-        float hue = fmod(f,1);
-        subscription.color = @(hue);
-    }
     cell.backgroundColor = [subscription getColor];
 }
 
