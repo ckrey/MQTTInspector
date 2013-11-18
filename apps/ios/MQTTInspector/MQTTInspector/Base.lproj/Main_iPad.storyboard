@@ -436,7 +436,13 @@
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="MQTT Inspector" id="mOI-FS-AaM"/>
+                    <navigationItem key="navigationItem" title="MQTT Inspector" id="mOI-FS-AaM">
+                        <barButtonItem key="rightBarButtonItem" systemItem="compose" id="LOd-1e-JPm">
+                            <connections>
+                                <action selector="send:" destination="JEX-9P-axG" id="wR8-WX-jig"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="clearButton" destination="l5S-9e-SGS" id="51V-QM-M7q"/>
                         <outlet property="connectButton" destination="ICA-8x-esm" id="nQb-u1-WZ1"/>

@@ -375,7 +375,7 @@
     NSRange range = NSMakeRange(2 + topicLength, [data length] - topicLength - 2);
     data = [data subdataWithRange:range];
     if ([msg qos] == 0) {
-        [self.delegate newMessage:self data:data onTopic:topic];
+        [self.delegate newMessage:self data:data onTopic:topic qos:msg.qos retained:msg.retainFlag mid:0];
     }
     else {
         if ([data length] < 2) {
@@ -388,12 +388,17 @@
         }
         data = [data subdataWithRange:NSMakeRange(2, [data length] - 2)];
         if ([msg qos] == 1) {
-            [self.delegate newMessage:self data:data onTopic:topic];
+            [self.delegate newMessage:self data:data onTopic:topic qos:msg.qos retained:msg.retainFlag mid:msgId];
             [self send:[MQTTMessage pubackMessageWithMessageId:msgId]];
         }
         else {
             NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                data, @"data", topic, @"topic", nil];
+                                  data, @"data",
+                                  topic, @"topic",
+                                  @(msg.qos), @"qos",
+                                  @(msg.retainFlag), @"retained",
+                                  @(msgId), @"mid",
+                                  nil];
             [self.rxFlows setObject:dict forKey:[NSNumber numberWithUnsignedInt:msgId]];
             [self send:[MQTTMessage pubrecMessageWithMessageId:msgId]];
         }
@@ -462,7 +467,11 @@
     if (dict != nil) {
         [self.delegate newMessage:self
                              data:[dict valueForKey:@"data"]
-                          onTopic:[dict valueForKey:@"topic"]];
+                          onTopic:[dict valueForKey:@"topic"]
+                              qos:[[dict valueForKey:@"qos"] intValue]
+                              retained:[[dict valueForKey:@"retained"] boolValue]
+                              mid:[[dict valueForKey:@"mid"] unsignedIntValue]
+         ];
         [self.rxFlows removeObjectForKey:msgId];
     }
     [self send:[MQTTMessage pubcompMessageWithMessageId:[msgId unsignedIntegerValue]]];

@@ -39,7 +39,12 @@ typedef enum {
 @protocol MQTTSessionDelegate <NSObject>
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error;
-- (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic;
+- (void)newMessage:(MQTTSession *)session
+              data:(NSData *)data
+           onTopic:(NSString *)topic
+               qos:(int)qos
+          retained:(BOOL)retained
+               mid:(unsigned int)mid;
 - (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID;
 - (void)sending:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped data:(NSData *)data;
 - (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped data:(NSData *)data;

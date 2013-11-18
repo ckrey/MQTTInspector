@@ -19,6 +19,7 @@
 @dynamic retained;
 @dynamic timestamp;
 @dynamic type;
+@dynamic mid;
 @dynamic belongsTo;
 
 @end

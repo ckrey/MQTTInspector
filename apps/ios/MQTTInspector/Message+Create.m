@@ -7,11 +7,15 @@
 //
 
 #import "Message+Create.h"
+#import "MQTTInspectorDataViewController.h"
 
 @implementation Message (Create)
 + (Message *)messageAt:(NSDate *)timestamp
                  topic:(NSString *)topic
                   data:(NSData *)data
+                   qos:(int)qos
+              retained:(BOOL)retained
+                   mid:(unsigned int)mid
                session:(Session *)session
 inManagedObjectContext:(NSManagedObjectContext *)context
 {
@@ -33,6 +37,9 @@ inManagedObjectContext:(NSManagedObjectContext *)context
             message.timestamp = timestamp;
             message.topic = topic;
             message.data = data;
+            message.qos = @(qos);
+            message.retained = @(retained);
+            message.mid = @(mid);
             message.belongsTo = session;
         } else {
             message = [matches lastObject];
@@ -56,5 +63,43 @@ inManagedObjectContext:(NSManagedObjectContext *)context
     
     return matches;
 }
+
+- (NSString *)attributeText
+{
+    return [NSString stringWithFormat:@"%@%@%@",
+            [self attributeTextPart1],
+            [self attributeTextPart2],
+            [self attributeTextPart3]
+            ];
+}
+
+- (NSString *)attributeTextPart1
+{
+    return [NSString stringWithFormat:@"%@ :",
+            [NSDateFormatter localizedStringFromDate:self.timestamp
+                                           dateStyle:NSDateFormatterShortStyle
+                                           timeStyle:NSDateFormatterMediumStyle]
+            ];
+}
+
+- (NSString *)attributeTextPart2
+{
+    return self.topic;
+}
+
+- (NSString *)attributeTextPart3
+{
+    return [NSString stringWithFormat:@" q%d r%d i%u (%lu)",
+            [self.qos intValue],
+            [self.retained boolValue],
+            [self.mid unsignedIntValue],
+            (unsigned long)self.data.length];
+}
+
+- (NSString *)dataText
+{
+    return [MQTTInspectorDataViewController dataToString:self.data];
+}
+
 
 @end

@@ -25,8 +25,6 @@
 
     /* DEMO DB SETUP */
     Session *session;
-    Subscription *subscription;
-    Publication *publication;
 
     /* mosquitto.org */
     session = [Session sessionWithName:@"mosquitto.org"
@@ -42,23 +40,23 @@
                                 dnssrv:YES
                                 dnsdomain:@"mosquitto.org"
                 inManagedObjectContext:self.managedObjectContext];
-    subscription = [Subscription subscriptionWithTopic:@"MQTTInspector/#"
+    [Subscription subscriptionWithTopic:@"MQTTInspector/#"
                                                    qos:1
                                                session:session
                                 inManagedObjectContext:self.managedObjectContext];
-    subscription = [Subscription subscriptionWithTopic:@"test/+"
+    [Subscription subscriptionWithTopic:@"test/+"
                                                    qos:2
                                                session:session
                                 inManagedObjectContext:self.managedObjectContext];
-    subscription = [Subscription subscriptionWithTopic:@"system/+/chronos/#"
+    [Subscription subscriptionWithTopic:@"system/+/chronos/#"
                                                    qos:0 session:session
                                 inManagedObjectContext:self.managedObjectContext];
-    subscription = [Subscription subscriptionWithTopic:@"loc/#"
+    [Subscription subscriptionWithTopic:@"loc/#"
                                                    qos:2
                                                session:session
                                 inManagedObjectContext:self.managedObjectContext];
 
-    publication = [Publication publicationWithName:@"ping"
+    [Publication publicationWithName:@"ping"
                                              topic:@"MQTTInspector"
                                                qos:0
                                           retained:NO
@@ -79,16 +77,16 @@
                                 dnssrv:NO
                                 dnsdomain:@"eclipse.org"
 inManagedObjectContext:self.managedObjectContext];
-    subscription = [Subscription subscriptionWithTopic:@"MQTTInspector/#"
+    [Subscription subscriptionWithTopic:@"MQTTInspector/#"
                                                    qos:1
                                                session:session
                                 inManagedObjectContext:self.managedObjectContext];
     
-    subscription = [Subscription subscriptionWithTopic:@"test/+"
+    [Subscription subscriptionWithTopic:@"test/+"
                                                    qos:2
                                                session:session
                                 inManagedObjectContext:self.managedObjectContext];
-    publication = [Publication publicationWithName:@"ping"
+    [Publication publicationWithName:@"ping"
                                              topic:@"MQTTInspector"
                                                qos:0
                                           retained:NO

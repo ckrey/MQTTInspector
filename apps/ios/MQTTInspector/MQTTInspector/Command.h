@@ -20,6 +20,7 @@
 @property (nonatomic, retain) NSNumber * retained;
 @property (nonatomic, retain) NSDate * timestamp;
 @property (nonatomic, retain) NSNumber * type;
+@property (nonatomic, retain) NSNumber * mid;
 @property (nonatomic, retain) Session *belongsTo;
 
 @end

@@ -7,12 +7,16 @@
 //
 
 #import "Topic+Create.h"
+#import "MQTTInspectorDataViewController.h"
 
 @implementation Topic (Create)
 
 + (Topic *)topicNamed:(NSString *)name
             timestamp:(NSDate *)timestamp
                  data:(NSData *)data
+                  qos:(int)qos
+             retained:(BOOL)retained
+                  mid:(unsigned int)mid
               session:(Session *)session
 inManagedObjectContext:(NSManagedObjectContext *)context
 {
@@ -34,12 +38,17 @@ inManagedObjectContext:(NSManagedObjectContext *)context
             topic.topic = name;
             topic.timestamp = timestamp;
             topic.data = data;
+            topic.qos = @(qos);
+            topic.retained = @(retained);
+            topic.mid = @(mid);
             topic.belongsTo = session;
             topic.count = @(0);
         } else {
             topic = [matches lastObject];
             topic.timestamp = timestamp;
             topic.data = data;
+            topic.qos = @(qos);
+            topic.mid = @(mid);
             topic.count = @([topic.count intValue] + 1);
         }
     }
@@ -60,5 +69,43 @@ inManagedObjectContext:(NSManagedObjectContext *)context
     
     return matches;
 }
+
+- (NSString *)attributeText
+{
+    return [NSString stringWithFormat:@"%@%@%@",
+            [self attributeTextPart1],
+            [self attributeTextPart2],
+            [self attributeTextPart3]
+            ];
+}
+
+- (NSString *)attributeTextPart1
+{
+    return [NSString stringWithFormat:@"%@ :",
+            [NSDateFormatter localizedStringFromDate:self.timestamp
+                                           dateStyle:NSDateFormatterShortStyle
+                                           timeStyle:NSDateFormatterMediumStyle]
+            ];
+}
+- (NSString *)attributeTextPart2
+{
+    return self.topic;
+}
+
+- (NSString *)attributeTextPart3
+{
+    return [NSString stringWithFormat:@" q%d r%d i%u (%d) #%d",
+            [self.qos intValue],
+            [self.retained boolValue],
+            [self.mid unsignedIntValue],
+            self.data.length,
+            [self.count intValue]];
+}
+
+- (NSString *)dataText
+{
+    return [MQTTInspectorDataViewController dataToString:self.data];
+}
+
 
 @end

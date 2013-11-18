@@ -9,7 +9,15 @@
 #import "Command+Create.h"
 
 @implementation Command (Create)
-+ (Command *)commandAt:(NSDate *)timestamp inbound:(BOOL)inbound type:(int)type duped:(BOOL)duped qos:(int)qos retained:(BOOL)retained data:(NSData *)data session:(Session *)session inManagedObjectContext:(NSManagedObjectContext *)context
++ (Command *)commandAt:(NSDate *)timestamp
+               inbound:(BOOL)inbound
+                  type:(int)type
+                 duped:(BOOL)duped
+                   qos:(int)qos
+              retained:(BOOL)retained
+                   mid:(unsigned int)mid
+                  data:(NSData *)data
+               session:(Session *)session inManagedObjectContext:(NSManagedObjectContext *)context
 {
     Command *command = nil;
     
@@ -37,6 +45,7 @@
             command.qos = @(qos);
             command.retained = @(retained);
             command.data = data;
+            command.mid = @(mid);
             command.belongsTo = session;
         } else {
             command = [matches lastObject];
@@ -47,6 +56,67 @@
     
 
 }
+
+- (NSString *)attributeText
+{
+    return [NSString stringWithFormat:@"%@%@%@",
+            [self attributeTextPart1],
+            [self attributeTextPart2],
+            [self attributeTextPart3]
+            ];
+}
+
+- (NSString *)attributeTextPart1
+{
+    return [NSString stringWithFormat:@"%@ %@:",
+            [NSDateFormatter localizedStringFromDate:self.timestamp
+                                           dateStyle:NSDateFormatterShortStyle
+                                           timeStyle:NSDateFormatterMediumStyle],
+            [self.inbound boolValue] ? @">" : @"<"
+            ];
+}
+
+- (NSString *)attributeTextPart2
+{
+    const NSArray *commandNames = @[
+                                    @"Reserved0",
+                                    @"CONNECT",
+                                    @"CONNACK",
+                                    @"PUBLISH",
+                                    @"PUBACK",
+                                    @"PUBREC",
+                                    @"PUBREL",
+                                    @"PUBCOMP",
+                                    @"SUBSCRIBE",
+                                    @"SUBACK",
+                                    @"UNSUBSCRIBE",
+                                    @"UNSUBACK",
+                                    @"PINGREQ",
+                                    @"PINGRESP",
+                                    @"DISCONNECT",
+                                    @"Reserved15"
+                                    ];
+    
+    return commandNames[[self.type intValue]];
+}
+
+- (NSString *)attributeTextPart3
+{
+    return [NSString stringWithFormat:@"d%@ q%@ r%@ i%u",
+            self.duped,
+            self.qos,
+            self.retained,
+            [self.mid unsignedIntValue]
+            ];
+}
+
+- (NSString *)dataText
+{
+    return [NSString stringWithFormat:@"(%d) %@",
+            self.data.length,
+            [self.data description]];
+}
+
 
 + (NSArray *)allCommandsOfSession:(Session *)session inManagedObjectContext:(NSManagedObjectContext *)context
 {

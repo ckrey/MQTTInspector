@@ -59,56 +59,25 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Command *command = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
-    const NSArray *commandNames = @[
-                                    @"Reserved0",
-                                    @"CONNECT",
-                                    @"CONNACK",
-                                    @"PUBLISH",
-                                    @"PUBACK",
-                                    @"PUBREC",
-                                    @"PUBREL",
-                                    @"PUBCOMP",
-                                    @"SUBSCRIBE",
-                                    @"SUBACK",
-                                    @"UNSUBSCRIBE",
-                                    @"UNSUBACK",
-                                    @"PINGREQ",
-                                    @"PINGRESP",
-                                    @"DISCONNECT",
-                                    @"Reserved15"
-                                    ];
-    
-    NSMutableAttributedString *as =
-    [[NSMutableAttributedString alloc] initWithString:[NSDateFormatter localizedStringFromDate:command.timestamp
-                                                                                     dateStyle:NSDateFormatterShortStyle
-                                                                                     timeStyle:NSDateFormatterMediumStyle]
-                                           attributes:@{}];
-    
-    [as appendAttributedString:
-     [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@ :",
-                                                 [command.inbound boolValue] ? @">" : @"<"]
-                                     attributes:@{}]];
+        
+    NSMutableAttributedString *as = [[NSMutableAttributedString alloc]
+                                     initWithString:[command attributeTextPart1] attributes:@{}];
     
     UIFont *font = [UIFont boldSystemFontOfSize:16.0];
-    NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:font
+    NSDictionary *attributes = [NSDictionary dictionaryWithObject:font
                                                                 forKey:NSFontAttributeName];
-    [as appendAttributedString:
-     [[NSAttributedString alloc] initWithString:commandNames[[command.type intValue]] attributes:attrsDictionary]];
+    [as appendAttributedString:[[NSAttributedString alloc]
+                                initWithString:[command attributeTextPart1] attributes:attributes]];
     
     
-    [as appendAttributedString:
-     [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" d%@ q%@ r%@ i%d",
-                                                 command.duped,
-                                                 command.qos,
-                                                 command.retained,
-                                                 -1]
+    [as appendAttributedString:[[NSAttributedString alloc]
+                                initWithString:[command attributeTextPart3]
                                      attributes:@{}]];
+    
     cell.detailTextLabel.attributedText = as;
 
-    cell.textLabel.text = [NSString stringWithFormat:@"(%d) %@",
-                                 command.data.length,
-                                 [command.data description]];
+    cell.textLabel.text = [command dataText];
+    
     cell.backgroundColor = [UIColor lightGrayColor];
     
     [cell setAccessoryType:UITableViewCellAccessoryDetailButton];

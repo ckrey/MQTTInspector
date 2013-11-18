@@ -163,9 +163,81 @@
 - (IBAction)runningChanged:(UISwitch *)sender {
     //
 }
+- (IBAction)send:(UIBarButtonItem *)sender {
+    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+    picker.mailComposeDelegate = self;
+    
+    [picker setSubject:[NSString stringWithFormat:@"MQTTInspector-%@", self.session.name]];
+    
+    NSString *string = [NSString stringWithFormat:@"MQTTInspector\n"];
+    
+    string = [string stringByAppendingFormat:@"URL: %@ - %@\n", self.session.name, [self url]];
+    
+    for (Subscription *sub in self.session.hasSubs) {
+        string = [string  stringByAppendingFormat:@"SUB:%@ q%d s%d\n",
+                  sub.topic,
+                  [sub.qos intValue],
+                  [sub.state intValue]
+                  ];
+    }
+    
+    for (Publication *pub in self.session.hasPubs) {
+        string = [string  stringByAppendingFormat:@"PUB:%@ %@ %@ q%d r%d\n",
+                  pub.name,
+                  pub.topic,
+                  [MQTTInspectorDataViewController dataToString:pub.data],
+                  [pub.qos intValue],
+                  [pub.retained boolValue]
+                  ];
+    }
+
+    for (Topic *topic in self.session.hasTopics) {
+        string = [string  stringByAppendingFormat:@"TOP:%@ %@\n",
+                  [topic attributeText],
+                  [topic dataText]
+                  ];
+    }
+    for (Message *message in self.session.hasCommands) {
+        string = [string  stringByAppendingFormat:@"MSG:%@ %@\n",
+                  [message attributeText],
+                  [message dataText]
+                  ];
+    }
+
+
+    for (Command *command in self.session.hasCommands) {
+        string = [string  stringByAppendingFormat:@"CMD:%@ %@\n",
+                  [command attributeText],
+                  [command dataText]
+                  ];
+    }
+
+    
+    NSData *myData = [string dataUsingEncoding:NSUTF8StringEncoding];
+    [picker addAttachmentData:myData mimeType:@"text/plain"
+                     fileName:[NSString stringWithFormat:@"MQTTInspector-%@.txt", self.session.name]];
+    
+    NSString *emailBody = @"see attached file";
+    [picker setMessageBody:emailBody isHTML:NO];
+    
+    [self presentViewController:picker animated:YES completion:^{
+        // done
+    }];
+}
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller
+          didFinishWithResult:(MFMailComposeResult)result
+                        error:(NSError *)error
+{
+    [controller dismissViewControllerAnimated:YES completion:^{
+        // done
+    }];
+}
 
 - (IBAction)connect:(UIButton *)sender {
     if (self.session) {
+        
+        self.title = [NSString stringWithFormat:@"%@ - %@", self.session.name, [self url]];
 
         self.mqttSession = [[MQTTSession alloc] initWithClientId:[self effectiveClientId]
                                                         userName:self.session.user
@@ -193,7 +265,7 @@
 
 - (IBAction)disconnect:(UIButton *)sender {
     if (self.session) {
-        [self.mqttSession close];
+        self.title = self.session.name;
     }
 }
 
@@ -244,6 +316,7 @@
 - (void)setSession:(Session *)session
 {
     self.title = session.name;
+    
     if ((_session != session) || ([self.session.state intValue] != MQTTSessionEventConnected)) {
         if (_session) {
             if (self.mqttSession)
@@ -377,7 +450,12 @@
     }
 }
 
-- (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic
+- (void)newMessage:(MQTTSession *)session
+              data:(NSData *)data
+           onTopic:(NSString *)topic
+               qos:(int)qos
+          retained:(BOOL)retained
+               mid:(unsigned int)mid
 {
     NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
     NSString *name = self.session.name;
@@ -415,6 +493,9 @@
         [Message messageAt:timestamp
                      topic:topic
                       data:data
+                       qos:qos
+                       retained:retained
+                       mid:mid
                    session:mySession
     inManagedObjectContext:self.queueManagedObjectContext];
         
@@ -428,6 +509,9 @@
         [Topic topicNamed:topic
                 timestamp:timestamp
                      data:data
+                      qos:qos
+                 retained:retained
+                      mid:mid
                   session:mySession
    inManagedObjectContext:self.queueManagedObjectContext];
         
@@ -481,6 +565,7 @@
                      duped:duped
                        qos:qos
                   retained:retained
+                       mid:0
                       data:data
                    session:mySession
     inManagedObjectContext:self.queueManagedObjectContext];
@@ -537,6 +622,7 @@
                      duped:duped
                        qos:qos
                   retained:retained
+                       mid:0
                       data:data
                    session:mySession
     inManagedObjectContext:self.queueManagedObjectContext];
@@ -607,6 +693,19 @@
 {
     NSLog(@"didStopWithError %@", error);
 }
+
+- (NSString *)url
+{
+    return [NSString stringWithFormat:@"%@://%@%@:%@",
+            [self.session.tls boolValue] ? @"mqtts" : @"mqtt",
+            [self.session.auth boolValue] ? [NSString stringWithFormat:@"%@@",
+                                                    self.session.user] : @"",
+            self.session.host,
+            self.session.port];
+    
+}
+
+
 
 
 @end

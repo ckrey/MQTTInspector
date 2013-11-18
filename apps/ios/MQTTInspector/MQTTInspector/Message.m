@@ -16,6 +16,9 @@
 @dynamic state;
 @dynamic timestamp;
 @dynamic topic;
+@dynamic mid;
+@dynamic qos;
+@dynamic retained;
 @dynamic belongsTo;
 
 @end

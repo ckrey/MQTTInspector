@@ -48,41 +48,24 @@
 {
     Topic *topic = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    NSMutableAttributedString *as =
-    [[NSMutableAttributedString alloc] initWithString:[NSDateFormatter localizedStringFromDate:topic.timestamp
-                                                                                     dateStyle:NSDateFormatterShortStyle
-                                                                                     timeStyle:NSDateFormatterMediumStyle]
-                                           attributes:@{}];
-    
-    [as appendAttributedString:
-     [[NSAttributedString alloc] initWithString:@" :"
-                                     attributes:@{}]];
+    NSMutableAttributedString *as = [[NSMutableAttributedString alloc]
+                                     initWithString:[topic attributeTextPart1] attributes:@{}];
     
     UIFont *font = [UIFont boldSystemFontOfSize:16.0];
     NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:font
                                                                 forKey:NSFontAttributeName];
-    [as appendAttributedString:
-     [[NSAttributedString alloc] initWithString:topic.topic attributes:attrsDictionary]];
+    [as appendAttributedString:[[NSAttributedString alloc]
+                                initWithString:[topic attributeTextPart2]
+                                attributes:attrsDictionary]];
     
     
-    [as appendAttributedString:
-     [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" (%d) #%@",
-                                                 topic.data.length,
-                                                 topic.count]
-                                     attributes:@{}]];
-    /*
-     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ :%@ (%d) #%@",
-     [NSDateFormatter localizedStringFromDate:topic.timestamp
-     dateStyle:NSDateFormatterShortStyle
-     timeStyle:NSDateFormatterMediumStyle],
-     topic.topic,
-     topic.data.length,
-     topic.count];
-     */
+    [as appendAttributedString:[[NSAttributedString alloc]
+                                initWithString:[topic attributeTextPart3]
+                                attributes:@{}]];
     
     cell.detailTextLabel.attributedText = as;
     
-    cell.textLabel.text = [MQTTInspectorDataViewController dataToString:topic.data];
+    cell.textLabel.text = [topic dataText];
     
     cell.backgroundColor = [self matchingSubscriptionColor:topic];
     
