@@ -121,7 +121,7 @@
                                                     dupFlag:isDuplicate
                                                        data:self.dataBuffer];
 #ifdef DEBUG
-                    NSLog(@"MQTTDecoder received (%d)=%@", self.dataBuffer.length, [self.dataBuffer description]);
+                    NSLog(@"MQTTDecoder received (%lu)=%@", (unsigned long)self.dataBuffer.length, [self.dataBuffer description]);
 #endif
 
                     [self.delegate decoder:self newMessage:msg];
@@ -143,7 +143,7 @@
         }
         default:
 #ifdef DEBUG
-            NSLog(@"MQTTDecoder unhandled event code 0x%02xv", eventCode);
+            NSLog(@"MQTTDecoder unhandled event code 0x%02lxv", (long)eventCode);
 #endif
             break;
     }

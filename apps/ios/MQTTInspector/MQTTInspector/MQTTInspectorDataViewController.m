@@ -7,7 +7,7 @@
 //
 
 #import "MQTTInspectorDataViewController.h"
-int isutf8(unsigned char *str, size_t len);
+size_t isutf8(unsigned char *str, size_t len);
 /*
  Check if the given unsigned char * is a valid utf-8 sequence.
  
@@ -24,7 +24,7 @@ int isutf8(unsigned char *str, size_t len);
  1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
  */
 
-int isutf8(unsigned char *str, size_t len)
+size_t isutf8(unsigned char *str, size_t len)
 {
     size_t i = 0;
     size_t continuation_bytes = 0;

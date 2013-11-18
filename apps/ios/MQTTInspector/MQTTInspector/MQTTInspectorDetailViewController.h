@@ -9,10 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "Session+Create.h"
 #import "MQTTSession.h"
+#include "SRVResolver.h"
 
-
-
-@interface MQTTInspectorDetailViewController : UIViewController <UISplitViewControllerDelegate, MQTTSessionDelegate>
+@interface MQTTInspectorDetailViewController : UIViewController <UISplitViewControllerDelegate, MQTTSessionDelegate, SRVResolverDelegate>
 
 @property (strong, nonatomic) Session *session;
 @property (strong, nonatomic) MQTTSession *mqttSession;

@@ -9,12 +9,6 @@
 /* Begin PBXBuildFile section */
 		84147CDB1832662B0018E601 /* Command+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147CDA1832662B0018E601 /* Command+Create.m */; };
 		84147CDE183269D50018E601 /* MQTTInspectorCommandsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147CDD183269D50018E601 /* MQTTInspectorCommandsTableViewController.m */; };
-		84147CE51834BAFC0018E601 /* Command.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147CE41834BAFC0018E601 /* Command.m */; };
-		84147CE81834BAFC0018E601 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147CE71834BAFC0018E601 /* Message.m */; };
-		84147CEB1834BAFC0018E601 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147CEA1834BAFC0018E601 /* Subscription.m */; };
-		84147CEE1834BAFC0018E601 /* Topic.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147CED1834BAFC0018E601 /* Topic.m */; };
-		84147CF11834BAFC0018E601 /* Publication.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147CF01834BAFC0018E601 /* Publication.m */; };
-		84147CF41834BAFC0018E601 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147CF31834BAFC0018E601 /* Session.m */; };
 		84147CF71834CDD10018E601 /* MQTTInspectorSetupPubsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147CF61834CDD10018E601 /* MQTTInspectorSetupPubsTableViewController.m */; };
 		84147CFA1834CDE70018E601 /* MQTTInspectorSetupPubTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147CF91834CDE70018E601 /* MQTTInspectorSetupPubTableViewController.m */; };
 		84147CFE1834D3AD0018E601 /* MQTTInspectorSetupSessionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147CFD1834D3AD0018E601 /* MQTTInspectorSetupSessionTableViewController.m */; };
@@ -58,6 +52,12 @@
 		84A1986818310FC000A77080 /* MQTTInspectorLogsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1986718310FC000A77080 /* MQTTInspectorLogsTableViewController.m */; };
 		84A1987A183114BF00A77080 /* Topic+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A19879183114BF00A77080 /* Topic+Create.m */; };
 		84A1987D1831179D00A77080 /* MQTTInspectorTopicsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1987C1831179D00A77080 /* MQTTInspectorTopicsTableViewController.m */; };
+		84C308E1183A29EE0031C606 /* Topic.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C308E0183A29EE0031C606 /* Topic.m */; };
+		84C308E4183A29EF0031C606 /* Publication.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C308E3183A29EF0031C606 /* Publication.m */; };
+		84C308E7183A29EF0031C606 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C308E6183A29EF0031C606 /* Session.m */; };
+		84C308EA183A29EF0031C606 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C308E9183A29EF0031C606 /* Message.m */; };
+		84C308ED183A29EF0031C606 /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C308EC183A29EF0031C606 /* Subscription.m */; };
+		84C308F0183A29EF0031C606 /* Command.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C308EF183A29EF0031C606 /* Command.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,18 +75,6 @@
 		84147CDA1832662B0018E601 /* Command+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Command+Create.m"; path = "../Command+Create.m"; sourceTree = "<group>"; };
 		84147CDC183269D50018E601 /* MQTTInspectorCommandsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTInspectorCommandsTableViewController.h; sourceTree = "<group>"; };
 		84147CDD183269D50018E601 /* MQTTInspectorCommandsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTInspectorCommandsTableViewController.m; sourceTree = "<group>"; };
-		84147CE31834BAFC0018E601 /* Command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Command.h; sourceTree = "<group>"; };
-		84147CE41834BAFC0018E601 /* Command.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Command.m; sourceTree = "<group>"; };
-		84147CE61834BAFC0018E601 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
-		84147CE71834BAFC0018E601 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
-		84147CE91834BAFC0018E601 /* Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Subscription.h; sourceTree = "<group>"; };
-		84147CEA1834BAFC0018E601 /* Subscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Subscription.m; sourceTree = "<group>"; };
-		84147CEC1834BAFC0018E601 /* Topic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Topic.h; sourceTree = "<group>"; };
-		84147CED1834BAFC0018E601 /* Topic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Topic.m; sourceTree = "<group>"; };
-		84147CEF1834BAFC0018E601 /* Publication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Publication.h; sourceTree = "<group>"; };
-		84147CF01834BAFC0018E601 /* Publication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Publication.m; sourceTree = "<group>"; };
-		84147CF21834BAFC0018E601 /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
-		84147CF31834BAFC0018E601 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
 		84147CF51834CDD10018E601 /* MQTTInspectorSetupPubsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTInspectorSetupPubsTableViewController.h; sourceTree = "<group>"; };
 		84147CF61834CDD10018E601 /* MQTTInspectorSetupPubsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTInspectorSetupPubsTableViewController.m; sourceTree = "<group>"; };
 		84147CF81834CDE70018E601 /* MQTTInspectorSetupPubTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTInspectorSetupPubTableViewController.h; sourceTree = "<group>"; };
@@ -160,6 +148,19 @@
 		84A19879183114BF00A77080 /* Topic+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Topic+Create.m"; path = "../Topic+Create.m"; sourceTree = "<group>"; };
 		84A1987B1831179D00A77080 /* MQTTInspectorTopicsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTInspectorTopicsTableViewController.h; sourceTree = "<group>"; };
 		84A1987C1831179D00A77080 /* MQTTInspectorTopicsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTInspectorTopicsTableViewController.m; sourceTree = "<group>"; };
+		84C308DF183A29EE0031C606 /* Topic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Topic.h; sourceTree = "<group>"; };
+		84C308E0183A29EE0031C606 /* Topic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Topic.m; sourceTree = "<group>"; };
+		84C308E2183A29EF0031C606 /* Publication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Publication.h; sourceTree = "<group>"; };
+		84C308E3183A29EF0031C606 /* Publication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Publication.m; sourceTree = "<group>"; };
+		84C308E5183A29EF0031C606 /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
+		84C308E6183A29EF0031C606 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
+		84C308E8183A29EF0031C606 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
+		84C308E9183A29EF0031C606 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
+		84C308EB183A29EF0031C606 /* Subscription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Subscription.h; sourceTree = "<group>"; };
+		84C308EC183A29EF0031C606 /* Subscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Subscription.m; sourceTree = "<group>"; };
+		84C308EE183A29EF0031C606 /* Command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Command.h; sourceTree = "<group>"; };
+		84C308EF183A29EF0031C606 /* Command.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Command.m; sourceTree = "<group>"; };
+		84C308F1183A2F6B0031C606 /* MQTTInspector 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MQTTInspector 2.xcdatamodel"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,19 +193,19 @@
 		84684E8E18321CCD00AE13B5 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				84147CE31834BAFC0018E601 /* Command.h */,
-				84147CF21834BAFC0018E601 /* Session.h */,
-				84147CF31834BAFC0018E601 /* Session.m */,
-				84147CEF1834BAFC0018E601 /* Publication.h */,
-				84147CF01834BAFC0018E601 /* Publication.m */,
-				84147CEC1834BAFC0018E601 /* Topic.h */,
-				84147CED1834BAFC0018E601 /* Topic.m */,
-				84147CE91834BAFC0018E601 /* Subscription.h */,
-				84147CEA1834BAFC0018E601 /* Subscription.m */,
-				84147CE61834BAFC0018E601 /* Message.h */,
-				84147CE71834BAFC0018E601 /* Message.m */,
-				84147CE41834BAFC0018E601 /* Command.m */,
 				8492C96C182E63D300A40D8B /* MQTTInspector.xcdatamodeld */,
+				84C308DF183A29EE0031C606 /* Topic.h */,
+				84C308E0183A29EE0031C606 /* Topic.m */,
+				84C308E2183A29EF0031C606 /* Publication.h */,
+				84C308E3183A29EF0031C606 /* Publication.m */,
+				84C308E5183A29EF0031C606 /* Session.h */,
+				84C308E6183A29EF0031C606 /* Session.m */,
+				84C308E8183A29EF0031C606 /* Message.h */,
+				84C308E9183A29EF0031C606 /* Message.m */,
+				84C308EB183A29EF0031C606 /* Subscription.h */,
+				84C308EC183A29EF0031C606 /* Subscription.m */,
+				84C308EE183A29EF0031C606 /* Command.h */,
+				84C308EF183A29EF0031C606 /* Command.m */,
 				84147CD91832662B0018E601 /* Command+Create.h */,
 				84147CDA1832662B0018E601 /* Command+Create.m */,
 				84A19878183114BF00A77080 /* Topic+Create.h */,
@@ -448,30 +449,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				8492C96E182E63D300A40D8B /* MQTTInspector.xcdatamodeld in Sources */,
+				84C308EA183A29EF0031C606 /* Message.m in Sources */,
 				8492C9AB182EEEDA00A40D8B /* MQTTSession.m in Sources */,
 				84A1987D1831179D00A77080 /* MQTTInspectorTopicsTableViewController.m in Sources */,
 				84684E9418321D2300AE13B5 /* MQTTInspectorSubsTableViewController.m in Sources */,
 				8492C9A9182EEEDA00A40D8B /* MQTTEncoder.m in Sources */,
 				84147CF71834CDD10018E601 /* MQTTInspectorSetupPubsTableViewController.m in Sources */,
+				84C308E4183A29EF0031C606 /* Publication.m in Sources */,
 				84147D071835204F0018E601 /* MQTTInspectorSetupSubTableViewController.m in Sources */,
 				84147D0E18365A9C0018E601 /* SRVResolver.m in Sources */,
+				84C308E1183A29EE0031C606 /* Topic.m in Sources */,
 				8492C9A8182EEEDA00A40D8B /* MQTTDecoder.m in Sources */,
+				84C308ED183A29EF0031C606 /* Subscription.m in Sources */,
 				84684E8D1832193B00AE13B5 /* Publication+Create.m in Sources */,
 				84684E9118321D1200AE13B5 /* MQTTInspectorPubsTableViewController.m in Sources */,
-				84147CF41834BAFC0018E601 /* Session.m in Sources */,
 				84147D13183673A70018E601 /* MQTTInspectorAdHocPubTableViewController.m in Sources */,
 				84147D161838CB720018E601 /* MQTTInspectorMessagesTableViewController.m in Sources */,
 				84684E8A1832192800AE13B5 /* Subscription+Create.m in Sources */,
 				8492C9AA182EEEDA00A40D8B /* MQTTMessage.m in Sources */,
 				8492C974182E63D300A40D8B /* MQTTInspectorDetailViewController.m in Sources */,
-				84147CEE1834BAFC0018E601 /* Topic.m in Sources */,
 				84147CFE1834D3AD0018E601 /* MQTTInspectorSetupSessionTableViewController.m in Sources */,
 				8492C965182E63D300A40D8B /* MQTTInspectorAppDelegate.m in Sources */,
+				84C308E7183A29EF0031C606 /* Session.m in Sources */,
 				84A1985C1830EC0B00A77080 /* Message+Create.m in Sources */,
-				84147CE51834BAFC0018E601 /* Command.m in Sources */,
 				84147D011834E06A0018E601 /* MQTTInspectorDataViewController.m in Sources */,
-				84147CEB1834BAFC0018E601 /* Subscription.m in Sources */,
-				84147CE81834BAFC0018E601 /* Message.m in Sources */,
 				8492C9AC182EEEDA00A40D8B /* MQttTxFlow.m in Sources */,
 				84A1986818310FC000A77080 /* MQTTInspectorLogsTableViewController.m in Sources */,
 				8492C971182E63D300A40D8B /* MQTTInspectorMasterViewController.m in Sources */,
@@ -479,7 +480,7 @@
 				84147CFA1834CDE70018E601 /* MQTTInspectorSetupPubTableViewController.m in Sources */,
 				8492C961182E63D300A40D8B /* main.m in Sources */,
 				84147CDB1832662B0018E601 /* Command+Create.m in Sources */,
-				84147CF11834BAFC0018E601 /* Publication.m in Sources */,
+				84C308F0183A29EF0031C606 /* Command.m in Sources */,
 				8492C99C182EDF8F00A40D8B /* Session+Create.m in Sources */,
 				84A1987A183114BF00A77080 /* Topic+Create.m in Sources */,
 				84147CDE183269D50018E601 /* MQTTInspectorCommandsTableViewController.m in Sources */,
@@ -718,6 +719,7 @@
 		8492C96C182E63D300A40D8B /* MQTTInspector.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				84C308F1183A2F6B0031C606 /* MQTTInspector 2.xcdatamodel */,
 				8492C96D182E63D300A40D8B /* MQTTInspector.xcdatamodel */,
 			);
 			currentVersion = 8492C96D182E63D300A40D8B /* MQTTInspector.xcdatamodel */;

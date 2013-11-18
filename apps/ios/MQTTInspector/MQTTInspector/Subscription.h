@@ -2,7 +2,7 @@
 //  Subscription.h
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 14.11.13.
+//  Created by Christoph Krey on 18.11.13.
 //  Copyright (c) 2013 Christoph Krey. All rights reserved.
 //
 
@@ -13,10 +13,10 @@
 
 @interface Subscription : NSManagedObject
 
+@property (nonatomic, retain) NSNumber * color;
 @property (nonatomic, retain) NSNumber * qos;
 @property (nonatomic, retain) NSNumber * state;
 @property (nonatomic, retain) NSString * topic;
-@property (nonatomic, retain) NSNumber * color;
 @property (nonatomic, retain) Session *belongsTo;
 
 @end

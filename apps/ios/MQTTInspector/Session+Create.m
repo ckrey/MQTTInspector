@@ -20,6 +20,8 @@
                     clientid:(NSString *)clientid
                 cleansession:(BOOL)cleansession
                    keepalive:(int)keepalive
+                      dnssrv:(BOOL)dnssrv
+                      dnsdomain:(NSString *)dnsdomain
       inManagedObjectContext:(NSManagedObjectContext *)context;
 {
     Session *session = [Session existSessionWithName:name inManagedObjectContext:context];
@@ -37,6 +39,8 @@
         session.clientid = clientid;
         session.cleansession = @(cleansession);
         session.keepalive = @(keepalive);
+        session.dnssrv = @(dnssrv);
+        session.dnsdomain = dnsdomain;
         session.state = @(-1);
     }
     

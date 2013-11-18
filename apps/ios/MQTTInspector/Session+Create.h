@@ -21,6 +21,8 @@
                     clientid:(NSString *)clientid
                 cleansession:(BOOL)cleansession
                    keepalive:(int)keepalive
+                      dnssrv:(BOOL)dnssrv
+                      dnsdomain:(NSString *)dnsdomain
       inManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end

@@ -66,10 +66,10 @@
     
     
     [as appendAttributedString:
-     [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" q%d i%d (%d)",
+     [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" q%d i%d (%lu)",
                                                  -1,
                                                  -1,
-                                                 message.data.length]
+                                                 (unsigned long)message.data.length]
                                      attributes:@{}]];
     cell.detailTextLabel.attributedText = as;
 

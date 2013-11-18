@@ -22,7 +22,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *clientIdText;
 @property (weak, nonatomic) IBOutlet UISwitch *cleansessionSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *keepaliveText;
-@property (weak, nonatomic) IBOutlet UIPickerView *servicePicker;
+@property (weak, nonatomic) IBOutlet UITextField *domainText;
+@property (weak, nonatomic) IBOutlet UISwitch *domainSwitch;
 
 @property (strong, nonatomic) SRVResolver *resolver;
 @property (strong, nonatomic) NSMutableArray *resolverResults;
@@ -41,9 +42,6 @@
 {
     [super viewWillAppear:animated];
     
-    self.servicePicker.delegate = self;
-    self.servicePicker.dataSource = self;
-    
     self.title = self.session.name;
     
     self.nameText.text = self.session.name;
@@ -56,6 +54,9 @@
     self.clientIdText.text = self.session.clientid;
     self.cleansessionSwitch.on = [self.session.cleansession boolValue];
     self.keepaliveText.text = [NSString stringWithFormat:@"%@", self.session.keepalive];
+    self.domainSwitch.on = [self.session.dnssrv boolValue];
+    [self setDnsSrv:self.domainSwitch.on];
+    self.domainText.text = self.session.dnsdomain;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -96,13 +97,25 @@
 - (IBAction)tlsChanged:(UISwitch *)sender {
     self.session.tls = @(sender.on);
 }
+- (IBAction)domainSwitchChanged:(UISwitch *)sender {
+    self.session.dnssrv = @(sender.on);
+    [self setDnsSrv:sender.on];
+}
+
+- (void)setDnsSrv:(BOOL)on
+{
+    if (on) {
+        self.domainText.enabled = TRUE;
+        self.hostText.enabled = FALSE;
+        self.portText.enabled = FALSE;
+    } else {
+        self.domainText.enabled = FALSE;
+        self.hostText.enabled = TRUE;
+        self.portText.enabled = TRUE;
+    }
+}
 - (IBAction)domainChanged:(UITextField *)sender {
-    NSString *service = [NSString stringWithFormat:@"%@._tcp.%@.",
-                         [self.session.tls boolValue] ? @"_secure-mqtt" : @"_mqtt",
-                         sender.text];
-    [self.resolverResults removeAllObjects];
-    [self.servicePicker reloadAllComponents];
-    [self getService:service];
+    self.session.dnsdomain = sender.text;
 }
 - (IBAction)authChanged:(UISwitch *)sender {
     self.session.auth = @(sender.on);
@@ -123,64 +136,5 @@
     self.session.keepalive = @([sender.text intValue]);
 }
 
-- (void)getService:(NSString *)srvName
-{
-    self.resolver = [[SRVResolver alloc] initWithSRVName:srvName];
-    self.resolver.delegate = self;
-    
-    [self.resolver start];
-}
-
-- (void)srvResolver:(SRVResolver *)resolver didReceiveResult:(NSDictionary *)result
-{
-    NSLog(@"didReceiveResult %@", result);
-    [self.resolverResults addObject:result];
-    [self.servicePicker reloadAllComponents];
-}
-
-- (void)srvResolver:(SRVResolver *)resolver didStopWithError:(NSError *)error
-{
-    NSLog(@"didStopWithError %@", error);
-}
-
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    NSLog(@"didSelectRow %d", row);
-    self.hostText.text = [self.resolverResults[row] objectForKey:kSRVResolverTarget];
-    self.session.host = [self.resolverResults[row] objectForKey:kSRVResolverTarget];
-    
-    self.portText.text = [NSString stringWithFormat:@"%@",
-                          [self.resolverResults[row] objectForKey:kSRVResolverPort]];
-    self.session.port = @([[self.resolverResults[row] objectForKey:kSRVResolverPort] intValue]);
-}
-
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return [self.resolverResults count];
-}
-
-- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
-{
-    return 32;
-}
-
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    NSString *text = [NSString stringWithFormat:@"%@:%d",
-                      [self.resolverResults[row] objectForKey:kSRVResolverTarget],
-                      [[self.resolverResults[row] objectForKey:kSRVResolverPort    ] intValue]
-                      ];
-    return text;
-}
-
--  (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
-{
-    return self.servicePicker.bounds.size.width;
-}
-
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
 
 @end

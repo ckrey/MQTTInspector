@@ -39,22 +39,25 @@
                               clientid:nil
                           cleansession:YES
                              keepalive:60
+                                dnssrv:YES
+                                dnsdomain:@"mosquitto.org"
                 inManagedObjectContext:self.managedObjectContext];
-    subscription = [Subscription subscriptionWithTopic:@"loc/#"
-                                                   qos:1
-                                               session:session
-                                inManagedObjectContext:self.managedObjectContext];
     subscription = [Subscription subscriptionWithTopic:@"MQTTInspector/#"
                                                    qos:1
                                                session:session
                                 inManagedObjectContext:self.managedObjectContext];
-    subscription = [Subscription subscriptionWithTopic:@"mqttitude/#"
+    subscription = [Subscription subscriptionWithTopic:@"test/+"
                                                    qos:2
                                                session:session
                                 inManagedObjectContext:self.managedObjectContext];
     subscription = [Subscription subscriptionWithTopic:@"system/+/chronos/#"
                                                    qos:0 session:session
                                 inManagedObjectContext:self.managedObjectContext];
+    subscription = [Subscription subscriptionWithTopic:@"loc/#"
+                                                   qos:2
+                                               session:session
+                                inManagedObjectContext:self.managedObjectContext];
+
     publication = [Publication publicationWithName:@"ping"
                                              topic:@"MQTTInspector"
                                                qos:0
@@ -71,17 +74,17 @@
                                   user:@""
                                 passwd:@""
                               clientid:nil
-                          cleansession:YES keepalive:60 inManagedObjectContext:self.managedObjectContext];
-    subscription = [Subscription subscriptionWithTopic:@"loc/#"
-                                                   qos:1
-                                               session:session
-                                inManagedObjectContext:self.managedObjectContext];
+                          cleansession:YES
+                             keepalive:60
+                                dnssrv:NO
+                                dnsdomain:@"eclipse.org"
+inManagedObjectContext:self.managedObjectContext];
     subscription = [Subscription subscriptionWithTopic:@"MQTTInspector/#"
                                                    qos:1
                                                session:session
                                 inManagedObjectContext:self.managedObjectContext];
     
-    subscription = [Subscription subscriptionWithTopic:@"mqttitude/#"
+    subscription = [Subscription subscriptionWithTopic:@"test/+"
                                                    qos:2
                                                session:session
                                 inManagedObjectContext:self.managedObjectContext];
@@ -113,6 +116,8 @@
                                            clientid:@""
                                        cleansession:YES
                                           keepalive:60
+                                             dnssrv:NO
+                                             dnsdomain:@""
                              inManagedObjectContext:self.managedObjectContext];
         if ([segue.destinationViewController respondsToSelector:@selector(setSession:)]) {
             [segue.destinationViewController performSelector:@selector(setSession:)

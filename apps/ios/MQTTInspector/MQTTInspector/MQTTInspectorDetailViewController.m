@@ -42,6 +42,8 @@
 @property (strong, nonatomic) NSManagedObjectContext *queueManagedObjectContext;
 @property (nonatomic) float queueIn;
 @property (nonatomic) float queueOut;
+@property (strong, nonatomic) SRVResolver *resolver;
+@property (strong, nonatomic) NSMutableArray *resolverResults;
 
 @end
 
@@ -352,7 +354,7 @@
 - (void)limit:(NSArray *)array max:(int)max
 {
 #ifdef DEBUG
-    NSLog(@"#count %d/%d", [array count], max);
+    NSLog(@"#count %lu/%d", (unsigned long)[array count], max);
 #endif
     
     for (NSInteger i = [array count]; i > max; i--) {
@@ -377,6 +379,8 @@
     NSString *clientid = self.session.clientid;
     BOOL cleansession = [self.session.cleansession boolValue];
     int keepalive = [self.session.keepalive intValue];
+    NSString *dnsdomain = self.session.dnsdomain;
+    BOOL dnssrv = [self.session.dnssrv boolValue];
 
     [self startQueue];
     [self.queueManagedObjectContext performBlock:^{
@@ -393,6 +397,8 @@
                                              clientid:clientid
                                          cleansession:cleansession
                                             keepalive:keepalive
+                                               dnssrv:dnssrv
+                                               dnsdomain:dnsdomain
                                inManagedObjectContext:self.queueManagedObjectContext];
 
         [Message messageAt:timestamp
@@ -436,6 +442,8 @@
     NSString *clientid = self.session.clientid;
     BOOL cleansession = [self.session.cleansession boolValue];
     int keepalive = [self.session.keepalive intValue];
+    NSString *dnsdomain = self.session.dnsdomain;
+    BOOL dnssrv = [self.session.dnssrv boolValue];
 
     [self startQueue];
     [self.queueManagedObjectContext performBlock:^{
@@ -452,6 +460,8 @@
                                              clientid:clientid
                                          cleansession:cleansession
                                             keepalive:keepalive
+                                               dnssrv:dnssrv
+                                               dnsdomain:dnsdomain
                                inManagedObjectContext:self.queueManagedObjectContext];
 
         [Command commandAt:timestamp
@@ -485,6 +495,8 @@
     NSString *passwd = self.session.passwd;
     NSString *clientid = self.session.clientid;
     BOOL cleansession = [self.session.cleansession boolValue];
+    NSString *dnsdomain = self.session.dnsdomain;
+    BOOL dnssrv = [self.session.dnssrv boolValue];
     int keepalive = [self.session.keepalive intValue];
 
     [self startQueue];
@@ -503,6 +515,9 @@
                                              clientid:clientid
                                          cleansession:cleansession
                                             keepalive:keepalive
+                                               dnssrv:dnssrv
+                                               dnsdomain:dnsdomain
+
                                inManagedObjectContext:self.queueManagedObjectContext];
 
         [Command commandAt:timestamp
@@ -533,7 +548,7 @@
 
 - (void)splitViewController:(UISplitViewController *)splitController willHideViewController:(UIViewController *)viewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)popoverController
 {
-    barButtonItem.title = @"Organize";
+    barButtonItem.title = @"Sessions";
     [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
     self.masterPopoverController = popoverController;
 }
@@ -561,5 +576,26 @@
                                       otherButtonTitles:nil];
     [alertView show];
 }
+
+#pragma mark - dns srv
+- (void)getService:(NSString *)srvName
+{
+    self.resolver = [[SRVResolver alloc] initWithSRVName:srvName];
+    self.resolver.delegate = self;
+    
+    [self.resolver start];
+}
+
+- (void)srvResolver:(SRVResolver *)resolver didReceiveResult:(NSDictionary *)result
+{
+    NSLog(@"didReceiveResult %@", result);
+    [self.resolverResults addObject:result];
+}
+
+- (void)srvResolver:(SRVResolver *)resolver didStopWithError:(NSError *)error
+{
+    NSLog(@"didStopWithError %@", error);
+}
+
 
 @end
