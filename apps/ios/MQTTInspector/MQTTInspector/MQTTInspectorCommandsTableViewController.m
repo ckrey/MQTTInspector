@@ -47,13 +47,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [NSString stringWithFormat:@"Commands - %@://%@%@:%@",
-            [self.mother.session.tls boolValue] ? @"mqtts" : @"mqtt",
-            [self.mother.session.auth boolValue] ? [NSString stringWithFormat:@"%@@",
-                                                    self.mother.session.user] : @"",
-            self.mother.session.host,
-            self.mother.session.port];
-            
+    return @"Commands";
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
@@ -67,7 +61,7 @@
     NSDictionary *attributes = [NSDictionary dictionaryWithObject:font
                                                                 forKey:NSFontAttributeName];
     [as appendAttributedString:[[NSAttributedString alloc]
-                                initWithString:[command attributeTextPart1] attributes:attributes]];
+                                initWithString:[command attributeTextPart2] attributes:attributes]];
     
     
     [as appendAttributedString:[[NSAttributedString alloc]

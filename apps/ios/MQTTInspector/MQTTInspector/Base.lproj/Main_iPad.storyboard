@@ -55,7 +55,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="6Qg-qW-wyx"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -91,7 +91,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="6Sd-B5-GTh"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -278,7 +278,6 @@
                                                 <segment title="Low Level"/>
                                             </segments>
                                             <connections>
-                                                <action selector="setLevel:" destination="JEX-9P-axG" eventType="valueChanged" id="2Q5-1b-3fC"/>
                                                 <action selector="viewChanged:" destination="JEX-9P-axG" eventType="valueChanged" id="ARR-yw-Nc8"/>
                                             </connections>
                                         </segmentedControl>
@@ -406,8 +405,8 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="1" translatesAutoresizingMaskIntoConstraints="NO" id="N1v-ey-t2M">
-                                <rect key="frame" x="0.0" y="724" width="703" height="3"/>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="1" translatesAutoresizingMaskIntoConstraints="NO" id="N1v-ey-t2M">
+                                <rect key="frame" x="0.0" y="724" width="703" height="2"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </progressView>
                         </subviews>
@@ -436,13 +435,7 @@
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="MQTT Inspector" id="mOI-FS-AaM">
-                        <barButtonItem key="rightBarButtonItem" systemItem="compose" id="LOd-1e-JPm">
-                            <connections>
-                                <action selector="send:" destination="JEX-9P-axG" id="wR8-WX-jig"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="MQTT Inspector" id="mOI-FS-AaM"/>
                     <connections>
                         <outlet property="clearButton" destination="l5S-9e-SGS" id="51V-QM-M7q"/>
                         <outlet property="connectButton" destination="ICA-8x-esm" id="nQb-u1-WZ1"/>
@@ -460,7 +453,7 @@
             </objects>
             <point key="canvasLocation" x="1447" y="873"/>
         </scene>
-        <!--Inspector Data View Controller-->
+        <!--Inspector Data View Controller - Detail-->
         <scene sceneID="1Y1-yd-zaj">
             <objects>
                 <viewController id="N8D-IB-PEI" customClass="MQTTInspectorDataViewController" sceneMemberID="viewController">
@@ -490,7 +483,7 @@
                         </constraints>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
-                    <navigationItem key="navigationItem" id="vUo-mo-QEM"/>
+                    <navigationItem key="navigationItem" title="Detail" id="vUo-mo-QEM"/>
                     <connections>
                         <outlet property="dataTextView" destination="39j-lk-74x" id="2Wf-lY-Tmf"/>
                     </connections>

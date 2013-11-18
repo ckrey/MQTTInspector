@@ -10,9 +10,8 @@
 #import "Session+Create.h"
 #import "MQTTSession.h"
 #include "SRVResolver.h"
-#import <MessageUI/MessageUI.h>
 
-@interface MQTTInspectorDetailViewController : UIViewController <UISplitViewControllerDelegate, MQTTSessionDelegate, SRVResolverDelegate, MFMailComposeViewControllerDelegate>
+@interface MQTTInspectorDetailViewController : UIViewController <UISplitViewControllerDelegate, MQTTSessionDelegate, SRVResolverDelegate>
 
 @property (strong, nonatomic) Session *session;
 @property (strong, nonatomic) MQTTSession *mqttSession;
@@ -20,6 +19,5 @@
 
 + (void)alert:(NSString *)message;
 - (void)publish:(Publication *)pub;
-
 
 @end

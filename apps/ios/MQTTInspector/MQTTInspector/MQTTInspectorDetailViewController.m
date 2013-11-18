@@ -18,6 +18,8 @@
 #import "MQTTInspectorSubsTableViewController.h"
 #import "MQTTInspectorPubsTableViewController.h"
 #import "MQTTInspectorDataViewController.h"
+#import "MQTTInspectorSetupPubsTableViewController.h"
+#import "MQTTInspectorSetupSubsTableViewController.h"
 
 @interface MQTTInspectorDetailViewController ()
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *disconnectButton;
@@ -55,6 +57,12 @@
     //
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self viewChanged:nil];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -71,6 +79,16 @@
         if ([segue.destinationViewController respondsToSelector:@selector(setMother:)]) {
             [segue.destinationViewController performSelector:@selector(setMother:)
                                                   withObject:self];
+        }
+    }
+    if ([segue.identifier isEqualToString:@"enlargePubs"] ||
+        [segue.identifier isEqualToString:@"enlargeSubs"]) {
+        
+        if (segue.sourceViewController == self) {
+            if ([segue.destinationViewController respondsToSelector:@selector(setSession:)]) {
+                [segue.destinationViewController performSelector:@selector(setSession:)
+                                                      withObject:self.session];
+            }
         }
     }
 
@@ -163,78 +181,8 @@
 - (IBAction)runningChanged:(UISwitch *)sender {
     //
 }
-- (IBAction)send:(UIBarButtonItem *)sender {
-    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
-    picker.mailComposeDelegate = self;
-    
-    [picker setSubject:[NSString stringWithFormat:@"MQTTInspector-%@", self.session.name]];
-    
-    NSString *string = [NSString stringWithFormat:@"MQTTInspector\n"];
-    
-    string = [string stringByAppendingFormat:@"URL: %@ - %@\n", self.session.name, [self url]];
-    
-    for (Subscription *sub in self.session.hasSubs) {
-        string = [string  stringByAppendingFormat:@"SUB:%@ q%d s%d\n",
-                  sub.topic,
-                  [sub.qos intValue],
-                  [sub.state intValue]
-                  ];
-    }
-    
-    for (Publication *pub in self.session.hasPubs) {
-        string = [string  stringByAppendingFormat:@"PUB:%@ %@ %@ q%d r%d\n",
-                  pub.name,
-                  pub.topic,
-                  [MQTTInspectorDataViewController dataToString:pub.data],
-                  [pub.qos intValue],
-                  [pub.retained boolValue]
-                  ];
-    }
 
-    for (Topic *topic in self.session.hasTopics) {
-        string = [string  stringByAppendingFormat:@"TOP:%@ %@\n",
-                  [topic attributeText],
-                  [topic dataText]
-                  ];
-    }
-    for (Message *message in self.session.hasCommands) {
-        string = [string  stringByAppendingFormat:@"MSG:%@ %@\n",
-                  [message attributeText],
-                  [message dataText]
-                  ];
-    }
-
-
-    for (Command *command in self.session.hasCommands) {
-        string = [string  stringByAppendingFormat:@"CMD:%@ %@\n",
-                  [command attributeText],
-                  [command dataText]
-                  ];
-    }
-
-    
-    NSData *myData = [string dataUsingEncoding:NSUTF8StringEncoding];
-    [picker addAttachmentData:myData mimeType:@"text/plain"
-                     fileName:[NSString stringWithFormat:@"MQTTInspector-%@.txt", self.session.name]];
-    
-    NSString *emailBody = @"see attached file";
-    [picker setMessageBody:emailBody isHTML:NO];
-    
-    [self presentViewController:picker animated:YES completion:^{
-        // done
-    }];
-}
-
-- (void)mailComposeController:(MFMailComposeViewController *)controller
-          didFinishWithResult:(MFMailComposeResult)result
-                        error:(NSError *)error
-{
-    [controller dismissViewControllerAnimated:YES completion:^{
-        // done
-    }];
-}
-
-- (IBAction)connect:(UIButton *)sender {
+- (IBAction)connect:(UIBarButtonItem *)sender {
     if (self.session) {
         
         self.title = [NSString stringWithFormat:@"%@ - %@", self.session.name, [self url]];
@@ -262,10 +210,10 @@
         [self.mqttSession connectToHost:self.session.host port:[self.session.port intValue] usingSSL:[self.session.tls boolValue]];
     }
 }
-
-- (IBAction)disconnect:(UIButton *)sender {
+- (IBAction)disconnect:(UIBarButtonItem *)sender {
     if (self.session) {
         self.title = self.session.name;
+        [self.mqttSession close];
     }
 }
 
@@ -297,8 +245,7 @@
         }
     }
 }
-
-- (IBAction)clear:(UIButton *)sender {
+- (IBAction)clear:(UIBarButtonItem *)sender {
     if (self.session) {
         for (Message *message in self.session.hasMesssages) {
             [self.managedObjectContext deleteObject:message];
@@ -315,6 +262,8 @@
 #pragma mark - Managing the detail item
 - (void)setSession:(Session *)session
 {
+    self.managedObjectContext = session.managedObjectContext;
+    
     self.title = session.name;
     
     if ((_session != session) || ([self.session.state intValue] != MQTTSessionEventConnected)) {
@@ -704,8 +653,16 @@
             self.session.port];
     
 }
-
-
+- (IBAction)longSub:(UILongPressGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        [self performSegueWithIdentifier:@"enlargeSubs" sender:sender];
+    }
+}
+- (IBAction)longPub:(UILongPressGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        [self performSegueWithIdentifier:@"enlargePubs" sender:sender];
+    }
+}
 
 
 @end

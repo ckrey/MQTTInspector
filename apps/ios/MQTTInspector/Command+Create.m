@@ -68,7 +68,7 @@
 
 - (NSString *)attributeTextPart1
 {
-    return [NSString stringWithFormat:@"%@ %@:",
+    return [NSString stringWithFormat:@"%@ :%@ ",
             [NSDateFormatter localizedStringFromDate:self.timestamp
                                            dateStyle:NSDateFormatterShortStyle
                                            timeStyle:NSDateFormatterMediumStyle],
@@ -102,7 +102,7 @@
 
 - (NSString *)attributeTextPart3
 {
-    return [NSString stringWithFormat:@"d%@ q%@ r%@ i%u",
+    return [NSString stringWithFormat:@" d%@ q%@ r%@ i%u",
             self.duped,
             self.qos,
             self.retained,

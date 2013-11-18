@@ -75,7 +75,6 @@
     [super viewWillDisappear:animated];
 }
 
-#include <netdb.h>
 - (IBAction)nameChanged:(UITextField *)sender {
     
     NSString *newName = sender.text;
