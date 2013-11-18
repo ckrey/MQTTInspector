@@ -269,7 +269,7 @@
 
         [self viewChanged:nil];
         
-        [self connect:nil];
+        [self performSelectorOnMainThread:@selector(connect:) withObject:nil waitUntilDone:NO];
     }
     
     if (self.masterPopoverController != nil) {

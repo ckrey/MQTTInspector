@@ -29,7 +29,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                         <sections>
-                            <tableViewSection headerTitle="Ad Hoc PUB" id="aSg-3S-WZU">
+                            <tableViewSection headerTitle="PUB" id="aSg-3S-WZU">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="maM-df-B9t">
                                         <rect key="frame" x="0.0" y="22" width="1024" height="44"/>

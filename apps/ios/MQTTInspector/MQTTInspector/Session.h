@@ -24,8 +24,8 @@
 @property (nonatomic, retain) NSNumber * state;
 @property (nonatomic, retain) NSNumber * tls;
 @property (nonatomic, retain) NSString * user;
-@property (nonatomic, retain) NSString * dnsdomain;
 @property (nonatomic, retain) NSNumber * dnssrv;
+@property (nonatomic, retain) NSString * dnsdomain;
 @property (nonatomic, retain) NSOrderedSet *hasCommands;
 @property (nonatomic, retain) NSOrderedSet *hasMesssages;
 @property (nonatomic, retain) NSOrderedSet *hasPubs;

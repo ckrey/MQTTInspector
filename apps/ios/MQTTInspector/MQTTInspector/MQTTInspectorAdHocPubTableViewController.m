@@ -26,7 +26,7 @@
 {
     [super viewWillAppear:animated];
     
-    self.pub = [Publication publicationWithName:@"<ad hoc>"
+    self.pub = [Publication publicationWithName:@"<last>"
                                           topic:@"MQTTInspector"
                                             qos:0
                                        retained:FALSE

@@ -102,6 +102,9 @@
                 break;
             }
             if ([subscriptionComponents[i] isEqualToString:@"+"]) {
+                if (i == [topicComponents count] - 1) {
+                    color = [subscription getColor];
+                }
                 continue;
             }
             if (![subscriptionComponents[i] isEqualToString:topicComponents[i]]) {

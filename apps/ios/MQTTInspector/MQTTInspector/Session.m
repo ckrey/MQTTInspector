@@ -27,8 +27,8 @@
 @dynamic state;
 @dynamic tls;
 @dynamic user;
-@dynamic dnsdomain;
 @dynamic dnssrv;
+@dynamic dnsdomain;
 @dynamic hasCommands;
 @dynamic hasMesssages;
 @dynamic hasPubs;

@@ -30,6 +30,8 @@
         <attribute name="auth" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="cleansession" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="clientid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dnsdomain" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dnssrv" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="host" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="keepalive" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
