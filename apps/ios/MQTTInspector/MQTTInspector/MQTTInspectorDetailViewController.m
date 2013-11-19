@@ -44,8 +44,6 @@
 @property (strong, nonatomic) NSManagedObjectContext *queueManagedObjectContext;
 @property (nonatomic) float queueIn;
 @property (nonatomic) float queueOut;
-@property (strong, nonatomic) SRVResolver *resolver;
-@property (strong, nonatomic) NSMutableArray *resolverResults;
 
 @end
 
@@ -632,25 +630,6 @@
     [alertView show];
 }
 
-#pragma mark - dns srv
-- (void)getService:(NSString *)srvName
-{
-    self.resolver = [[SRVResolver alloc] initWithSRVName:srvName];
-    self.resolver.delegate = self;
-    
-    [self.resolver start];
-}
-
-- (void)srvResolver:(SRVResolver *)resolver didReceiveResult:(NSDictionary *)result
-{
-    NSLog(@"didReceiveResult %@", result);
-    [self.resolverResults addObject:result];
-}
-
-- (void)srvResolver:(SRVResolver *)resolver didStopWithError:(NSError *)error
-{
-    NSLog(@"didStopWithError %@", error);
-}
 
 - (NSString *)url
 {

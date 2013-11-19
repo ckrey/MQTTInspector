@@ -57,20 +57,25 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Command *command = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        
-    NSMutableAttributedString *as = [[NSMutableAttributedString alloc]
-                                     initWithString:[command attributeTextPart1] attributes:@{}];
     
-    UIFont *font = [UIFont boldSystemFontOfSize:16.0];
-    NSDictionary *attributes = [NSDictionary dictionaryWithObject:font
+    UIFont *fontBold = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+    NSDictionary *attributesBold = [NSDictionary dictionaryWithObject:fontBold
+                                                               forKey:NSFontAttributeName];
+    
+    UIFont *fontLight = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+    NSDictionary *attributesLight = [NSDictionary dictionaryWithObject:fontLight
                                                                 forKey:NSFontAttributeName];
-    [as appendAttributedString:[[NSAttributedString alloc]
-                                initWithString:[command attributeTextPart2] attributes:attributes]];
     
+    NSMutableAttributedString *as = [[NSMutableAttributedString alloc]
+                                     initWithString:[command attributeTextPart1] attributes:attributesLight];
+    
+    [as appendAttributedString:[[NSAttributedString alloc]
+                                initWithString:[command attributeTextPart2] attributes:attributesBold]];
+
     
     [as appendAttributedString:[[NSAttributedString alloc]
                                 initWithString:[command attributeTextPart3]
-                                     attributes:@{}]];
+                                     attributes:attributesLight]];
     
     cell.detailTextLabel.attributedText = as;
 
@@ -79,6 +84,13 @@
     cell.backgroundColor = [UIColor lightGrayColor];
     
     [cell setAccessoryType:UITableViewCellAccessoryDetailButton];
+    
+    [cell setAccessoryType:UITableViewCellAccessoryDetailButton];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+    }
+
 }
 
 @end

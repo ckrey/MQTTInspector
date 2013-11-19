@@ -25,9 +25,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *domainText;
 @property (weak, nonatomic) IBOutlet UISwitch *domainSwitch;
 
-@property (strong, nonatomic) SRVResolver *resolver;
-@property (strong, nonatomic) NSMutableArray *resolverResults;
-
 @end
 
 @implementation MQTTInspectorSetupSessionTableViewController
@@ -35,7 +32,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.resolverResults = [[NSMutableArray alloc] init];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -55,7 +51,6 @@
     self.cleansessionSwitch.on = [self.session.cleansession boolValue];
     self.keepaliveText.text = [NSString stringWithFormat:@"%@", self.session.keepalive];
     self.domainSwitch.on = [self.session.dnssrv boolValue];
-    [self setDnsSrv:self.domainSwitch.on];
     self.domainText.text = self.session.dnsdomain;
 }
 
@@ -71,7 +66,6 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [self.resolver stop];
     [super viewWillDisappear:animated];
 }
 
@@ -95,23 +89,15 @@
 }
 - (IBAction)tlsChanged:(UISwitch *)sender {
     self.session.tls = @(sender.on);
+    if (sender.on) {
+        self.session.port = @(8883);
+    } else {
+        self.session.port = @(1883);
+    }
+    self.portText.text = [NSString stringWithFormat:@"%@", self.session.port];
 }
 - (IBAction)domainSwitchChanged:(UISwitch *)sender {
     self.session.dnssrv = @(sender.on);
-    [self setDnsSrv:sender.on];
-}
-
-- (void)setDnsSrv:(BOOL)on
-{
-    if (on) {
-        self.domainText.enabled = TRUE;
-        self.hostText.enabled = FALSE;
-        self.portText.enabled = FALSE;
-    } else {
-        self.domainText.enabled = FALSE;
-        self.hostText.enabled = TRUE;
-        self.portText.enabled = TRUE;
-    }
 }
 - (IBAction)domainChanged:(UITextField *)sender {
     self.session.dnsdomain = sender.text;
@@ -135,5 +121,10 @@
     self.session.keepalive = @([sender.text intValue]);
 }
 
+- (IBAction)dnssrvSelected:(UIStoryboardSegue *)segue
+{
+    self.hostText.text = self.session.host;
+    self.portText.text = [NSString stringWithFormat:@"%@", self.session.port];
+}
 
 @end

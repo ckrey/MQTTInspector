@@ -186,6 +186,11 @@
 {
     Publication *publication = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = publication.name;
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
+        cell.textLabel.font = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+    }
+
 }
 
 @end

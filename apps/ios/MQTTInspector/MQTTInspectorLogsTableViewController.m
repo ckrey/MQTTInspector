@@ -52,20 +52,26 @@
 {
     Message *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
+    UIFont *fontBold = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+    NSDictionary *attributesBold = [NSDictionary dictionaryWithObject:fontBold
+                                                                forKey:NSFontAttributeName];
+    
+    UIFont *fontLight = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+    NSDictionary *attributesLight = [NSDictionary dictionaryWithObject:fontLight
+                                                               forKey:NSFontAttributeName];
+
+    
     NSMutableAttributedString *as = [[NSMutableAttributedString alloc]
                                      initWithString:[message attributeTextPart1]
-                                     attributes:@{}];
+                                     attributes:attributesLight];
     
-    UIFont *font = [UIFont boldSystemFontOfSize:16.0];
-    NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:font
-                                                                forKey:NSFontAttributeName];
     [as appendAttributedString:[[NSAttributedString alloc]
                                 initWithString:[message attributeTextPart2]
-                                attributes:attrsDictionary]];
+                                attributes:attributesBold]];
     
     [as appendAttributedString:[[NSAttributedString alloc]
                                 initWithString:[message attributeTextPart3]
-                                attributes:@{}]];
+                                attributes:attributesLight]];
     
     cell.detailTextLabel.attributedText = as;
     
@@ -74,6 +80,11 @@
     cell.backgroundColor = [self matchingSubscriptionColor:message];
     
     [cell setAccessoryType:UITableViewCellAccessoryDetailButton];
+
+    if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+    }
+
 }
 
 - (UIColor *)matchingSubscriptionColor:(Message *)message

@@ -202,6 +202,12 @@
     }
     
     cell.backgroundColor = [subscription getColor];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+    }
+
 }
 
 @end
