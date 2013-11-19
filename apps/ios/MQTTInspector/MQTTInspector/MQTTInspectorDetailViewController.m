@@ -654,8 +654,9 @@
 
 - (NSString *)url
 {
-    return [NSString stringWithFormat:@"%@://%@%@:%@",
-            [self.session.tls boolValue] ? @"mqtts" : @"mqtt",
+    return [NSString stringWithFormat:@"%@%@%@:%@",
+            ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) ? @"" :
+            [NSString stringWithFormat:@"%@://", [self.session.tls boolValue] ? @"mqtts" : @"mqtt"],
             [self.session.auth boolValue] ? [NSString stringWithFormat:@"%@@",
                                                     self.session.user] : @"",
             self.session.host,
