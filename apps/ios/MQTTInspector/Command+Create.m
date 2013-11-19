@@ -112,8 +112,8 @@
 
 - (NSString *)dataText
 {
-    return [NSString stringWithFormat:@"(%d) %@",
-            self.data.length,
+    return [NSString stringWithFormat:@"(%lu) %@",
+            (unsigned long)self.data.length,
             [self.data description]];
 }
 

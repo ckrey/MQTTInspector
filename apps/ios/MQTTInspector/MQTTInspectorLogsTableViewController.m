@@ -100,6 +100,9 @@
                 break;
             }
             if ([subscriptionComponents[i] isEqualToString:@"+"]) {
+                if (i == [messageComponents count] - 1) {
+                    color = [subscription getColor];
+                }
                 continue;
             }
             if (![subscriptionComponents[i] isEqualToString:messageComponents[i]]) {
@@ -113,6 +116,5 @@
     }
     return color;
 }
-
                         
 @end
