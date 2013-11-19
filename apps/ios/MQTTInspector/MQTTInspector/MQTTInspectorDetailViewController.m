@@ -54,7 +54,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //
+    [[NSNotificationCenter defaultCenter ]addObserver:self
+                                             selector:@selector(willResign:)
+                                                 name:UIApplicationWillResignActiveNotification
+                                               object:nil];
+    
+}
+
+- (void)willResign:(NSNotification *)notification
+{
+    [self disconnect:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated

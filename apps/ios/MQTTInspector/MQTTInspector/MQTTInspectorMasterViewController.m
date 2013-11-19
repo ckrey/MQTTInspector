@@ -22,76 +22,79 @@
 - (void)viewDidLoad
 {
     self.detailViewController.managedObjectContext = self.managedObjectContext;
-
-    /* DEMO DB SETUP */
-    Session *session;
-
-    /* mosquitto.org */
-    session = [Session sessionWithName:@"mosquitto.org"
-                                  host:@"test.mosquitto.org"
-                                  port:1883
-                                   tls:NO
-                                  auth:NO
-                                  user:@""
-                                passwd:@""
-                              clientid:nil
-                          cleansession:YES
-                             keepalive:60
-                                dnssrv:YES
-                                dnsdomain:@"mosquitto.org"
-                inManagedObjectContext:self.managedObjectContext];
-    [Subscription subscriptionWithTopic:@"MQTTInspector/#"
-                                                   qos:1
-                                               session:session
-                                inManagedObjectContext:self.managedObjectContext];
-    [Subscription subscriptionWithTopic:@"test/+"
-                                                   qos:2
-                                               session:session
-                                inManagedObjectContext:self.managedObjectContext];
-    [Subscription subscriptionWithTopic:@"system/+/chronos/#"
-                                                   qos:0 session:session
-                                inManagedObjectContext:self.managedObjectContext];
-    [Subscription subscriptionWithTopic:@"loc/#"
-                                                   qos:2
-                                               session:session
-                                inManagedObjectContext:self.managedObjectContext];
-
-    [Publication publicationWithName:@"ping"
-                                             topic:@"MQTTInspector"
-                                               qos:0
-                                          retained:NO
-                                              data:[@"ping %t %c" dataUsingEncoding:NSUTF8StringEncoding]
-                                           session:session inManagedObjectContext:self.managedObjectContext];
-
-    /* eclipse.org */
-    session = [Session sessionWithName:@"eclipse.org"
-                                  host:@"m2m.eclipse.org"
-                                  port:1883
-                                   tls:NO
-                                  auth:NO
-                                  user:@""
-                                passwd:@""
-                              clientid:nil
-                          cleansession:YES
-                             keepalive:60
-                                dnssrv:NO
-                                dnsdomain:@"eclipse.org"
-inManagedObjectContext:self.managedObjectContext];
-    [Subscription subscriptionWithTopic:@"MQTTInspector/#"
-                                                   qos:1
-                                               session:session
-                                inManagedObjectContext:self.managedObjectContext];
     
-    [Subscription subscriptionWithTopic:@"test/+"
-                                                   qos:2
-                                               session:session
-                                inManagedObjectContext:self.managedObjectContext];
-    [Publication publicationWithName:@"ping"
-                                             topic:@"MQTTInspector"
-                                               qos:0
-                                          retained:NO
-                                              data:[@"ping %t %c" dataUsingEncoding:NSUTF8StringEncoding]
-                                           session:session inManagedObjectContext:self.managedObjectContext];
+    if ([[Session allSessions:self.managedObjectContext] count] == 0) {
+        
+        /* DEMO DB SETUP only if DB is empty */
+        Session *session;
+        
+        /* mosquitto.org */
+        session = [Session sessionWithName:@"mosquitto.org"
+                                      host:@"test.mosquitto.org"
+                                      port:1883
+                                       tls:NO
+                                      auth:NO
+                                      user:@""
+                                    passwd:@""
+                                  clientid:nil
+                              cleansession:YES
+                                 keepalive:60
+                                    dnssrv:YES
+                                 dnsdomain:@"mosquitto.org"
+                    inManagedObjectContext:self.managedObjectContext];
+        [Subscription subscriptionWithTopic:@"MQTTInspector/#"
+                                        qos:1
+                                    session:session
+                     inManagedObjectContext:self.managedObjectContext];
+        [Subscription subscriptionWithTopic:@"test/+"
+                                        qos:2
+                                    session:session
+                     inManagedObjectContext:self.managedObjectContext];
+        [Subscription subscriptionWithTopic:@"system/+/chronos/#"
+                                        qos:0 session:session
+                     inManagedObjectContext:self.managedObjectContext];
+        [Subscription subscriptionWithTopic:@"loc/#"
+                                        qos:2
+                                    session:session
+                     inManagedObjectContext:self.managedObjectContext];
+        
+        [Publication publicationWithName:@"ping"
+                                   topic:@"MQTTInspector"
+                                     qos:0
+                                retained:NO
+                                    data:[@"ping %t %c" dataUsingEncoding:NSUTF8StringEncoding]
+                                 session:session inManagedObjectContext:self.managedObjectContext];
+        
+        /* eclipse.org */
+        session = [Session sessionWithName:@"eclipse.org"
+                                      host:@"m2m.eclipse.org"
+                                      port:1883
+                                       tls:NO
+                                      auth:NO
+                                      user:@""
+                                    passwd:@""
+                                  clientid:nil
+                              cleansession:YES
+                                 keepalive:60
+                                    dnssrv:NO
+                                 dnsdomain:@"eclipse.org"
+                    inManagedObjectContext:self.managedObjectContext];
+        [Subscription subscriptionWithTopic:@"MQTTInspector/#"
+                                        qos:1
+                                    session:session
+                     inManagedObjectContext:self.managedObjectContext];
+        
+        [Subscription subscriptionWithTopic:@"test/+"
+                                        qos:2
+                                    session:session
+                     inManagedObjectContext:self.managedObjectContext];
+        [Publication publicationWithName:@"ping"
+                                   topic:@"MQTTInspector"
+                                     qos:0
+                                retained:NO
+                                    data:[@"ping %t %c" dataUsingEncoding:NSUTF8StringEncoding]
+                                 session:session inManagedObjectContext:self.managedObjectContext];
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

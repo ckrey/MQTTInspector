@@ -80,4 +80,18 @@
     return session;
 }
 
++ (NSArray *)allSessions:(NSManagedObjectContext *)context
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Session"];
+    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:NO]];
+    
+    NSError *error = nil;
+    
+    NSArray *matches = [context executeFetchRequest:request error:&error];
+    
+    return matches;
+}
+
+
+
 @end

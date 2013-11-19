@@ -24,5 +24,6 @@
                       dnssrv:(BOOL)dnssrv
                       dnsdomain:(NSString *)dnsdomain
       inManagedObjectContext:(NSManagedObjectContext *)context;
++ (NSArray *)allSessions:(NSManagedObjectContext *)context;
 
 @end
