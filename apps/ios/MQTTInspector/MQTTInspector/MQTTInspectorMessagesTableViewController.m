@@ -210,9 +210,9 @@
         }
 
         if (match) {
-            //NSLog(@"topic %@ matches %@ specific:%d match:%d best:%d", topic, subscription.topic, i, match, best);
-
-            if ((i >= [topicComponents count]) || (i == [subscriptionComponents count] - 1)) {
+            NSLog(@"topic %@ matches %@ specific:%d match:%d best:%d", topic, subscription.topic, i, match, best);
+            if (((i == [subscriptionComponents count] - 1) && ([subscriptionComponents[i] isEqualToString:@"#"])) ||
+                ((match > 1) && (i == [subscriptionComponents count]) && (i == [topicComponents count]))) {
                 if ((i * 10 + match) > best) {
                     color = [subscription getColor];
                     best = i * 10 + match;
