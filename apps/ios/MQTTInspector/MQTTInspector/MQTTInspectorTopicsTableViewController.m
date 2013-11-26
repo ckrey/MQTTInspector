@@ -77,43 +77,12 @@
     
     cell.textLabel.text = [topic dataText];
     
-    cell.backgroundColor = [self matchingSubscriptionColor:topic];
+    cell.backgroundColor = [self matchingTopicColor:topic.topic inSession:self.mother.session];
     
     [cell setAccessoryType:UITableViewCellAccessoryDetailButton];
        if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
         cell.textLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
     }
 }
-
-- (UIColor *)matchingSubscriptionColor:(Topic *)topic
-{
-    UIColor *color = [UIColor whiteColor];
-    
-    for (Subscription *subscription in topic.belongsTo.hasSubs) {
-        NSArray *subscriptionComponents = [subscription.topic pathComponents];
-        NSArray *topicComponents = [topic.topic pathComponents];
-        for (int i = 0; i < [topicComponents count]; i++) {
-            if ([subscriptionComponents[i] isEqualToString:@"#"]) {
-                color = [subscription getColor];
-                break;
-            }
-            if ([subscriptionComponents[i] isEqualToString:@"+"]) {
-                if (i == [topicComponents count] - 1) {
-                    color = [subscription getColor];
-                }
-                continue;
-            }
-            if (![subscriptionComponents[i] isEqualToString:topicComponents[i]]) {
-                break;
-            } else {
-                if (i == [topicComponents count] - 1) {
-                    color = [subscription getColor];
-                }
-            }
-        }
-    }
-    return color;
-}
-
 
 @end

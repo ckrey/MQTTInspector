@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "MQTTInspectorDetailViewController.h"
+#import "Session.h"
 
 @interface MQTTInspectorMessagesTableViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 @property (strong, nonatomic) MQTTInspectorDetailViewController *mother;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+
+- (UIColor *)matchingTopicColor:(NSString *)topic inSession:(Session *)session;
 
 @end

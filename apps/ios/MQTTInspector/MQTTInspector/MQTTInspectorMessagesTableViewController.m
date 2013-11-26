@@ -7,6 +7,8 @@
 //
 
 #import "MQTTInspectorMessagesTableViewController.h"
+#import "Session.h"
+#import "Subscription+Create.h"
 
 @interface MQTTInspectorMessagesTableViewController ()
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
@@ -167,5 +169,59 @@
     // abstract
     return nil;
 }
+
+- (UIColor *)matchingTopicColor:(NSString *)topic inSession:(Session *)session
+{
+    UIColor *color = [UIColor whiteColor];
+    int best = -1;
+    
+    NSArray *topicComponents = [topic pathComponents];
+    
+    for (Subscription *subscription in session.hasSubs) {
+        
+        NSArray *subscriptionComponents = [subscription.topic pathComponents];
+        int i;
+        int match = 0;
+        
+        for (i = 0; (i < [topicComponents count]) && (i < [subscriptionComponents count]); i++) {
+            if ([subscriptionComponents[i] isEqualToString:topicComponents[i]]) {
+                if (i == [subscriptionComponents count] -1) {
+                    match = 5;
+                } else {
+                    match = 3;
+                }
+                continue;
+            }
+            
+            if ([subscriptionComponents[i] isEqualToString:@"+"]) {
+                match = 2;
+                continue;
+            }
+            
+            if ([subscriptionComponents[i] isEqualToString:@"#"]) {
+                match = 1;
+                break;
+            }
+            
+            if (![subscriptionComponents[i] isEqualToString:topicComponents[i]]) {
+                match = 0;
+                break;
+            }
+        }
+
+        if (match) {
+            //NSLog(@"topic %@ matches %@ specific:%d match:%d best:%d", topic, subscription.topic, i, match, best);
+
+            if ((i >= [topicComponents count]) || (i == [subscriptionComponents count] - 1)) {
+                if ((i * 10 + match) > best) {
+                    color = [subscription getColor];
+                    best = i * 10 + match;
+                }
+            }
+        }
+    }
+    return color;
+}
+
 
 @end

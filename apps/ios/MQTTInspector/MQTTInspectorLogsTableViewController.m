@@ -77,7 +77,7 @@
     
     cell.textLabel.text = [message dataText];
     
-    cell.backgroundColor = [self matchingSubscriptionColor:message];
+    cell.backgroundColor = [self matchingTopicColor:message.topic inSession:self.mother.session];
     
     [cell setAccessoryType:UITableViewCellAccessoryDetailButton];
 
@@ -85,36 +85,6 @@
         cell.textLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
     }
 
-}
-
-- (UIColor *)matchingSubscriptionColor:(Message *)message
-{
-    UIColor *color = [UIColor whiteColor];
-    
-    for (Subscription *subscription in message.belongsTo.hasSubs) {
-        NSArray *subscriptionComponents = [subscription.topic pathComponents];
-        NSArray *messageComponents = [message.topic pathComponents];
-        for (int i = 0; i < [messageComponents count]; i++) {
-            if ([subscriptionComponents[i] isEqualToString:@"#"]) {
-                color = [subscription getColor];
-                break;
-            }
-            if ([subscriptionComponents[i] isEqualToString:@"+"]) {
-                if (i == [messageComponents count] - 1) {
-                    color = [subscription getColor];
-                }
-                continue;
-            }
-            if (![subscriptionComponents[i] isEqualToString:messageComponents[i]]) {
-                break;
-            } else {
-                if (i == [messageComponents count] - 1) {
-                    color = [subscription getColor];
-                }
-            }
-        }
-    }
-    return color;
 }
                         
 @end
