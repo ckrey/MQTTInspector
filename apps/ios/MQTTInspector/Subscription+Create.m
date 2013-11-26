@@ -14,8 +14,6 @@
                         session:(Session *)session
          inManagedObjectContext:(NSManagedObjectContext *)context
 {
-    float r = rand();
-
     Subscription *subscription = nil;
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Subscription"];
@@ -33,10 +31,8 @@
             
             subscription.topic = topic;
             subscription.qos = @(qos);
-
-            float f = r / INT_MAX;
-            float hue = fmod(f,1);
-            subscription.color = @(hue);
+            
+            subscription.color = @([Subscription uniqueHue:session]);
 
             subscription.belongsTo = session;
         } else {
@@ -47,6 +43,26 @@
     }
 
     return subscription;
+}
+
++ (float)uniqueHue:(Session *)session
+{
+    float hue;
+    for (int i = 2; TRUE ; i *= 2) {
+        for (int j = 1; j < i; j += 2) {
+            hue = (float)j / (float)i;
+            BOOL exists = FALSE;
+            for (Subscription *otherSubscription in session.hasSubs) {
+                if ([otherSubscription.color floatValue] == hue) {
+                    exists = TRUE;
+                    break;
+                }
+            }
+            if (!exists) {
+                    return hue;
+            }
+        }
+    }
 }
 
 - (UIColor *)getColor
