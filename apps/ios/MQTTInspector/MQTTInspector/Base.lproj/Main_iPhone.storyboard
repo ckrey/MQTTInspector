@@ -922,7 +922,7 @@
                                                     <rect key="frame" x="94" y="7" width="206" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                                     <connections>
                                                         <action selector="clientIdChanged:" destination="SsW-Pg-FKC" eventType="editingDidEnd" id="gD9-ZZ-t7k"/>
                                                     </connections>

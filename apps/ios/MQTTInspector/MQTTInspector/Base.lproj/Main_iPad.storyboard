@@ -885,7 +885,7 @@
                                                     <rect key="frame" x="110" y="7" width="190" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="numberPad"/>
                                                     <connections>
                                                         <action selector="keepalvieChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="F3O-cG-C38"/>
                                                     </connections>
