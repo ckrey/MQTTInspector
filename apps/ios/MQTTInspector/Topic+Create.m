@@ -94,12 +94,13 @@ inManagedObjectContext:(NSManagedObjectContext *)context
 
 - (NSString *)attributeTextPart3
 {
-    return [NSString stringWithFormat:@" q%d r%d i%u (%lu) #%d",
-            [self.qos intValue],
-            [self.retained boolValue],
-            [self.mid unsignedIntValue],
-            (unsigned long)self.data.length,
-            [self.count intValue]];
+    NSString *string = [NSString stringWithFormat:@" q%d r%d i%u (%lu) #%d",
+                        [self.qos intValue],
+                        [self.retained boolValue],
+                        [self.mid unsignedIntValue],
+                        (unsigned long)self.data.length,
+                        [self.count intValue]];
+    return string;
 }
 
 - (NSString *)dataText

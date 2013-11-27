@@ -2,7 +2,7 @@
 //  Topic.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 18.11.13.
+//  Created by Christoph Krey on 27.11.13.
 //  Copyright (c) 2013 Christoph Krey. All rights reserved.
 //
 
@@ -14,11 +14,11 @@
 
 @dynamic count;
 @dynamic data;
-@dynamic timestamp;
-@dynamic topic;
 @dynamic mid;
 @dynamic qos;
 @dynamic retained;
+@dynamic timestamp;
+@dynamic topic;
 @dynamic belongsTo;
 
 @end
