@@ -175,52 +175,63 @@
     UIColor *color = [UIColor whiteColor];
     int best = -1;
     
-    NSArray *topicComponents = [topic pathComponents];
-    
     for (Subscription *subscription in session.hasSubs) {
         
-        NSArray *subscriptionComponents = [subscription.topic pathComponents];
-        int i;
-        int match = 0;
-        
-        for (i = 0; (i < [topicComponents count]) && (i < [subscriptionComponents count]); i++) {
-            if ([subscriptionComponents[i] isEqualToString:topicComponents[i]]) {
-                if (i == [subscriptionComponents count] -1) {
-                    match = 5;
-                } else {
-                    match = 3;
-                }
-                continue;
-            }
-            
-            if ([subscriptionComponents[i] isEqualToString:@"+"]) {
-                match = 2;
-                continue;
-            }
-            
-            if ([subscriptionComponents[i] isEqualToString:@"#"]) {
-                match = 1;
-                break;
-            }
-            
-            if (![subscriptionComponents[i] isEqualToString:topicComponents[i]]) {
-                match = 0;
-                break;
-            }
-        }
-
-        if (match) {
-            NSLog(@"topic %@ matches %@ specific:%d match:%d best:%d", topic, subscription.topic, i, match, best);
-            if (((i == [subscriptionComponents count] - 1) && ([subscriptionComponents[i] isEqualToString:@"#"])) ||
-                ((match > 1) && (i == [subscriptionComponents count]) && (i == [topicComponents count]))) {
-                if ((i * 10 + match) > best) {
-                    color = [subscription getColor];
-                    best = i * 10 + match;
-                }
-            }
+        int points = [self pointsTopic:topic matchingSub:subscription.topic];
+        if (points > best) {
+            color = [subscription getColor];
+            best = points;
         }
     }
     return color;
+}
+
+- (int)pointsTopic:(NSString *)topic matchingSub:(NSString *)subscription
+{
+    int points = -1;
+    
+    NSArray *topicComponents = [topic pathComponents];
+    NSArray *subscriptionComponents = [subscription pathComponents];
+    
+    int i;
+    int match = 0;
+    
+    for (i = 0; (i < [topicComponents count]) && (i < [subscriptionComponents count]); i++) {
+        if ([subscriptionComponents[i] isEqualToString:topicComponents[i]]) {
+            if ((i == [subscriptionComponents count] - 1) && (i == [topicComponents count] - 1)) {
+                match = 5;
+            } else {
+                match = 3;
+            }
+            continue;
+        }
+        
+        if ([subscriptionComponents[i] isEqualToString:@"+"]) {
+            match = 2;
+            continue;
+        }
+        
+        if ([subscriptionComponents[i] isEqualToString:@"#"]) {
+            match = 1;
+            break;
+        }
+        
+        if (![subscriptionComponents[i] isEqualToString:topicComponents[i]]) {
+            match = 0;
+            break;
+        }
+    }
+    
+    if (match) {
+        if (((i == [subscriptionComponents count] - 1) && ([subscriptionComponents[i] isEqualToString:@"#"])) ||
+            ((match > 1) && (i == [subscriptionComponents count]) && (i == [topicComponents count]))) {
+            points = i * 10 + match;
+        }
+    }
+    NSLog(@"topic %@(%lu) matches %@(%lu) specific:%d match:%d",
+          topic, (unsigned long)[topicComponents count], subscription, (unsigned long)[subscriptionComponents count], i, match);
+
+    return points;
 }
 
 

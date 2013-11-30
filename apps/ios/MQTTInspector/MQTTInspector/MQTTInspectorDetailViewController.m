@@ -41,6 +41,8 @@
 @property (strong, nonatomic) MQTTInspectorPubsTableViewController *pubsTVC;
 
 @property (strong, nonatomic) UIAlertView *alertView;
+@property (strong, nonatomic) NSError *lastError;
+@property (nonatomic) int errorCount;
 @property (strong, nonatomic) NSManagedObjectContext *queueManagedObjectContext;
 @property (nonatomic) float queueIn;
 @property (nonatomic) float queueOut;
@@ -299,8 +301,6 @@
         [self viewChanged:nil];
         
         [self connect:nil];
-//        [self performSelector:@selector(connect:) withObject:nil afterDelay:1];
-        
     }
     
     if (self.masterPopoverController != nil) {
@@ -351,8 +351,18 @@
         self.pubButton.enabled = FALSE;
     }
     if (error) {
-        [MQTTInspectorDetailViewController alert:[error description]];
+        if ((self.lastError.domain == error.domain) && (self.lastError.code == error.code)) {
+            self.errorCount++;
+        } else {
+            self.errorCount = 1;
+        }
+        if (self.errorCount == 1 && [error.domain isEqualToString:NSOSStatusErrorDomain] && error.code == errSSLClosedAbort) {
+            [self performSelector:@selector(connect:) withObject:nil afterDelay:.25];
+        } else {
+            [MQTTInspectorDetailViewController alert:[error description]];
+        }
     }
+    self.lastError = error;
 }
 
 #define MAX_LOG 512
