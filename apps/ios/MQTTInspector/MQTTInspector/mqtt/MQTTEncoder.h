@@ -34,7 +34,7 @@ typedef enum {
 
 @protocol MQTTEncoderDelegate <NSObject>
 - (void)encoder:(MQTTEncoder*)sender handleEvent:(MQTTEncoderEvent)eventCode error:(NSError *)error;
-- (void)encoder:(MQTTEncoder*)sender sending:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped data:(NSData *)data;
+- (void)encoder:(MQTTEncoder*)sender sending:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;
 @end
 
 

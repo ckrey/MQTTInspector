@@ -116,6 +116,7 @@
     MQTTMessage* msg = [[MQTTMessage alloc] initWithType:MQTTSubscribe
                                                      qos:1
                                                     data:data];
+    msg.mid = msgId;
     return msg;
 }
 
@@ -127,6 +128,7 @@
     MQTTMessage* msg = [[MQTTMessage alloc] initWithType:MQTTUnsubscribe
                                                      qos:1
                                                     data:data];
+    msg.mid = msgId;
     return msg;
 }
 
@@ -145,35 +147,44 @@
                                               retainFlag:retain
                                                  dupFlag:dup
                                                     data:data];
+    msg.mid = msgId;
     return msg;
 }
 
 + (id)pubackMessageWithMessageId:(UInt16)msgId {
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
-    return [[MQTTMessage alloc] initWithType:MQTTPuback
-                                         data:data];
+    MQTTMessage *msg = [[MQTTMessage alloc] initWithType:MQTTPuback
+                                                    data:data];
+    msg.mid = msgId;
+    return msg;
 }
 
 + (id)pubrecMessageWithMessageId:(UInt16)msgId {
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
-    return [[MQTTMessage alloc] initWithType:MQTTPubrec
-                                         data:data];
+    MQTTMessage *msg = [[MQTTMessage alloc] initWithType:MQTTPubrec
+                                                    data:data];
+    msg.mid = msgId;
+    return msg;
 }
 
 + (id)pubrelMessageWithMessageId:(UInt16)msgId {
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
-    return [[MQTTMessage alloc] initWithType:MQTTPubrel
-                                         data:data];
+    MQTTMessage *msg = [[MQTTMessage alloc] initWithType:MQTTPubrel
+                                                    data:data];
+    msg.mid = msgId;
+    return msg;
 }
 
 + (id)pubcompMessageWithMessageId:(UInt16)msgId {
     NSMutableData* data = [NSMutableData data];
     [data appendUInt16BigEndian:msgId];
-    return [[MQTTMessage alloc] initWithType:MQTTPubcomp
-                                         data:data];
+    MQTTMessage *msg = [[MQTTMessage alloc] initWithType:MQTTPubcomp
+                                                    data:data];
+    msg.mid = msgId;
+    return msg;
 }
 
 - (id)initWithType:(UInt8)aType {

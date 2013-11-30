@@ -20,6 +20,7 @@
 @property (nonatomic)    UInt8    qos;
 @property (nonatomic)    BOOL     retainFlag;
 @property (nonatomic)    BOOL     dupFlag;
+@property (nonatomic)    UInt16   mid;
 
 enum {
     MQTTConnect = 1,
@@ -55,7 +56,6 @@ enum {
                       willRetain:(BOOL)willRetainFlag;
 
 + (id)pingreqMessage;
-/* CK added disconnect */
 + (id)disconnectMessage;
 + (id)subscribeMessageWithMessageId:(UInt16)msgId
                               topic:(NSString*)topic

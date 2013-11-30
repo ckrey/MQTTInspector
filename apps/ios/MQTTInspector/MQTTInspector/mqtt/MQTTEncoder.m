@@ -143,7 +143,7 @@
     NSLog(@"MQTTEncoder buffer to write (%lu)=%@", (unsigned long)self.buffer.length, [self.buffer description]);
 #endif
     
-    [self.delegate encoder:self sending:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.isDuplicate data:self.buffer];
+    [self.delegate encoder:self sending:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.isDuplicate mid:msg.mid data:self.buffer];
     
     n = [self.stream write:[self.buffer bytes] maxLength:[self.buffer length]];
     if (n == -1) {

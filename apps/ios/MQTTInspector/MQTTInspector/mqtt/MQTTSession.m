@@ -248,8 +248,8 @@
     }
 }
 
-- (void)encoder:(MQTTEncoder *)sender sending:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped data:(NSData *)data{
-    [self.delegate sending:type qos:qos retained:retained duped:duped data:data];
+- (void)encoder:(MQTTEncoder *)sender sending:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data{
+    [self.delegate sending:type qos:qos retained:retained duped:duped mid:mid data:data];
 }
 
 - (void)decoder:(MQTTDecoder*)sender handleEvent:(MQTTDecoderEvent)eventCode error:(NSError *)error
@@ -271,12 +271,11 @@
 
 - (void)decoder:(MQTTDecoder*)sender newMessage:(MQTTMessage*)msg
 {
-    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag data:msg.data];
-    
     switch (self.status) {
         case MQTTSessionStatusConnecting:
             switch ([msg type]) {
                 case MQTTConnack:
+                    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:0 data:msg.data];
                     if ([[msg data] length] != 2) {
                         [self error:MQTTSessionEventProtocolError
                               error:[NSError errorWithDomain:@"MQTT"
@@ -325,6 +324,7 @@
                     }
                     break;
                 default:
+                    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:0 data:msg.data];
                     [self error:MQTTSessionEventProtocolError
                           error:[NSError errorWithDomain:@"MQTT"
                                                     code:-1
@@ -349,11 +349,19 @@
                 case MQTTPubcomp:
                     [self handlePubcomp:msg];
                     break;
+                case MQTTSuback:
+                    [self handleSuback:msg];
+                    break;
+                case MQTTUnsuback:
+                    [self handleUnsuback:msg];
+                    break;
                 default:
+                    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:0 data:msg.data];
                     return;
             }
             break;
         default:
+            [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
             break;
     }
 }
@@ -375,124 +383,151 @@
     NSRange range = NSMakeRange(2 + topicLength, [data length] - topicLength - 2);
     data = [data subdataWithRange:range];
     if ([msg qos] == 0) {
+        [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:0 data:msg.data];
         [self.delegate newMessage:self data:data onTopic:topic qos:msg.qos retained:msg.retainFlag mid:0];
     }
     else {
-        if ([data length] < 2) {
-            return;
+        if ([data length] >= 2) {
+            bytes = [data bytes];
+            UInt16 msgId = 256 * bytes[0] + bytes[1];
+            if (msgId != 0) {
+                msg.mid = msgId;
+                data = [data subdataWithRange:NSMakeRange(2, [data length] - 2)];
+                if ([msg qos] == 1) {
+                    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
+                    [self.delegate newMessage:self data:data onTopic:topic qos:msg.qos retained:msg.retainFlag mid:msgId];
+                    [self send:[MQTTMessage pubackMessageWithMessageId:msgId]];
+                    return;
+                } else {
+                    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                          data, @"data",
+                                          topic, @"topic",
+                                          @(msg.qos), @"qos",
+                                          @(msg.retainFlag), @"retained",
+                                          @(msgId), @"mid",
+                                          nil];
+                    [self.rxFlows setObject:dict forKey:[NSNumber numberWithUnsignedInt:msgId]];
+                    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
+                    [self send:[MQTTMessage pubrecMessageWithMessageId:msgId]];
+                    return;
+                }
+            }
         }
-        bytes = [data bytes];
-        UInt16 msgId = 256 * bytes[0] + bytes[1];
-        if (msgId == 0) {
-            return;
-        }
-        data = [data subdataWithRange:NSMakeRange(2, [data length] - 2)];
-        if ([msg qos] == 1) {
-            [self.delegate newMessage:self data:data onTopic:topic qos:msg.qos retained:msg.retainFlag mid:msgId];
-            [self send:[MQTTMessage pubackMessageWithMessageId:msgId]];
-        }
-        else {
-            NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  data, @"data",
-                                  topic, @"topic",
-                                  @(msg.qos), @"qos",
-                                  @(msg.retainFlag), @"retained",
-                                  @(msgId), @"mid",
-                                  nil];
-            [self.rxFlows setObject:dict forKey:[NSNumber numberWithUnsignedInt:msgId]];
-            [self send:[MQTTMessage pubrecMessageWithMessageId:msgId]];
-        }
+        [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
     }
 }
 
 - (void)handlePuback:(MQTTMessage*)msg
 {
-    if ([[msg data] length] != 2) {
-        return;
+    if ([[msg data] length] == 2) {
+        UInt8 const *bytes = [[msg data] bytes];
+        NSNumber *msgId = [NSNumber numberWithUnsignedInt:(256 * bytes[0] + bytes[1])];
+        if ([msgId unsignedIntValue] != 0) {
+            msg.mid = [msgId unsignedIntValue];
+            MQttTxFlow *flow = [self.txFlows objectForKey:msgId];
+            if (flow != nil) {
+                if ([[flow msg] type] == MQTTPublish && [[flow msg] qos] == 1) {
+                    
+                    [self.txFlows removeObjectForKey:msgId];
+                    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
+                    
+                    [self.delegate messageDelivered:self msgID:[msgId unsignedIntValue]];
+                    return;
+                }
+            }
+        }
     }
-    UInt8 const *bytes = [[msg data] bytes];
-    NSNumber *msgId = [NSNumber numberWithUnsignedInt:(256 * bytes[0] + bytes[1])];
-    if ([msgId unsignedIntValue] == 0) {
-        return;
-    }
-    MQttTxFlow *flow = [self.txFlows objectForKey:msgId];
-    if (flow == nil) {
-        return;
-    }
+    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
+}
 
-    if ([[flow msg] type] != MQTTPublish || [[flow msg] qos] != 1) {
-        return;
+- (void)handleSuback:(MQTTMessage*)msg
+{
+    if ([[msg data] length] == 3) {
+        UInt8 const *bytes = [[msg data] bytes];
+        NSNumber *msgId = [NSNumber numberWithUnsignedInt:(256 * bytes[0] + bytes[1])];
+        msg.mid = [msgId unsignedIntValue];
     }
+    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
+}
 
-    [self.txFlows removeObjectForKey:msgId];
-    [self.delegate messageDelivered:self msgID:[msgId unsignedIntValue]];
+- (void)handleUnsuback:(MQTTMessage*)msg
+{
+    if ([[msg data] length] == 2) {
+        UInt8 const *bytes = [[msg data] bytes];
+        NSNumber *msgId = [NSNumber numberWithUnsignedInt:(256 * bytes[0] + bytes[1])];
+        msg.mid = [msgId unsignedIntValue];
+    }
+    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
 }
 
 - (void)handlePubrec:(MQTTMessage*)msg
 {
-    if ([[msg data] length] != 2) {
-        return;
+    if ([[msg data] length] == 2) {
+        UInt8 const *bytes = [[msg data] bytes];
+        NSNumber *msgId = [NSNumber numberWithUnsignedInt:(256 * bytes[0] + bytes[1])];
+        if ([msgId unsignedIntValue] != 0) {
+            msg.mid = [msgId unsignedIntValue];
+            MQttTxFlow *flow = [self.txFlows objectForKey:msgId];
+            if (flow != nil) {
+                MQTTMessage *flowmsg = [flow msg];
+                if ([flowmsg type] == MQTTPublish && [flowmsg qos] == 2) {
+                    flowmsg = [MQTTMessage pubrelMessageWithMessageId:[msgId unsignedIntValue]];
+                    flow.msg = flowmsg;
+                    flow.deadline = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT];
+                    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
+                    [self send:flowmsg];
+                    return;
+                }
+            }
+        }
     }
-    UInt8 const *bytes = [[msg data] bytes];
-    NSNumber *msgId = [NSNumber numberWithUnsignedInt:(256 * bytes[0] + bytes[1])];
-    if ([msgId unsignedIntValue] == 0) {
-        return;
-    }
-    MQttTxFlow *flow = [self.txFlows objectForKey:msgId];
-    if (flow == nil) {
-        return;
-    }
-    msg = [flow msg];
-    if ([msg type] != MQTTPublish || [msg qos] != 2) {
-        return;
-    }
-    msg = [MQTTMessage pubrelMessageWithMessageId:[msgId unsignedIntValue]];
-    flow.msg = msg;
-    flow.deadline = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT];
-
-    [self send:msg];
+    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
 }
 
 - (void)handlePubrel:(MQTTMessage*)msg
 {
-    if ([[msg data] length] != 2) {
-        return;
+    if ([[msg data] length] == 2) {
+        UInt8 const *bytes = [[msg data] bytes];
+        NSNumber *msgId = [NSNumber numberWithUnsignedInt:(256 * bytes[0] + bytes[1])];
+        if ([msgId unsignedIntValue] != 0) {
+            msg.mid = [msgId unsignedIntValue];
+            NSDictionary *dict = [self.rxFlows objectForKey:msgId];
+            if (dict != nil) {
+                [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
+                [self.delegate newMessage:self
+                                     data:[dict valueForKey:@"data"]
+                                  onTopic:[dict valueForKey:@"topic"]
+                                      qos:[[dict valueForKey:@"qos"] intValue]
+                                 retained:[[dict valueForKey:@"retained"] boolValue]
+                                      mid:[[dict valueForKey:@"mid"] unsignedIntValue]
+                 ];
+                [self.rxFlows removeObjectForKey:msgId];
+            }
+            [self send:[MQTTMessage pubcompMessageWithMessageId:[msgId unsignedIntegerValue]]];
+            return;
+        }
     }
-    UInt8 const *bytes = [[msg data] bytes];
-    NSNumber *msgId = [NSNumber numberWithUnsignedInt:(256 * bytes[0] + bytes[1])];
-    if ([msgId unsignedIntValue] == 0) {
-        return;
-    }
-    NSDictionary *dict = [self.rxFlows objectForKey:msgId];
-    if (dict != nil) {
-        [self.delegate newMessage:self
-                             data:[dict valueForKey:@"data"]
-                          onTopic:[dict valueForKey:@"topic"]
-                              qos:[[dict valueForKey:@"qos"] intValue]
-                              retained:[[dict valueForKey:@"retained"] boolValue]
-                              mid:[[dict valueForKey:@"mid"] unsignedIntValue]
-         ];
-        [self.rxFlows removeObjectForKey:msgId];
-    }
-    [self send:[MQTTMessage pubcompMessageWithMessageId:[msgId unsignedIntegerValue]]];
+    
+    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
 }
 
 - (void)handlePubcomp:(MQTTMessage*)msg {
-    if ([[msg data] length] != 2) {
-        return;
+    if ([[msg data] length] == 2) {
+        UInt8 const *bytes = [[msg data] bytes];
+        NSNumber *msgId = [NSNumber numberWithUnsignedInt:(256 * bytes[0] + bytes[1])];
+        if ([msgId unsignedIntValue] != 0) {
+            msg.mid = [msgId unsignedIntValue];
+            MQttTxFlow *flow = [self.txFlows objectForKey:msgId];
+            if (flow != nil && [[flow msg] type] == MQTTPubrel) {
+                [self.txFlows removeObjectForKey:msgId];
+                [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
+                [self.delegate messageDelivered:self msgID:[msgId unsignedIntValue]];
+                return;
+            }
+        }
     }
-    UInt8 const *bytes = [[msg data] bytes];
-    NSNumber *msgId = [NSNumber numberWithUnsignedInt:(256 * bytes[0] + bytes[1])];
-    if ([msgId unsignedIntValue] == 0) {
-        return;
-    }
-    MQttTxFlow *flow = [self.txFlows objectForKey:msgId];
-    if (flow == nil || [[flow msg] type] != MQTTPubrel) {
-        return;
-    }
-
-    [self.txFlows removeObjectForKey:msgId];
-    [self.delegate messageDelivered:self msgID:[msgId unsignedIntValue]];
+    
+    [self.delegate received:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.dupFlag mid:msg.mid data:msg.data];
 }
 
 - (void)error:(MQTTSessionEvent)eventCode error:(NSError *)error {

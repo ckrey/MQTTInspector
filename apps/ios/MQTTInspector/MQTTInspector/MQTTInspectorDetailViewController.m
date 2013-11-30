@@ -480,7 +480,7 @@
     }];
 }
 
-- (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped data:(NSData *)data
+- (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
 {
     NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
     NSString *name = self.session.name;
@@ -521,7 +521,7 @@
                      duped:duped
                        qos:qos
                   retained:retained
-                       mid:0
+                       mid:mid
                       data:data
                    session:mySession
     inManagedObjectContext:self.queueManagedObjectContext];
@@ -535,7 +535,7 @@
     }];
 }
 
-- (void)sending:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped data:(NSData *)data
+- (void)sending:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
 {
     NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
     NSString *name = self.session.name;
@@ -578,7 +578,7 @@
                      duped:duped
                        qos:qos
                   retained:retained
-                       mid:0
+                       mid:mid
                       data:data
                    session:mySession
     inManagedObjectContext:self.queueManagedObjectContext];
