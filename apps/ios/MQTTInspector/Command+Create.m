@@ -68,11 +68,11 @@
 
 - (NSString *)attributeTextPart1
 {
-    return [NSString stringWithFormat:@"%@ :%@ ",
+    return [NSString stringWithFormat:@"%@ %@ :",
             [NSDateFormatter localizedStringFromDate:self.timestamp
                                            dateStyle:NSDateFormatterShortStyle
                                            timeStyle:NSDateFormatterMediumStyle],
-            [self.inbound boolValue] ? @">" : @"<"
+            [self.inbound boolValue] ? @"incoming" : @"outgoing"
             ];
 }
 

@@ -81,7 +81,11 @@
 
     cell.textLabel.text = [command dataText];
     
-    cell.backgroundColor = [UIColor lightGrayColor];
+    if ([command.inbound boolValue]) {
+        cell.backgroundColor = [UIColor colorWithHue:.666 saturation:0.333 brightness:1.0 alpha:1.0];
+    } else {
+        cell.backgroundColor = [UIColor colorWithHue:.333 saturation:0.333 brightness:1.0 alpha:1.0];
+    }
     
     [cell setAccessoryType:UITableViewCellAccessoryDetailButton];
     
