@@ -20,6 +20,7 @@
 #import "MQTTInspectorDataViewController.h"
 #import "MQTTInspectorSetupPubsTableViewController.h"
 #import "MQTTInspectorSetupSubsTableViewController.h"
+#import "MQTTInspectorAppDelegate.h"
 
 @interface MQTTInspectorDetailViewController ()
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *disconnectButton;
@@ -350,6 +351,12 @@
         self.disconnectButton.enabled = FALSE;
         self.pubButton.enabled = FALSE;
     }
+    
+    if ([self.session.state intValue] == MQTTSessionEventConnectionClosed) {
+        MQTTInspectorAppDelegate *delegate = [UIApplication sharedApplication].delegate;
+        [delegate connectionClosed];
+    }
+
     if (error) {
         if ((self.lastError.domain == error.domain) && (self.lastError.code == error.code)) {
             self.errorCount++;

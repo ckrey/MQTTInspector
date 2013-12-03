@@ -97,7 +97,7 @@
 		84147D12183673A70018E601 /* MQTTInspectorAdHocPubTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTInspectorAdHocPubTableViewController.m; sourceTree = "<group>"; };
 		84147D141838CB720018E601 /* MQTTInspectorMessagesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTInspectorMessagesTableViewController.h; sourceTree = "<group>"; };
 		84147D151838CB720018E601 /* MQTTInspectorMessagesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTInspectorMessagesTableViewController.m; sourceTree = "<group>"; };
-		84283FF71846ABD70078DA05 /* MQTTInspector 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MQTTInspector 5.xcdatamodel"; sourceTree = "<group>"; };
+		84283FF71846ABD70078DA05 /* MQTTInspector 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 5.xcdatamodel"; sourceTree = "<group>"; };
 		84283FFE1846AD430078DA05 /* Topic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Topic.h; sourceTree = "<group>"; };
 		84283FFF1846AD430078DA05 /* Topic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Topic.m; sourceTree = "<group>"; };
 		84684E881832192800AE13B5 /* Subscription+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Subscription+Create.h"; path = "../Subscription+Create.h"; sourceTree = "<group>"; };
