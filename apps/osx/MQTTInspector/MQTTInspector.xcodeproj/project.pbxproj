@@ -19,6 +19,11 @@
 		842D353B18508C0A00280E3F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842D351718508C0A00280E3F /* Cocoa.framework */; };
 		842D354318508C0A00280E3F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 842D354118508C0A00280E3F /* InfoPlist.strings */; };
 		842D354518508C0A00280E3F /* MQTTInspectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 842D354418508C0A00280E3F /* MQTTInspectorTests.m */; };
+		842D355918508C5200280E3F /* MQTTDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 842D355018508C5200280E3F /* MQTTDecoder.m */; };
+		842D355A18508C5200280E3F /* MQTTEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 842D355218508C5200280E3F /* MQTTEncoder.m */; };
+		842D355B18508C5200280E3F /* MQTTMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 842D355418508C5200280E3F /* MQTTMessage.m */; };
+		842D355C18508C5200280E3F /* MQTTSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 842D355618508C5200280E3F /* MQTTSession.m */; };
+		842D355D18508C5200280E3F /* MQttTxFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 842D355818508C5200280E3F /* MQttTxFlow.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +57,16 @@
 		842D354018508C0A00280E3F /* MQTTInspectorTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MQTTInspectorTests-Info.plist"; sourceTree = "<group>"; };
 		842D354218508C0A00280E3F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		842D354418508C0A00280E3F /* MQTTInspectorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MQTTInspectorTests.m; sourceTree = "<group>"; };
+		842D354F18508C5200280E3F /* MQTTDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTDecoder.h; sourceTree = "<group>"; };
+		842D355018508C5200280E3F /* MQTTDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTDecoder.m; sourceTree = "<group>"; };
+		842D355118508C5200280E3F /* MQTTEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTEncoder.h; sourceTree = "<group>"; };
+		842D355218508C5200280E3F /* MQTTEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTEncoder.m; sourceTree = "<group>"; };
+		842D355318508C5200280E3F /* MQTTMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTMessage.h; sourceTree = "<group>"; };
+		842D355418508C5200280E3F /* MQTTMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTMessage.m; sourceTree = "<group>"; };
+		842D355518508C5200280E3F /* MQTTSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTSession.h; sourceTree = "<group>"; };
+		842D355618508C5200280E3F /* MQTTSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTSession.m; sourceTree = "<group>"; };
+		842D355718508C5200280E3F /* MQttTxFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQttTxFlow.h; sourceTree = "<group>"; };
+		842D355818508C5200280E3F /* MQttTxFlow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQttTxFlow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +93,7 @@
 		842D350B18508C0A00280E3F = {
 			isa = PBXGroup;
 			children = (
+				842D354E18508C5200280E3F /* mqtt */,
 				842D351D18508C0A00280E3F /* MQTTInspector */,
 				842D353E18508C0A00280E3F /* MQTTInspectorTests */,
 				842D351618508C0A00280E3F /* Frameworks */,
@@ -155,6 +171,24 @@
 				842D354118508C0A00280E3F /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		842D354E18508C5200280E3F /* mqtt */ = {
+			isa = PBXGroup;
+			children = (
+				842D354F18508C5200280E3F /* MQTTDecoder.h */,
+				842D355018508C5200280E3F /* MQTTDecoder.m */,
+				842D355118508C5200280E3F /* MQTTEncoder.h */,
+				842D355218508C5200280E3F /* MQTTEncoder.m */,
+				842D355318508C5200280E3F /* MQTTMessage.h */,
+				842D355418508C5200280E3F /* MQTTMessage.m */,
+				842D355518508C5200280E3F /* MQTTSession.h */,
+				842D355618508C5200280E3F /* MQTTSession.m */,
+				842D355718508C5200280E3F /* MQttTxFlow.h */,
+				842D355818508C5200280E3F /* MQttTxFlow.m */,
+			);
+			name = mqtt;
+			path = ../../ios/MQTTInspector/MQTTInspector/mqtt;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -256,7 +290,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				842D355918508C5200280E3F /* MQTTDecoder.m in Sources */,
+				842D355D18508C5200280E3F /* MQttTxFlow.m in Sources */,
 				842D353118508C0A00280E3F /* MQTTInspector.xcdatamodeld in Sources */,
+				842D355A18508C5200280E3F /* MQTTEncoder.m in Sources */,
+				842D355B18508C5200280E3F /* MQTTMessage.m in Sources */,
+				842D355C18508C5200280E3F /* MQTTSession.m in Sources */,
 				842D352B18508C0A00280E3F /* MQTTInspectorAppDelegate.m in Sources */,
 				842D352418508C0A00280E3F /* main.m in Sources */,
 			);
