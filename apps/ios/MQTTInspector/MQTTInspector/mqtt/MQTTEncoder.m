@@ -42,8 +42,16 @@
 }
 
 - (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
-    if(self.stream == nil)
+#ifdef DEBUG
+    NSLog(@"MQTTEncoder handleEvent 0x%02x", eventCode);
+#endif
+
+    if(self.stream == nil) {
+#ifdef DEBUG
+        NSLog(@"MQTTEncoder self.stream == nil");
+#endif
         return;
+    }
     assert(sender == self.stream);
     switch (eventCode) {
         case NSStreamEventOpenCompleted:
@@ -88,7 +96,7 @@
             break;
         default:
 #ifdef DEBUG
-            NSLog(@"MQTTEncoder unhandled event code 0x%02lxv", (long)eventCode);
+            NSLog(@"MQTTEncoder unhandled event code 0x%02x", eventCode);
 #endif
             break;
     }
@@ -142,9 +150,9 @@
 #ifdef DEBUG
     NSLog(@"MQTTEncoder buffer to write (%lu)=%@", (unsigned long)self.buffer.length, [self.buffer description]);
 #endif
-    
+
     [self.delegate encoder:self sending:msg.type qos:msg.qos retained:msg.retainFlag duped:msg.isDuplicate mid:msg.mid data:self.buffer];
-    
+
     n = [self.stream write:[self.buffer bytes] maxLength:[self.buffer length]];
     if (n == -1) {
         self.status = MQTTEncoderStatusError;

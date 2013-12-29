@@ -24,6 +24,7 @@
 		842D355B18508C5200280E3F /* MQTTMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 842D355418508C5200280E3F /* MQTTMessage.m */; };
 		842D355C18508C5200280E3F /* MQTTSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 842D355618508C5200280E3F /* MQTTSession.m */; };
 		842D355D18508C5200280E3F /* MQttTxFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 842D355818508C5200280E3F /* MQttTxFlow.m */; };
+		842D355F185099AE00280E3F /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842D355E185099AE00280E3F /* MapKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		842D355618508C5200280E3F /* MQTTSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTSession.m; sourceTree = "<group>"; };
 		842D355718508C5200280E3F /* MQttTxFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQttTxFlow.h; sourceTree = "<group>"; };
 		842D355818508C5200280E3F /* MQttTxFlow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQttTxFlow.m; sourceTree = "<group>"; };
+		842D355E185099AE00280E3F /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				842D355F185099AE00280E3F /* MapKit.framework in Frameworks */,
 				842D351818508C0A00280E3F /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -113,6 +116,7 @@
 		842D351618508C0A00280E3F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				842D355E185099AE00280E3F /* MapKit.framework */,
 				842D351718508C0A00280E3F /* Cocoa.framework */,
 				842D353918508C0A00280E3F /* XCTest.framework */,
 				842D351918508C0A00280E3F /* Other Frameworks */,
@@ -239,6 +243,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Christoph Krey";
 				TargetAttributes = {
+					842D351318508C0A00280E3F = {
+						DevelopmentTeam = C652JFWU23;
+					};
 					842D353718508C0A00280E3F = {
 						TestTargetID = 842D351318508C0A00280E3F;
 					};
@@ -508,6 +515,7 @@
 				842D354A18508C0A00280E3F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		842D354B18508C0A00280E3F /* Build configuration list for PBXNativeTarget "MQTTInspectorTests" */ = {
 			isa = XCConfigurationList;
@@ -516,6 +524,7 @@
 				842D354D18508C0A00280E3F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

@@ -48,6 +48,10 @@ typedef enum {
 - (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID;
 - (void)sending:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;
 - (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data;
+- (void)buffered:(MQTTSession *)session
+          queued:(NSUInteger)queued
+       flowingIn:(NSUInteger)flowingIn
+      flowingOut:(NSUInteger)flowingOut;
 
 @end
 

@@ -101,7 +101,6 @@
     return [[MQTTMessage alloc] initWithType:MQTTPingreq];
 }
 
-/* CK added disconnect */
 + (id)disconnectMessage {
     return [[MQTTMessage alloc] initWithType:MQTTDisconnect];
 }
@@ -256,3 +255,4 @@
 }
 
 @end
+

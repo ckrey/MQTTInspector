@@ -42,8 +42,16 @@
 }
 
 - (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
-    if(self.stream == nil)
+#ifdef DEBUG
+    NSLog(@"MQTTDecoder handleEvent 0x%02x", eventCode);
+#endif
+    if(self.stream == nil) {
+#ifdef DEBUG
+        NSLog(@"MQTTDecoder self.stream == nil");
+#endif
         return;
+    }
+    assert(sender == self.stream);
     switch (eventCode) {
         case NSStreamEventOpenCompleted:
             self.status = MQTTDecoderStatusDecodingHeader;
@@ -123,7 +131,6 @@
 #ifdef DEBUG
                     NSLog(@"MQTTDecoder received (%lu)=%@", (unsigned long)self.dataBuffer.length, [self.dataBuffer description]);
 #endif
-
                     [self.delegate decoder:self newMessage:msg];
                     self.dataBuffer = NULL;
                     self.status = MQTTDecoderStatusDecodingHeader;
@@ -143,7 +150,7 @@
         }
         default:
 #ifdef DEBUG
-            NSLog(@"MQTTDecoder unhandled event code 0x%02lxv", (long)eventCode);
+            NSLog(@"MQTTDecoder unhandled event code 0x%02x", eventCode);
 #endif
             break;
     }
