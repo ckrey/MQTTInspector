@@ -43,7 +43,7 @@
 
 - (void)stream:(NSStream*)sender handleEvent:(NSStreamEvent)eventCode {
 #ifdef DEBUG
-    NSLog(@"MQTTDecoder handleEvent 0x%02x", eventCode);
+    NSLog(@"MQTTDecoder handleEvent 0x%02lx", (long)eventCode);
 #endif
     if(self.stream == nil) {
 #ifdef DEBUG
@@ -150,7 +150,7 @@
         }
         default:
 #ifdef DEBUG
-            NSLog(@"MQTTDecoder unhandled event code 0x%02x", eventCode);
+            NSLog(@"MQTTDecoder unhandled event code 0x%02lx", (long)eventCode);
 #endif
             break;
     }

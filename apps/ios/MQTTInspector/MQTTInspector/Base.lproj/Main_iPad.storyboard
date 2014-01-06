@@ -346,6 +346,10 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="zgb-dC-Tei" appends="YES" id="TuU-pO-1zm"/>
+                                    <outletCollection property="gestureRecognizers" destination="hxx-IM-Wsz" appends="YES" id="hwd-UH-QKL"/>
+                                </connections>
                             </tableView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="lin-fH-Aff">
                                 <rect key="frame" x="0.0" y="72" width="225" height="322"/>
@@ -380,6 +384,10 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="zgb-dC-Tei" appends="YES" id="g4L-Yo-nfq"/>
+                                    <outletCollection property="gestureRecognizers" destination="hxx-IM-Wsz" appends="YES" id="fh7-Uw-NnP"/>
+                                </connections>
                             </tableView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Ud0-UN-jcw">
                                 <rect key="frame" x="0.0" y="402" width="225" height="322"/>
@@ -405,6 +413,10 @@
                                         <color key="backgroundColor" red="0.59849044210000002" green="0.98461457770000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="zgb-dC-Tei" appends="YES" id="mE7-Py-9TB"/>
+                                    <outletCollection property="gestureRecognizers" destination="hxx-IM-Wsz" appends="YES" id="m6Y-Hc-chl"/>
+                                </connections>
                             </tableView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="1" translatesAutoresizingMaskIntoConstraints="NO" id="N1v-ey-t2M">
                                 <rect key="frame" x="0.0" y="724" width="703" height="2"/>
@@ -451,6 +463,16 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>
+                <pinchGestureRecognizer id="hxx-IM-Wsz">
+                    <connections>
+                        <action selector="pinch:" destination="JEX-9P-axG" id="Grq-j7-ogZ"/>
+                    </connections>
+                </pinchGestureRecognizer>
+                <rotationGestureRecognizer id="zgb-dC-Tei">
+                    <connections>
+                        <action selector="rotate:" destination="JEX-9P-axG" id="pmB-On-e4E"/>
+                    </connections>
+                </rotationGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1447" y="873"/>
         </scene>

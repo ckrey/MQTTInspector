@@ -187,6 +187,56 @@
     }
     return clientId;
 }
+- (IBAction)rotate:(UIRotationGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateChanged) {
+        NSLog(@"Rotate: %f", sender.rotation);
+        CGRect mrect = self.messages.frame;
+        CGRect srect = self.subs.frame;
+        CGRect prect = self.pubs.frame;
+        
+        double dx;
+        if (sender.rotation < 0.0) {
+            dx = -10;
+        } else {
+            dx = 10;
+        }
+        
+        mrect.origin.x += dx;
+        mrect.size.width -= dx;
+        srect.size.width += dx;
+        prect.size.width += dx;
+        
+        if (mrect.size.width > 20 && srect.size.width > 20) {
+            self.messages.frame = mrect;
+            self.subs.frame = srect;
+            self.pubs.frame = prect;
+        }
+    }
+
+}
+
+- (IBAction)pinch:(UIPinchGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateChanged) {
+        NSLog(@"Pinch: %f", sender.scale);
+        CGRect srect = self.subs.frame;
+        CGRect prect = self.pubs.frame;
+        double dy;
+        if (sender.scale > 1.0) {
+            dy = 10;
+        } else {
+            dy = -10;
+        }
+        
+        srect.size.height += dy;
+        prect.origin.y += dy;
+        prect.size.height -= dy;
+        
+        if (srect.size.height > 20 && prect.size.height > 20) {
+            self.subs.frame = srect;
+            self.pubs.frame = prect;
+        }
+    }
+}
 
 - (IBAction)runningChanged:(UISwitch *)sender {
     //

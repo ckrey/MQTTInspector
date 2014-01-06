@@ -172,6 +172,10 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="fQT-nQ-CJQ" appends="YES" id="Rdn-7O-aCG"/>
+                                    <outletCollection property="gestureRecognizers" destination="9TQ-qP-iI7" appends="YES" id="JZQ-eD-DUX"/>
+                                </connections>
                             </tableView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="32" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="vxO-hd-Az4">
                                 <rect key="frame" x="0.0" y="65" width="96" height="226"/>
@@ -209,7 +213,8 @@
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="c8B-Pg-JyV" appends="YES" id="MKs-JO-nWS"/>
+                                    <outletCollection property="gestureRecognizers" destination="fQT-nQ-CJQ" appends="YES" id="yza-Ns-VAV"/>
+                                    <outletCollection property="gestureRecognizers" destination="9TQ-qP-iI7" appends="YES" id="B8r-a3-ZLL"/>
                                 </connections>
                             </tableView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="19" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="c56-ux-QOe">
@@ -238,7 +243,8 @@
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="LoK-bT-UDE" appends="YES" id="KJe-mQ-ina"/>
+                                    <outletCollection property="gestureRecognizers" destination="fQT-nQ-CJQ" appends="YES" id="Abr-n5-W2I"/>
+                                    <outletCollection property="gestureRecognizers" destination="9TQ-qP-iI7" appends="YES" id="kV9-Gu-uB0"/>
                                 </connections>
                             </tableView>
                         </subviews>
@@ -276,21 +282,19 @@
                         <outlet property="pubs" destination="c56-ux-QOe" id="gEM-Dh-fZ4"/>
                         <outlet property="runningSwitch" destination="u8p-z6-mm1" id="CXn-RK-zh6"/>
                         <outlet property="subs" destination="vxO-hd-Az4" id="S1N-oT-ckF"/>
-                        <segue destination="eq8-nh-IVy" kind="push" identifier="enlargeSubs" id="hxk-ek-Xv8"/>
-                        <segue destination="5ix-Qk-zSQ" kind="push" identifier="enlargePubs" id="gkj-wS-9ck"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lrm-kH-fPn" sceneMemberID="firstResponder"/>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="c8B-Pg-JyV">
+                <pinchGestureRecognizer id="9TQ-qP-iI7">
                     <connections>
-                        <action selector="longSub:" destination="Ah7-4n-0Wa" id="1oe-pe-rXx"/>
+                        <action selector="pinch:" destination="Ah7-4n-0Wa" id="Gu4-4C-7JM"/>
                     </connections>
-                </pongPressGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="LoK-bT-UDE">
+                </pinchGestureRecognizer>
+                <rotationGestureRecognizer id="fQT-nQ-CJQ">
                     <connections>
-                        <action selector="longPub:" destination="Ah7-4n-0Wa" id="FPf-mb-abQ"/>
+                        <action selector="rotate:" destination="Ah7-4n-0Wa" id="tWv-T0-vk7"/>
                     </connections>
-                </pongPressGestureRecognizer>
+                </rotationGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2043" y="64"/>
         </scene>
@@ -324,84 +328,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PoR-nr-v6O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2614" y="-676"/>
-        </scene>
-        <!--Inspector Setup Subs Table View Controller - SUBs-->
-        <scene sceneID="mkE-iN-l5z">
-            <objects>
-                <tableViewController id="eq8-nh-IVy" customClass="MQTTInspectorSetupSubsTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Puu-no-9jE">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="sub" textLabel="Q7N-0C-XIW" style="IBUITableViewCellStyleDefault" id="NLp-RB-uxc">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NLp-RB-uxc" id="csI-oU-9mw">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Q7N-0C-XIW">
-                                            <rect key="frame" x="15" y="0.0" width="290" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="eq8-nh-IVy" id="ImH-N6-UPn"/>
-                            <outlet property="delegate" destination="eq8-nh-IVy" id="AM8-Z5-LG2"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="SUBs" id="FFa-ux-dsd"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="zQM-i4-sE7" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2614" y="64"/>
-        </scene>
-        <!--Inspector Setup Pubs Table View Controller - PUBs-->
-        <scene sceneID="JRY-gj-Jmv">
-            <objects>
-                <tableViewController id="5ix-Qk-zSQ" customClass="MQTTInspectorSetupPubsTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="xJj-Oi-Hhj">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="pub" textLabel="Qfl-ex-4n9" style="IBUITableViewCellStyleDefault" id="sVd-lV-xJ0">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sVd-lV-xJ0" id="Udr-NV-Vrj">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Qfl-ex-4n9">
-                                            <rect key="frame" x="15" y="0.0" width="290" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                                <color key="backgroundColor" red="0.59849044210030189" green="0.98461457766528027" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="5ix-Qk-zSQ" id="3E5-ap-Tu9"/>
-                            <outlet property="delegate" destination="5ix-Qk-zSQ" id="WXt-sL-XIM"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="PUBs" id="Dal-1e-Aal"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ejw-da-0EZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2614" y="832"/>
+            <point key="canvasLocation" x="2586" y="-356"/>
         </scene>
         <!--Inspector Setup Subs Table View Controller - SUBs-->
         <scene sceneID="y1O-A6-JVZ">
@@ -662,7 +589,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="apK-cZ-1n3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2602" y="1532"/>
+            <point key="canvasLocation" x="2586" y="472"/>
         </scene>
         <!--Inspector Setup Session Table View Controller - Session-->
         <scene sceneID="HUT-WX-Z84">
