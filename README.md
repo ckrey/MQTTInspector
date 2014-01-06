@@ -15,6 +15,10 @@ A general MQTT testing app for iOS (iPhone and iPad)
 * Panel showing low-level communication with broker
 * Panels can be frozen (halts all display activity) for, say, taking screenshots
 
+# Net features in 1.2
+* Pinch to size SUBs display
+* Rotate to size Messages display
+
 # Future enhancements
 * View filters
 * View traps
