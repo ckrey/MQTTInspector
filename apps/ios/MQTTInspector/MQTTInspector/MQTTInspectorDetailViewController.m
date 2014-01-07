@@ -704,7 +704,14 @@
 
 - (void)buffered:(MQTTSession *)session queued:(NSUInteger)queued flowingIn:(NSUInteger)flowingIn flowingOut:(NSUInteger)flowingOut
 {
-    //
+#ifdef DEBUG
+    NSLog(@"Connection buffered q%u i%u o%u", queued, flowingIn, flowingOut);
+#endif
+    if (queued + flowingIn + flowingOut) {
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = TRUE;
+    } else {
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = FALSE;
+    }
 }
 
 #pragma mark - Split view
