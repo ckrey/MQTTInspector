@@ -187,9 +187,12 @@
     }
     return clientId;
 }
+
 - (IBAction)rotate:(UIRotationGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateChanged) {
+#ifdef DEBUG
         NSLog(@"Rotate: %f", sender.rotation);
+#endif
         CGRect mrect = self.messages.frame;
         CGRect srect = self.subs.frame;
         CGRect prect = self.pubs.frame;
@@ -214,10 +217,22 @@
     }
 
 }
+- (IBAction)editSubs:(UILongPressGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        self.subs.editing = !self.subs.editing;
+    }
+}
+- (IBAction)editPubs:(UILongPressGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        self.pubs.editing = !self.pubs.editing;
+    }
+}
 
 - (IBAction)pinch:(UIPinchGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateChanged) {
+#ifdef DEBUG
         NSLog(@"Pinch: %f", sender.scale);
+#endif
         CGRect srect = self.subs.frame;
         CGRect prect = self.pubs.frame;
         double dy;

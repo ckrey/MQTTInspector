@@ -2,8 +2,8 @@
 //  Subscription.h
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 18.11.13.
-//  Copyright (c) 2013 Christoph Krey. All rights reserved.
+//  Created by Christoph Krey on 07.01.14.
+//  Copyright (c) 2014 Christoph Krey. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -17,6 +17,7 @@
 @property (nonatomic, retain) NSNumber * qos;
 @property (nonatomic, retain) NSNumber * state;
 @property (nonatomic, retain) NSString * topic;
+@property (nonatomic, retain) NSNumber * position;
 @property (nonatomic, retain) Session *belongsTo;
 
 @end

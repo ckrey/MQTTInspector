@@ -33,7 +33,7 @@
             subscription.qos = @(qos);
             
             subscription.color = @([Subscription uniqueHue:session]);
-
+            subscription.position = @(-1);
             subscription.belongsTo = session;
         } else {
             subscription = [matches lastObject];

@@ -177,7 +177,7 @@
                                     <outletCollection property="gestureRecognizers" destination="9TQ-qP-iI7" appends="YES" id="JZQ-eD-DUX"/>
                                 </connections>
                             </tableView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="32" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="vxO-hd-Az4">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="32" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="vxO-hd-Az4">
                                 <rect key="frame" x="0.0" y="65" width="96" height="226"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -185,7 +185,7 @@
                                     <constraint firstAttribute="width" constant="96" id="vBx-zu-1c2"/>
                                 </constraints>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="checkmark" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="subscription" textLabel="Z5P-3V-dvw" detailTextLabel="zdP-Nj-vU1" rowHeight="32" style="IBUITableViewCellStyleSubtitle" id="SoV-hr-zpR">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" showsReorderControl="YES" accessoryType="checkmark" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="subscription" textLabel="Z5P-3V-dvw" detailTextLabel="zdP-Nj-vU1" rowHeight="32" style="IBUITableViewCellStyleSubtitle" id="SoV-hr-zpR">
                                         <rect key="frame" x="0.0" y="22" width="96" height="32"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SoV-hr-zpR" id="4XY-GC-rFF">
@@ -215,14 +215,15 @@
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="fQT-nQ-CJQ" appends="YES" id="yza-Ns-VAV"/>
                                     <outletCollection property="gestureRecognizers" destination="9TQ-qP-iI7" appends="YES" id="B8r-a3-ZLL"/>
+                                    <outletCollection property="gestureRecognizers" destination="6bn-38-ILZ" appends="YES" id="rFe-SA-h0N"/>
                                 </connections>
                             </tableView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="19" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="c56-ux-QOe">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="19" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="c56-ux-QOe">
                                 <rect key="frame" x="0.0" y="299" width="96" height="225"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="publication" textLabel="vZY-fZ-7WI" rowHeight="19" style="IBUITableViewCellStyleDefault" id="eYk-MD-uWx">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" showsReorderControl="YES" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="publication" textLabel="vZY-fZ-7WI" rowHeight="19" style="IBUITableViewCellStyleDefault" id="eYk-MD-uWx">
                                         <rect key="frame" x="0.0" y="22" width="96" height="19"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eYk-MD-uWx" id="Os4-MV-BQt">
@@ -245,6 +246,7 @@
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="fQT-nQ-CJQ" appends="YES" id="Abr-n5-W2I"/>
                                     <outletCollection property="gestureRecognizers" destination="9TQ-qP-iI7" appends="YES" id="kV9-Gu-uB0"/>
+                                    <outletCollection property="gestureRecognizers" destination="jIB-cR-vPe" appends="YES" id="5ap-kv-WA3"/>
                                 </connections>
                             </tableView>
                         </subviews>
@@ -285,6 +287,16 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lrm-kH-fPn" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="6bn-38-ILZ">
+                    <connections>
+                        <action selector="editSubs:" destination="Ah7-4n-0Wa" id="tjm-l4-V1a"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="jIB-cR-vPe">
+                    <connections>
+                        <action selector="editPubs:" destination="Ah7-4n-0Wa" id="Sva-hI-5Zz"/>
+                    </connections>
+                </pongPressGestureRecognizer>
                 <pinchGestureRecognizer id="9TQ-qP-iI7">
                     <connections>
                         <action selector="pinch:" destination="Ah7-4n-0Wa" id="Gu4-4C-7JM"/>
@@ -354,6 +366,7 @@
                         <connections>
                             <outlet property="dataSource" destination="Ef1-uO-m1e" id="wVK-Pg-U4N"/>
                             <outlet property="delegate" destination="Ef1-uO-m1e" id="8yd-hT-ncf"/>
+                            <outletCollection property="gestureRecognizers" destination="cme-f6-VF0" appends="YES" id="vhY-1l-mRt"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="SUBs" id="GDz-T7-C00">
@@ -365,6 +378,11 @@
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lp8-wO-fwT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="cme-f6-VF0">
+                    <connections>
+                        <action selector="toggleEdit:" destination="Ef1-uO-m1e" id="B4O-kt-0HH"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1522" y="832"/>
         </scene>
@@ -996,6 +1014,9 @@
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gsZ-vl-uyV" id="kR5-pa-zfB">
                                     <rect key="frame" x="0.0" y="0.0" width="253" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <connections>
+                                        <outletCollection property="gestureRecognizers" destination="x2q-gK-zFP" appends="YES" id="OL9-SC-AgJ"/>
+                                    </connections>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="0.59849044210000002" green="0.98461457770000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -1017,6 +1038,11 @@
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F0f-U7-5x0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="x2q-gK-zFP">
+                    <connections>
+                        <action selector="toggleEdit:" destination="Jow-r1-Mgi" id="pwd-oU-862"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1522" y="1546"/>
         </scene>

@@ -45,8 +45,9 @@
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
-    NSArray *sortDescriptors = @[sortDescriptor1];
+    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"position" ascending:YES];
+    NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+    NSArray *sortDescriptors = @[sortDescriptor1, sortDescriptor2];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
     
@@ -149,7 +150,6 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the specified item to be editable.
     return YES;
 }
 
@@ -171,8 +171,42 @@
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // The table view should not be re-orderable.
-    return NO;
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+#ifdef DEBUG
+    NSLog(@"PUBs moveRowAtIndexPath %d > %d", sourceIndexPath.row, destinationIndexPath.row);
+#endif
+    for (NSUInteger d = 0, s = 0;
+         d < [self.fetchedResultsController.fetchedObjects count];
+         d++, s++) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:d inSection:0];
+        Publication *pub = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        if (d == sourceIndexPath.row) {
+            pub.position = @(destinationIndexPath.row);
+#ifdef DEBUG
+            NSLog(@"PUBs moveRowAtIndexPath %d = %d", d, destinationIndexPath.row);
+#endif
+            s--;
+        } else {
+            if (d < sourceIndexPath.row) {
+                if (d == destinationIndexPath.row) {
+                    s++;
+                }
+            }
+            pub.position = @(s);
+#ifdef DEBUG
+            NSLog(@"PUBs moveRowAtIndexPath %d = %d", d, s);
+#endif
+            if (d >= sourceIndexPath.row) {
+                if (d == destinationIndexPath.row) {
+                    s++;
+                }
+            }
+        }
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

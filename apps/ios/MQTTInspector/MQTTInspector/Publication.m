@@ -2,8 +2,8 @@
 //  Publication.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 18.11.13.
-//  Copyright (c) 2013 Christoph Krey. All rights reserved.
+//  Created by Christoph Krey on 07.01.14.
+//  Copyright (c) 2014 Christoph Krey. All rights reserved.
 //
 
 #import "Publication.h"
@@ -18,6 +18,7 @@
 @dynamic retained;
 @dynamic state;
 @dynamic topic;
+@dynamic position;
 @dynamic belongsTo;
 
 @end

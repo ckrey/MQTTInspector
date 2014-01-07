@@ -30,6 +30,7 @@
         publication.data = data;
         publication.qos = @(qos);
         publication.retained = @(retained);
+        publication.position = @(-1);
         publication.belongsTo = session;
         publication.state = @(0);
     }
