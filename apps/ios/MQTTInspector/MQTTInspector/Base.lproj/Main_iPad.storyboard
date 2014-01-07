@@ -387,6 +387,7 @@
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="zgb-dC-Tei" appends="YES" id="g4L-Yo-nfq"/>
                                     <outletCollection property="gestureRecognizers" destination="hxx-IM-Wsz" appends="YES" id="fh7-Uw-NnP"/>
+                                    <outletCollection property="gestureRecognizers" destination="bKw-nw-K6q" appends="YES" id="QMU-eC-apD"/>
                                 </connections>
                             </tableView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Ud0-UN-jcw">
@@ -416,6 +417,7 @@
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="zgb-dC-Tei" appends="YES" id="mE7-Py-9TB"/>
                                     <outletCollection property="gestureRecognizers" destination="hxx-IM-Wsz" appends="YES" id="m6Y-Hc-chl"/>
+                                    <outletCollection property="gestureRecognizers" destination="O8e-Za-2zS" appends="YES" id="UC6-dG-N4H"/>
                                 </connections>
                             </tableView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="1" translatesAutoresizingMaskIntoConstraints="NO" id="N1v-ey-t2M">
@@ -463,6 +465,16 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="O8e-Za-2zS">
+                    <connections>
+                        <action selector="editPubs:" destination="JEX-9P-axG" id="ms7-Iy-4Yu"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="bKw-nw-K6q">
+                    <connections>
+                        <action selector="editSubs:" destination="JEX-9P-axG" id="KjX-O4-DoD"/>
+                    </connections>
+                </pongPressGestureRecognizer>
                 <pinchGestureRecognizer id="hxx-IM-Wsz">
                     <connections>
                         <action selector="pinch:" destination="JEX-9P-axG" id="Grq-j7-ogZ"/>
@@ -915,6 +927,29 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="jiG-IU-cn5">
+                                        <rect key="frame" x="0.0" y="727" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jiG-IU-cn5" id="8Bg-hc-MOd">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Autoconnect" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fOS-Sd-WXG">
+                                                    <rect key="frame" x="20" y="11" width="98" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F0j-8Y-75b">
+                                                    <rect key="frame" x="251" y="6" width="51" height="31"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <connections>
+                                                        <action selector="autoConnectChanged:" destination="bJC-yq-4xu" eventType="valueChanged" id="95h-RI-OBX"/>
+                                                    </connections>
+                                                </switch>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -926,6 +961,7 @@
                     <navigationItem key="navigationItem" title="Session" id="nGR-3e-Yfu"/>
                     <connections>
                         <outlet property="authSwitch" destination="k4T-hX-Mec" id="5hE-YG-Baq"/>
+                        <outlet property="autoConnectSwitch" destination="F0j-8Y-75b" id="cxD-Ur-gfh"/>
                         <outlet property="cleansessionSwitch" destination="Lib-5r-pdF" id="1cu-fN-87w"/>
                         <outlet property="clientIdText" destination="EL7-ne-Cap" id="3eW-jV-gmn"/>
                         <outlet property="domainText" destination="uk1-C9-dgi" id="opA-vg-LOS"/>
@@ -1018,6 +1054,7 @@
                         <connections>
                             <outlet property="dataSource" destination="r2c-F7-Pff" id="BOH-O5-ZXV"/>
                             <outlet property="delegate" destination="r2c-F7-Pff" id="vdM-gA-Ji0"/>
+                            <outletCollection property="gestureRecognizers" destination="41g-Wq-i1f" appends="YES" id="twS-Ac-Jxx"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="SUBs" id="uHa-vq-4ui">
@@ -1029,6 +1066,11 @@
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jJY-hp-vLO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="41g-Wq-i1f">
+                    <connections>
+                        <action selector="toggleEdit:" destination="r2c-F7-Pff" id="e4r-CV-pHT"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2541" y="-259"/>
         </scene>
@@ -1298,6 +1340,7 @@
                         <connections>
                             <outlet property="dataSource" destination="uom-Ww-PXM" id="5dg-9e-xde"/>
                             <outlet property="delegate" destination="uom-Ww-PXM" id="SPr-Ax-Hz0"/>
+                            <outletCollection property="gestureRecognizers" destination="tY1-mw-Lzf" appends="YES" id="9wO-ai-jxK"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="PUBs" id="CbL-Cs-f9a">
@@ -1309,6 +1352,11 @@
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q9J-q2-WqW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="tY1-mw-Lzf">
+                    <connections>
+                        <action selector="toggleEdit:" destination="uom-Ww-PXM" id="9BY-1W-hV8"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2541" y="-1151"/>
         </scene>

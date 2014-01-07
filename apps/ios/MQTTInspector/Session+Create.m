@@ -20,6 +20,7 @@
                     clientid:(NSString *)clientid
                 cleansession:(BOOL)cleansession
                    keepalive:(int)keepalive
+                 autoconnect:(BOOL)autoconnect
                       dnssrv:(BOOL)dnssrv
                       dnsdomain:(NSString *)dnsdomain
       inManagedObjectContext:(NSManagedObjectContext *)context;
@@ -44,6 +45,7 @@
         session.clientid = clientid;
         session.cleansession = @(cleansession);
         session.keepalive = @(keepalive);
+        session.autoconnect = @(autoconnect);
         session.dnssrv = @(dnssrv);
         session.dnsdomain = dnsdomain;
         session.state = @(-1);

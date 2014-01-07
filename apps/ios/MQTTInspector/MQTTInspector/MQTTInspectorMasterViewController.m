@@ -39,6 +39,7 @@
                                   clientid:nil
                               cleansession:YES
                                  keepalive:60
+                               autoconnect:YES
                                     dnssrv:YES
                                  dnsdomain:@"mosquitto.org"
                     inManagedObjectContext:self.managedObjectContext];
@@ -76,6 +77,7 @@
                                   clientid:nil
                               cleansession:YES
                                  keepalive:60
+                               autoconnect:NO
                                     dnssrv:NO
                                  dnsdomain:@"eclipse.org"
                     inManagedObjectContext:self.managedObjectContext];
@@ -117,6 +119,7 @@
                                            clientid:@""
                                        cleansession:YES
                                           keepalive:60
+                                        autoconnect:YES
                                              dnssrv:NO
                                              dnsdomain:@""
                              inManagedObjectContext:self.managedObjectContext];

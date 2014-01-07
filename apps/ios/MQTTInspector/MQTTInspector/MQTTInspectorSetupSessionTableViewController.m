@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *keepaliveText;
 @property (weak, nonatomic) IBOutlet UITextField *domainText;
 @property (weak, nonatomic) IBOutlet UISwitch *domainSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *autoConnectSwitch;
 
 @end
 
@@ -52,6 +53,8 @@
     self.keepaliveText.text = [NSString stringWithFormat:@"%@", self.session.keepalive];
     self.domainSwitch.on = [self.session.dnssrv boolValue];
     self.domainText.text = self.session.dnsdomain;
+    self.autoConnectSwitch.on = [self.session.autoconnect boolValue];
+
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -119,6 +122,9 @@
 }
 - (IBAction)keepalvieChanged:(UITextField *)sender {
     self.session.keepalive = @([sender.text intValue]);
+}
+- (IBAction)autoConnectChanged:(UISwitch *)sender {
+    self.session.autoconnect = @(sender.on);
 }
 
 - (IBAction)dnssrvSelected:(UIStoryboardSegue *)segue

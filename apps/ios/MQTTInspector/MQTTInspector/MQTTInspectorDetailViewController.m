@@ -59,12 +59,22 @@
                                              selector:@selector(willResign:)
                                                  name:UIApplicationWillResignActiveNotification
                                                object:nil];
-    
+    [[NSNotificationCenter defaultCenter ]addObserver:self
+                                             selector:@selector(willEnter:)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
 }
 
 - (void)willResign:(NSNotification *)notification
 {
     [self disconnect:nil];
+}
+
+- (void)willEnter:(NSNotification *)notification
+{
+    if ([self.session.autoconnect boolValue]) {
+        [self connect:nil];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -350,9 +360,7 @@
         }
         _session = session;
         
-        self.clearButton.enabled = TRUE;
         self.level.enabled = TRUE;
-        self.connectButton.enabled = TRUE;
 
         self.subsTVC = nil;
         UITableViewController *stvc = [[UITableViewController alloc] init];
@@ -366,7 +374,16 @@
 
         [self viewChanged:nil];
         
-        [self connect:nil];
+        if ([session.autoconnect boolValue]) {
+            [self connect:nil];
+            self.clearButton.enabled = TRUE;
+            self.disconnectButton.enabled = TRUE;
+            self.connectButton.enabled = FALSE;
+        } else {
+            self.clearButton.enabled = FALSE;
+            self.disconnectButton.enabled = FALSE;
+            self.connectButton.enabled = TRUE;
+        }
     }
     
     if (self.masterPopoverController != nil) {
@@ -506,6 +523,7 @@
     NSString *clientid = self.session.clientid;
     BOOL cleansession = [self.session.cleansession boolValue];
     int keepalive = [self.session.keepalive intValue];
+    BOOL autoconnect = [self.session.autoconnect boolValue];
     NSString *dnsdomain = self.session.dnsdomain;
     BOOL dnssrv = [self.session.dnssrv boolValue];
 
@@ -524,6 +542,7 @@
                                              clientid:clientid
                                          cleansession:cleansession
                                             keepalive:keepalive
+                                          autoconnect:autoconnect
                                                dnssrv:dnssrv
                                                dnsdomain:dnsdomain
                                inManagedObjectContext:self.queueManagedObjectContext];
@@ -575,6 +594,7 @@
     NSString *clientid = self.session.clientid;
     BOOL cleansession = [self.session.cleansession boolValue];
     int keepalive = [self.session.keepalive intValue];
+    BOOL autoconnect = [self.session.autoconnect boolValue];
     NSString *dnsdomain = self.session.dnsdomain;
     BOOL dnssrv = [self.session.dnssrv boolValue];
 
@@ -584,7 +604,7 @@
         NSLog(@"newCommand in");
 #endif
         Session *mySession = [Session sessionWithName:name
-                                                  host:host
+                                                 host:host
                                                  port:port
                                                   tls:tls
                                                  auth:auth
@@ -593,10 +613,11 @@
                                              clientid:clientid
                                          cleansession:cleansession
                                             keepalive:keepalive
+                                          autoconnect:autoconnect
                                                dnssrv:dnssrv
-                                               dnsdomain:dnsdomain
+                                            dnsdomain:dnsdomain
                                inManagedObjectContext:self.queueManagedObjectContext];
-
+        
         [Command commandAt:timestamp
                    inbound:YES
                       type:type
@@ -632,6 +653,7 @@
     NSString *dnsdomain = self.session.dnsdomain;
     BOOL dnssrv = [self.session.dnssrv boolValue];
     int keepalive = [self.session.keepalive intValue];
+    BOOL autoconnect = [self.session.autoconnect boolValue];
 
     [self startQueue];
     [self.queueManagedObjectContext performBlock:^{
@@ -649,6 +671,7 @@
                                              clientid:clientid
                                          cleansession:cleansession
                                             keepalive:keepalive
+                                          autoconnect:autoconnect
                                                dnssrv:dnssrv
                                                dnsdomain:dnsdomain
 
