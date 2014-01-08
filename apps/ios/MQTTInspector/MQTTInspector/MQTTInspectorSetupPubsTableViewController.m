@@ -115,7 +115,7 @@
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
 #ifdef DEBUG
-    NSLog(@"PUBs moveRowAtIndexPath %d > %d", sourceIndexPath.row, destinationIndexPath.row);
+    NSLog(@"PUBs moveRowAtIndexPath %ld > %ld", (long)sourceIndexPath.row, (long)destinationIndexPath.row);
 #endif
     for (NSUInteger d = 0, s = 0;
          d < [self.fetchedResultsController.fetchedObjects count];
@@ -125,7 +125,7 @@
         if (d == sourceIndexPath.row) {
             pub.position = @(destinationIndexPath.row);
 #ifdef DEBUG
-            NSLog(@"PUBs moveRowAtIndexPath %d = %d", d, destinationIndexPath.row);
+            NSLog(@"PUBs moveRowAtIndexPath %lu = %ld", (unsigned long)d, (long)destinationIndexPath.row);
 #endif
             s--;
         } else {
@@ -136,7 +136,7 @@
             }
             pub.position = @(s);
 #ifdef DEBUG
-            NSLog(@"PUBs moveRowAtIndexPath %d = %d", d, s);
+            NSLog(@"PUBs moveRowAtIndexPath %lu = %lu", (unsigned long)d, (unsigned long)s);
 #endif
             if (d >= sourceIndexPath.row) {
                 if (d == destinationIndexPath.row) {

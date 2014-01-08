@@ -705,7 +705,7 @@
 - (void)buffered:(MQTTSession *)session queued:(NSUInteger)queued flowingIn:(NSUInteger)flowingIn flowingOut:(NSUInteger)flowingOut
 {
 #ifdef DEBUG
-    NSLog(@"Connection buffered q%u i%u o%u", queued, flowingIn, flowingOut);
+    NSLog(@"Connection buffered q%lu i%lu o%lu", (unsigned long)queued, (unsigned long)flowingIn, (unsigned long)flowingOut);
 #endif
     if (queued + flowingIn + flowingOut) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = TRUE;
