@@ -282,6 +282,7 @@
                                                          willMsg:nil
                                                          willQoS:0
                                                   willRetainFlag:NO
+                                                   protocolLevel:[self.session.protocolLevel intValue]
                                                          runLoop:[NSRunLoop currentRunLoop]
                                                          forMode:NSRunLoopCommonModes];
         self.mqttSession.delegate = self;
@@ -526,6 +527,7 @@
     BOOL autoconnect = [self.session.autoconnect boolValue];
     NSString *dnsdomain = self.session.dnsdomain;
     BOOL dnssrv = [self.session.dnssrv boolValue];
+    UInt8 protocolLevel = [self.session.protocolLevel intValue];
 
     [self startQueue];
     [self.queueManagedObjectContext performBlock:^{
@@ -544,7 +546,8 @@
                                             keepalive:keepalive
                                           autoconnect:autoconnect
                                                dnssrv:dnssrv
-                                               dnsdomain:dnsdomain
+                                            dnsdomain:dnsdomain
+                                        protocolLevel:protocolLevel
                                inManagedObjectContext:self.queueManagedObjectContext];
 
         [Message messageAt:timestamp
@@ -597,6 +600,7 @@
     BOOL autoconnect = [self.session.autoconnect boolValue];
     NSString *dnsdomain = self.session.dnsdomain;
     BOOL dnssrv = [self.session.dnssrv boolValue];
+    UInt8 protocolLevel = [self.session.protocolLevel intValue];
 
     [self startQueue];
     [self.queueManagedObjectContext performBlock:^{
@@ -616,6 +620,7 @@
                                           autoconnect:autoconnect
                                                dnssrv:dnssrv
                                             dnsdomain:dnsdomain
+                                        protocolLevel:protocolLevel
                                inManagedObjectContext:self.queueManagedObjectContext];
         
         [Command commandAt:timestamp
@@ -654,6 +659,7 @@
     BOOL dnssrv = [self.session.dnssrv boolValue];
     int keepalive = [self.session.keepalive intValue];
     BOOL autoconnect = [self.session.autoconnect boolValue];
+    UInt8 protocolLevel = [self.session.protocolLevel intValue];
 
     [self startQueue];
     [self.queueManagedObjectContext performBlock:^{
@@ -674,7 +680,7 @@
                                           autoconnect:autoconnect
                                                dnssrv:dnssrv
                                                dnsdomain:dnsdomain
-
+                                        protocolLevel:protocolLevel
                                inManagedObjectContext:self.queueManagedObjectContext];
 
         [Command commandAt:timestamp

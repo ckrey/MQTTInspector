@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
 #import "Session+Create.h"
 
-@interface MQTTInspectorSetupSessionTableViewController : UITableViewController 
+@interface MQTTInspectorSetupSessionTableViewController : UITableViewController <MFMailComposeViewControllerDelegate>
 @property (strong, nonatomic) Session *session;
 
 @end

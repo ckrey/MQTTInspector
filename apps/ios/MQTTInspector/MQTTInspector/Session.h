@@ -2,7 +2,7 @@
 //  Session.h
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 07.01.14.
+//  Created by Christoph Krey on 13.01.14.
 //  Copyright (c) 2014 Christoph Krey. All rights reserved.
 //
 
@@ -14,6 +14,7 @@
 @interface Session : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * auth;
+@property (nonatomic, retain) NSNumber * autoconnect;
 @property (nonatomic, retain) NSNumber * cleansession;
 @property (nonatomic, retain) NSString * clientid;
 @property (nonatomic, retain) NSString * dnsdomain;
@@ -26,7 +27,7 @@
 @property (nonatomic, retain) NSNumber * state;
 @property (nonatomic, retain) NSNumber * tls;
 @property (nonatomic, retain) NSString * user;
-@property (nonatomic, retain) NSNumber * autoconnect;
+@property (nonatomic, retain) NSNumber * protocolLevel;
 @property (nonatomic, retain) NSOrderedSet *hasCommands;
 @property (nonatomic, retain) NSOrderedSet *hasMesssages;
 @property (nonatomic, retain) NSOrderedSet *hasPubs;

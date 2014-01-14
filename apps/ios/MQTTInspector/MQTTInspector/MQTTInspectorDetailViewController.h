@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Session+Create.h"
-#import "MQTTSession.h"
+#import <MQTTClient/MQTTClient.h>
 
 @interface MQTTInspectorDetailViewController : UIViewController <UISplitViewControllerDelegate, MQTTSessionDelegate>
 

@@ -8,6 +8,8 @@
 
 #import "MQTTInspectorSetupSessionTableViewController.h"
 #import "Session+Create.h"
+#import "Publication.h"
+#import "Subscription.h"
 #import "MQTTInspectorDetailViewController.h"
 
 
@@ -25,6 +27,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *domainText;
 @property (weak, nonatomic) IBOutlet UISwitch *domainSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *autoConnectSwitch;
+@property (weak, nonatomic) IBOutlet UITextField *protocolLevelText;
 
 @end
 
@@ -54,7 +57,8 @@
     self.domainSwitch.on = [self.session.dnssrv boolValue];
     self.domainText.text = self.session.dnsdomain;
     self.autoConnectSwitch.on = [self.session.autoconnect boolValue];
-
+    self.protocolLevelText.text = [NSString stringWithFormat:@"%@", self.session.protocolLevel];
+    
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -132,5 +136,75 @@
     self.hostText.text = self.session.host;
     self.portText.text = [NSString stringWithFormat:@"%@", self.session.port];
 }
+- (IBAction)protocolLevelChanged:(UITextField *)sender {
+    self.session.protocolLevel = @([sender.text intValue]);
+}
+- (IBAction)send:(UIBarButtonItem *)sender {
+    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+    picker.mailComposeDelegate = self;
+    
+    [picker setSubject:[NSString stringWithFormat:@"Export Session %@", self.session.name]];
+    
+    NSMutableArray *subs = [[NSMutableArray alloc] init];
+    for (Subscription *sub in self.session.hasSubs) {
+        [subs addObject:@{@"topic": [sub.topic description],
+                          @"qos": [sub.qos description]
+                          }];
+    }
+    
+    NSMutableArray *pubs = [[NSMutableArray alloc] init];
+    for (Publication *pub in self.session.hasPubs) {
+        [pubs addObject:@{@"name": [pub.name description],
+                          @"topic": [pub.topic description],
+                          @"qos": [pub.qos description],
+                          @"retained": [pub.retained description]
+                          }];
+    }
+
+    NSDictionary *dict = @{@"_type": @"MQTTInspector-Session",
+                           @"name": self.session.name ? self.session.name : @"",
+                           @"host": self.session.host ? self.session.host : @"",
+                           @"port": [NSString stringWithFormat:@"%@", self.session.port ? self.session.port : @(0)],
+                           @"tls": [NSString stringWithFormat:@"%@", self.session.tls ? self.session.tls : @(0)],
+                           @"auth": [NSString stringWithFormat:@"%@", self.session.auth ? self.session.auth : @(0)],
+                           @"user": self.session.user ? self.session.user : @"",
+                           @"passwd": self.session.passwd ? self.session.passwd : @"",
+                           @"clientid": self.session.clientid ? self.session.clientid : @"",
+                           @"cleansession": [NSString stringWithFormat:@"%@", self.session.cleansession ? self.session.cleansession : @(0)],
+                           @"keepalive": [NSString stringWithFormat:@"%@", self.session.keepalive ? self.session.keepalive : @(60)],
+                           @"dnssrv": [NSString stringWithFormat:@"%@", self.session.dnssrv ? self.session.dnssrv : @(0)],
+                           @"dnsdomain": self.session.dnsdomain ? self.session.dnsdomain : @"",
+                           @"autoconnect": [NSString stringWithFormat:@"%@", self.session.autoconnect ? self.session.autoconnect : @(0)],
+                           @"protocollevel": [NSString stringWithFormat:@"%@", self.session.protocolLevel ? self.session.protocolLevel : @(0)],
+                           @"subs": subs,
+                           @"pubs": pubs
+                           };
+    
+    NSError *error;
+    NSData *myData = [NSJSONSerialization dataWithJSONObject:dict
+                                                     options:NSJSONWritingPrettyPrinted
+                                                       error:&error];
+                      
+    [picker addAttachmentData:myData mimeType:@"application/json"
+                     fileName:[NSString stringWithFormat:@"Session-%@.mqti", self.session.name]];
+    
+    NSString *emailBody = @"see attached file";
+    [picker setMessageBody:emailBody isHTML:NO];
+    
+    [self presentViewController:picker animated:YES completion:^{
+        // done
+    }];
+}
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller
+          didFinishWithResult:(MFMailComposeResult)result
+                        error:(NSError *)error
+{
+    [controller dismissViewControllerAnimated:YES completion:^{
+        // done
+    }];
+}
+
+
 
 @end

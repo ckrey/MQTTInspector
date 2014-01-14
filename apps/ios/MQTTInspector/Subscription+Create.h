@@ -10,6 +10,10 @@
 #import "Session.h"
 
 @interface Subscription (Create)
++ (Subscription *)existsSubscriptionWithTopic:(NSString *)topic
+                                   session:(Session *)session
+                    inManagedObjectContext:(NSManagedObjectContext *)context;
+
 + (Subscription *)subscriptionWithTopic:(NSString *)topic
                             qos:(int)qos
                         session:(Session *)session

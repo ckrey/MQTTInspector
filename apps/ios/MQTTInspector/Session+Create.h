@@ -23,7 +23,8 @@
                    keepalive:(int)keepalive
                  autoconnect:(BOOL)autoconnect
                       dnssrv:(BOOL)dnssrv
-                      dnsdomain:(NSString *)dnsdomain
+                   dnsdomain:(NSString *)dnsdomain
+               protocolLevel:(UInt8)protocolLevel
       inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)allSessions:(NSManagedObjectContext *)context;
 

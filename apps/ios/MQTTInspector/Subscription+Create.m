@@ -45,6 +45,32 @@
     return subscription;
 }
 
++ (Subscription *)existsSubscriptionWithTopic:(NSString *)topic
+                                   session:(Session *)session
+                    inManagedObjectContext:(NSManagedObjectContext *)context
+{
+    Subscription *subscription = nil;
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Subscription"];
+    request.predicate = [NSPredicate predicateWithFormat:@"topic = %@ AND belongsTo = %@", topic, session];
+    
+    NSError *error = nil;
+    
+    NSArray *matches = [context executeFetchRequest:request error:&error];
+    
+    if (!matches) {
+        // handle error
+    } else {
+        if ([matches count]) {
+            subscription = [matches lastObject];
+            subscription.state = @(0);
+        }
+    }
+    
+    return subscription;
+}
+
+
 + (float)uniqueHue:(Session *)session
 {
     float hue;

@@ -42,6 +42,7 @@
                                autoconnect:YES
                                     dnssrv:YES
                                  dnsdomain:@"mosquitto.org"
+                             protocolLevel:3
                     inManagedObjectContext:self.managedObjectContext];
         [Subscription subscriptionWithTopic:@"MQTTInspector/#"
                                         qos:1
@@ -80,6 +81,7 @@
                                autoconnect:NO
                                     dnssrv:NO
                                  dnsdomain:@"eclipse.org"
+                             protocolLevel:3
                     inManagedObjectContext:self.managedObjectContext];
         [Subscription subscriptionWithTopic:@"MQTTInspector/#"
                                         qos:1
@@ -122,6 +124,7 @@
                                         autoconnect:YES
                                              dnssrv:NO
                                              dnsdomain:@""
+                                      protocolLevel:3
                              inManagedObjectContext:self.managedObjectContext];
         if ([segue.destinationViewController respondsToSelector:@selector(setSession:)]) {
             [segue.destinationViewController performSelector:@selector(setSession:)

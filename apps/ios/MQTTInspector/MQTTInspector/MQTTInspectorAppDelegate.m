@@ -8,6 +8,9 @@
 
 #import "MQTTInspectorAppDelegate.h"
 #import "MQTTInspectorMasterViewController.h"
+#import "Session+Create.h"
+#import "Subscription+Create.h"
+#import "Publication+Create.h"
 
 @interface MQTTInspectorAppDelegate ()
 @property (nonatomic) UIBackgroundTaskIdentifier bgTask;
@@ -202,5 +205,151 @@
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+#ifdef DEBUG
+    NSLog(@"UIApplication openURL:%@ sourceApplication:%@ annotation:%@", url, sourceApplication, annotation);
+#endif
+    
+    if (url) {
+        NSError *error;
+        NSInputStream *input = [NSInputStream inputStreamWithURL:url];
+        if ([input streamError]) {
+            NSLog(@"Error nputStreamWithURL %@ %@", [input streamError], url);
+            return FALSE;
+        }
+        [input open];
+        if ([input streamError]) {
+            NSLog(@"Error open %@ %@", [input streamError], url);
+            return FALSE;
+        }
+        
+        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithStream:input options:0 error:&error];
+        if (dictionary) {
+            for (NSString *key in [dictionary allKeys]) {
+                NSLog(@"Init %@:%@", key, dictionary[key]);
+            }
+            
+            if ([dictionary[@"_type"] isEqualToString:@"MQTTInspector-Session"]) {
+                NSString *name = dictionary[@"name"];
+                Session *session = [Session existSessionWithName:name
+                                          inManagedObjectContext:_managedObjectContext];
+                if (!session) {
+                    session = [Session sessionWithName:name
+                                                  host:@"host"
+                                                  port:1883
+                                                   tls:NO
+                                                  auth:NO
+                                                  user:@""
+                                                passwd:@""
+                                              clientid:@""
+                                          cleansession:YES
+                                             keepalive:60
+                                           autoconnect:NO
+                                                dnssrv:NO
+                                             dnsdomain:@""
+                                         protocolLevel:3
+                                inManagedObjectContext:_managedObjectContext];
+                }
+                
+                NSString *string;
+                string = dictionary[@"host"];
+                if (string) session.host = string;
+                
+                string = dictionary[@"port"];
+                if (string) session.port = @([string integerValue]);
+                
+                string = dictionary[@"tls"];
+                if (string) session.tls = @([string boolValue]);
+                
+                string = dictionary[@"auth"];
+                if (string) session.auth = @([string boolValue]);
+                
+                string = dictionary[@"user"];
+                if (string) session.user = string;
+                
+                string = dictionary[@"passwd"];
+                if (string) session.passwd = string;
+                
+                string = dictionary[@"clientid"];
+                if (string) session.clientid = string;
+                
+                string = dictionary[@"cleansession"];
+                if (string) session.cleansession = @([string boolValue]);
+                
+                string = dictionary[@"keepalive"];
+                if (string) session.keepalive = @([string integerValue]);
+                
+                string = dictionary[@"autoconnect"];
+                if (string) session.autoconnect = @([string boolValue]);
+                
+                string = dictionary[@"dnssrv"];
+                if (string) session.dnssrv = @([string boolValue]);
+                
+                string = dictionary[@"dnsdomain"];
+                if (string) session.dnsdomain = string;
+                
+                string = dictionary[@"protocollevel"];
+                if (string) session.protocolLevel = @([string integerValue]);
+                
+                NSArray *subs = dictionary[@"subs"];
+                if (subs) for (NSDictionary *subDict in subs) {
+                    NSString *topic = subDict[@"topic"];
+                    Subscription *sub = [Subscription existsSubscriptionWithTopic:topic
+                                                                          session:session
+                                                           inManagedObjectContext:_managedObjectContext];
+                    if (!sub) {
+                        sub = [Subscription subscriptionWithTopic:topic
+                                                              qos:0
+                                                          session:session
+                                           inManagedObjectContext:_managedObjectContext];
+                    }
+                    string = subDict[@"qos"];
+                    if (string) sub.qos = @([string integerValue]);
+                }
+                NSArray *pubs = dictionary[@"pubs"];
+                if (pubs) for (NSDictionary *pubDict in pubs) {
+                    NSString *name = pubDict[@"name"];
+                    Publication *pub = [Publication existsPublicationWithName:name
+                                                                      session:session
+                                                       inManagedObjectContext:_managedObjectContext];
+                    if (!pub) {
+                        pub = [Publication publicationWithName:name
+                                                         topic:@"topic"
+                                                           qos:0
+                                                      retained:NO
+                                                          data:[[NSData alloc] init]
+                                                       session:session
+                                        inManagedObjectContext:_managedObjectContext];
+                    }
+                    string = pubDict[@"topic"];
+                    if (string) pub.topic = string;
+
+                    string = pubDict[@"qos"];
+                    if (string) pub.qos = @([string integerValue]);
+
+                    string = pubDict[@"retained"];
+                    if (string) pub.retained = @([string boolValue]);
+
+                    NSData *data = pubDict[@"data"];
+                    if (string) pub.data = data;
+                }
+            } else {
+                NSLog(@"Error invalid init file %@)", dictionary[@"_type"]);
+                return FALSE;
+            }
+        } else {
+            NSLog(@"Error illegal json in init file %@)", error);
+            return FALSE;
+        }
+        
+        NSLog(@"Init file %@ successfully processed)", [url lastPathComponent]);
+        
+    }
+    [self saveContext];
+    return TRUE;
+}
+
 
 @end

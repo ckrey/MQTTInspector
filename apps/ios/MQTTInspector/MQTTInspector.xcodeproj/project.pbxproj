@@ -21,8 +21,9 @@
 		84147D161838CB720018E601 /* MQTTInspectorMessagesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147D151838CB720018E601 /* MQTTInspectorMessagesTableViewController.m */; };
 		8423B4B2187BE7F5006B08AC /* Subscription.m in Sources */ = {isa = PBXBuildFile; fileRef = 8423B4B1187BE7F5006B08AC /* Subscription.m */; };
 		8423B4B5187BE7F6006B08AC /* Publication.m in Sources */ = {isa = PBXBuildFile; fileRef = 8423B4B4187BE7F6006B08AC /* Publication.m */; };
-		8423B4B9187C5BC2006B08AC /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 8423B4B8187C5BC2006B08AC /* Session.m */; };
 		842840001846AD430078DA05 /* Topic.m in Sources */ = {isa = PBXBuildFile; fileRef = 84283FFF1846AD430078DA05 /* Topic.m */; };
+		845DBE721884314500EDB183 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 845DBE711884314500EDB183 /* Session.m */; };
+		845DBE7C1885764C00EDB183 /* MQTTClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 845DBE7B1885764C00EDB183 /* MQTTClient.framework */; };
 		84684E8A1832192800AE13B5 /* Subscription+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84684E891832192800AE13B5 /* Subscription+Create.m */; };
 		84684E8D1832193B00AE13B5 /* Publication+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84684E8C1832193B00AE13B5 /* Publication+Create.m */; };
 		84684E9118321D1200AE13B5 /* MQTTInspectorPubsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84684E9018321D1200AE13B5 /* MQTTInspectorPubsTableViewController.m */; };
@@ -47,11 +48,6 @@
 		8492C988182E63D400A40D8B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8492C986182E63D400A40D8B /* InfoPlist.strings */; };
 		8492C98A182E63D400A40D8B /* MQTTInspectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8492C989182E63D400A40D8B /* MQTTInspectorTests.m */; };
 		8492C99C182EDF8F00A40D8B /* Session+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 8492C99B182EDF8F00A40D8B /* Session+Create.m */; };
-		8492C9A8182EEEDA00A40D8B /* MQTTDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8492C99F182EEEDA00A40D8B /* MQTTDecoder.m */; };
-		8492C9A9182EEEDA00A40D8B /* MQTTEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8492C9A1182EEEDA00A40D8B /* MQTTEncoder.m */; };
-		8492C9AA182EEEDA00A40D8B /* MQTTMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 8492C9A3182EEEDA00A40D8B /* MQTTMessage.m */; };
-		8492C9AB182EEEDA00A40D8B /* MQTTSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 8492C9A5182EEEDA00A40D8B /* MQTTSession.m */; };
-		8492C9AC182EEEDA00A40D8B /* MQttTxFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8492C9A7182EEEDA00A40D8B /* MQttTxFlow.m */; };
 		84A1985C1830EC0B00A77080 /* Message+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1985B1830EC0B00A77080 /* Message+Create.m */; };
 		84A1986818310FC000A77080 /* MQTTInspectorLogsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1986718310FC000A77080 /* MQTTInspectorLogsTableViewController.m */; };
 		84A1987A183114BF00A77080 /* Topic+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A19879183114BF00A77080 /* Topic+Create.m */; };
@@ -102,12 +98,14 @@
 		8423B4B1187BE7F5006B08AC /* Subscription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Subscription.m; sourceTree = "<group>"; };
 		8423B4B3187BE7F6006B08AC /* Publication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Publication.h; sourceTree = "<group>"; };
 		8423B4B4187BE7F6006B08AC /* Publication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Publication.m; sourceTree = "<group>"; };
-		8423B4B6187C5B8D006B08AC /* MQTTInspector 1.2a.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MQTTInspector 1.2a.xcdatamodel"; sourceTree = "<group>"; };
-		8423B4B7187C5BC2006B08AC /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
-		8423B4B8187C5BC2006B08AC /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
+		8423B4B6187C5B8D006B08AC /* MQTTInspector 1.2a.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 1.2a.xcdatamodel"; sourceTree = "<group>"; };
 		84283FF71846ABD70078DA05 /* MQTTInspector 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 5.xcdatamodel"; sourceTree = "<group>"; };
 		84283FFE1846AD430078DA05 /* Topic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Topic.h; sourceTree = "<group>"; };
 		84283FFF1846AD430078DA05 /* Topic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Topic.m; sourceTree = "<group>"; };
+		845DBE6F1884310700EDB183 /* MQTTInspector 1.3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 1.3.xcdatamodel"; sourceTree = "<group>"; };
+		845DBE701884314500EDB183 /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
+		845DBE711884314500EDB183 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
+		845DBE7B1885764C00EDB183 /* MQTTClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MQTTClient.framework; path = "../../../../MQTT-Client-Framework/MQTTClient/dist/MQTTClient.framework"; sourceTree = "<group>"; };
 		84684E881832192800AE13B5 /* Subscription+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Subscription+Create.h"; path = "../Subscription+Create.h"; sourceTree = "<group>"; };
 		84684E891832192800AE13B5 /* Subscription+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Subscription+Create.m"; path = "../Subscription+Create.m"; sourceTree = "<group>"; };
 		84684E8B1832193B00AE13B5 /* Publication+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Publication+Create.h"; path = "../Publication+Create.h"; sourceTree = "<group>"; };
@@ -142,16 +140,6 @@
 		8492C989182E63D400A40D8B /* MQTTInspectorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MQTTInspectorTests.m; sourceTree = "<group>"; };
 		8492C99A182EDF8F00A40D8B /* Session+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Session+Create.h"; path = "../Session+Create.h"; sourceTree = "<group>"; };
 		8492C99B182EDF8F00A40D8B /* Session+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Session+Create.m"; path = "../Session+Create.m"; sourceTree = "<group>"; };
-		8492C99E182EEEDA00A40D8B /* MQTTDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTDecoder.h; sourceTree = "<group>"; };
-		8492C99F182EEEDA00A40D8B /* MQTTDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTDecoder.m; sourceTree = "<group>"; };
-		8492C9A0182EEEDA00A40D8B /* MQTTEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTEncoder.h; sourceTree = "<group>"; };
-		8492C9A1182EEEDA00A40D8B /* MQTTEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTEncoder.m; sourceTree = "<group>"; };
-		8492C9A2182EEEDA00A40D8B /* MQTTMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTMessage.h; sourceTree = "<group>"; };
-		8492C9A3182EEEDA00A40D8B /* MQTTMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTMessage.m; sourceTree = "<group>"; };
-		8492C9A4182EEEDA00A40D8B /* MQTTSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTSession.h; sourceTree = "<group>"; };
-		8492C9A5182EEEDA00A40D8B /* MQTTSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTSession.m; sourceTree = "<group>"; };
-		8492C9A6182EEEDA00A40D8B /* MQttTxFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQttTxFlow.h; sourceTree = "<group>"; };
-		8492C9A7182EEEDA00A40D8B /* MQttTxFlow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQttTxFlow.m; sourceTree = "<group>"; };
 		84A1985A1830EC0B00A77080 /* Message+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Message+Create.h"; path = "../Message+Create.h"; sourceTree = "<group>"; };
 		84A1985B1830EC0B00A77080 /* Message+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Message+Create.m"; path = "../Message+Create.m"; sourceTree = "<group>"; };
 		84A1986618310FC000A77080 /* MQTTInspectorLogsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTInspectorLogsTableViewController.h; sourceTree = SOURCE_ROOT; };
@@ -176,6 +164,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				845DBE7C1885764C00EDB183 /* MQTTClient.framework in Frameworks */,
 				84147D1018365C740018E601 /* libresolv.dylib in Frameworks */,
 				8492C955182E63D300A40D8B /* CoreGraphics.framework in Frameworks */,
 				8492C959182E63D300A40D8B /* CoreData.framework in Frameworks */,
@@ -201,9 +190,9 @@
 		84684E8E18321CCD00AE13B5 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				845DBE701884314500EDB183 /* Session.h */,
+				845DBE711884314500EDB183 /* Session.m */,
 				8492C96C182E63D300A40D8B /* MQTTInspector.xcdatamodeld */,
-				8423B4B7187C5BC2006B08AC /* Session.h */,
-				8423B4B8187C5BC2006B08AC /* Session.m */,
 				8423B4B3187BE7F6006B08AC /* Publication.h */,
 				8423B4B4187BE7F6006B08AC /* Publication.m */,
 				8423B4B0187BE7F5006B08AC /* Subscription.h */,
@@ -252,6 +241,7 @@
 		8492C951182E63D300A40D8B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				845DBE7B1885764C00EDB183 /* MQTTClient.framework */,
 				84147D0F18365C740018E601 /* libresolv.dylib */,
 				84147D0A18363C540018E601 /* CFNetwork.framework */,
 				84147D0818363BFC0018E601 /* libdns_services.dylib */,
@@ -271,7 +261,6 @@
 				8492C964182E63D300A40D8B /* MQTTInspectorAppDelegate.m */,
 				84147D0C18365A9C0018E601 /* SRVResolver.h */,
 				84147D0D18365A9C0018E601 /* SRVResolver.m */,
-				8492C99D182EEEDA00A40D8B /* mqtt */,
 				8492C966182E63D300A40D8B /* Main_iPhone.storyboard */,
 				8492C969182E63D300A40D8B /* Main_iPad.storyboard */,
 				8492C96F182E63D300A40D8B /* MQTTInspectorMasterViewController.h */,
@@ -340,23 +329,6 @@
 				8492C986182E63D400A40D8B /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		8492C99D182EEEDA00A40D8B /* mqtt */ = {
-			isa = PBXGroup;
-			children = (
-				8492C99E182EEEDA00A40D8B /* MQTTDecoder.h */,
-				8492C99F182EEEDA00A40D8B /* MQTTDecoder.m */,
-				8492C9A0182EEEDA00A40D8B /* MQTTEncoder.h */,
-				8492C9A1182EEEDA00A40D8B /* MQTTEncoder.m */,
-				8492C9A2182EEEDA00A40D8B /* MQTTMessage.h */,
-				8492C9A3182EEEDA00A40D8B /* MQTTMessage.m */,
-				8492C9A4182EEEDA00A40D8B /* MQTTSession.h */,
-				8492C9A5182EEEDA00A40D8B /* MQTTSession.m */,
-				8492C9A6182EEEDA00A40D8B /* MQttTxFlow.h */,
-				8492C9A7182EEEDA00A40D8B /* MQttTxFlow.m */,
-			);
-			path = mqtt;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -459,32 +431,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				8492C96E182E63D300A40D8B /* MQTTInspector.xcdatamodeld in Sources */,
-				8492C9AB182EEEDA00A40D8B /* MQTTSession.m in Sources */,
 				84A1987D1831179D00A77080 /* MQTTInspectorTopicsTableViewController.m in Sources */,
 				84B1C73C183B554D0062D1EE /* MQTTInspectorDNSSRVTableViewController.m in Sources */,
 				84684E9418321D2300AE13B5 /* MQTTInspectorSubsTableViewController.m in Sources */,
-				8492C9A9182EEEDA00A40D8B /* MQTTEncoder.m in Sources */,
 				8423B4B5187BE7F6006B08AC /* Publication.m in Sources */,
 				84147CF71834CDD10018E601 /* MQTTInspectorSetupPubsTableViewController.m in Sources */,
 				84147D071835204F0018E601 /* MQTTInspectorSetupSubTableViewController.m in Sources */,
 				842840001846AD430078DA05 /* Topic.m in Sources */,
+				845DBE721884314500EDB183 /* Session.m in Sources */,
 				84BB7155183A8963005AF544 /* Command.m in Sources */,
 				84147D0E18365A9C0018E601 /* SRVResolver.m in Sources */,
 				8423B4B2187BE7F5006B08AC /* Subscription.m in Sources */,
-				8492C9A8182EEEDA00A40D8B /* MQTTDecoder.m in Sources */,
 				84684E8D1832193B00AE13B5 /* Publication+Create.m in Sources */,
 				84684E9118321D1200AE13B5 /* MQTTInspectorPubsTableViewController.m in Sources */,
 				84147D13183673A70018E601 /* MQTTInspectorAdHocPubTableViewController.m in Sources */,
 				84147D161838CB720018E601 /* MQTTInspectorMessagesTableViewController.m in Sources */,
 				84684E8A1832192800AE13B5 /* Subscription+Create.m in Sources */,
-				8492C9AA182EEEDA00A40D8B /* MQTTMessage.m in Sources */,
-				8423B4B9187C5BC2006B08AC /* Session.m in Sources */,
 				8492C974182E63D300A40D8B /* MQTTInspectorDetailViewController.m in Sources */,
 				84147CFE1834D3AD0018E601 /* MQTTInspectorSetupSessionTableViewController.m in Sources */,
 				8492C965182E63D300A40D8B /* MQTTInspectorAppDelegate.m in Sources */,
 				84A1985C1830EC0B00A77080 /* Message+Create.m in Sources */,
 				84147D011834E06A0018E601 /* MQTTInspectorDataViewController.m in Sources */,
-				8492C9AC182EEEDA00A40D8B /* MQttTxFlow.m in Sources */,
 				84BB715B183A8964005AF544 /* Message.m in Sources */,
 				84A1986818310FC000A77080 /* MQTTInspectorLogsTableViewController.m in Sources */,
 				8492C971182E63D300A40D8B /* MQTTInspectorMasterViewController.m in Sources */,
@@ -631,6 +598,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/ckrey/MQTT-Client-Framework/MQTTClient/dist",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MQTTInspector/MQTTInspector-Prefix.pch";
 				INFOPLIST_FILE = "MQTTInspector/MQTTInspector-Info.plist";
@@ -644,6 +615,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/ckrey/MQTT-Client-Framework/MQTTClient/dist",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MQTTInspector/MQTTInspector-Prefix.pch";
 				INFOPLIST_FILE = "MQTTInspector/MQTTInspector-Info.plist";
@@ -733,12 +708,13 @@
 				84283FF71846ABD70078DA05 /* MQTTInspector 5.xcdatamodel */,
 				8423B4AF187BE726006B08AC /* MQTTInspector 1.2.xcdatamodel */,
 				8423B4B6187C5B8D006B08AC /* MQTTInspector 1.2a.xcdatamodel */,
+				845DBE6F1884310700EDB183 /* MQTTInspector 1.3.xcdatamodel */,
 				84C308F1183A2F6B0031C606 /* MQTTInspector 2.xcdatamodel */,
 				84BB7121183A3EE7005AF544 /* MQTTInspector 3.xcdatamodel */,
 				84BB7125183A82FC005AF544 /* MQTTInspector 4.xcdatamodel */,
 				8492C96D182E63D300A40D8B /* MQTTInspector.xcdatamodel */,
 			);
-			currentVersion = 8423B4B6187C5B8D006B08AC /* MQTTInspector 1.2a.xcdatamodel */;
+			currentVersion = 845DBE6F1884310700EDB183 /* MQTTInspector 1.3.xcdatamodel */;
 			path = MQTTInspector.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

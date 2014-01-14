@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="H1p-Uh-vWS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="H1p-Uh-vWS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
@@ -950,6 +950,31 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="icd-x3-w94">
+                                        <rect key="frame" x="0.0" y="771" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="icd-x3-w94" id="oto-Mg-fri">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Protocol Level" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Df8-4i-Paa">
+                                                    <rect key="frame" x="20" y="11" width="110" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="protocollevel" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7ef-gW-8QL">
+                                                    <rect key="frame" x="138" y="7" width="162" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="numberPad"/>
+                                                    <connections>
+                                                        <action selector="protocolLevelChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="RvE-Gd-1jm"/>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -958,7 +983,13 @@
                             <outlet property="delegate" destination="bJC-yq-4xu" id="UvX-Zt-qa5"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Session" id="nGR-3e-Yfu"/>
+                    <navigationItem key="navigationItem" title="Session" id="nGR-3e-Yfu">
+                        <barButtonItem key="rightBarButtonItem" systemItem="compose" id="TpU-nX-MY8">
+                            <connections>
+                                <action selector="send:" destination="bJC-yq-4xu" id="jSd-b2-scm"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="authSwitch" destination="k4T-hX-Mec" id="5hE-YG-Baq"/>
                         <outlet property="autoConnectSwitch" destination="F0j-8Y-75b" id="cxD-Ur-gfh"/>
@@ -970,6 +1001,7 @@
                         <outlet property="nameText" destination="GMd-v3-FfD" id="ShS-jJ-jnH"/>
                         <outlet property="passwdText" destination="Amh-Yz-dxp" id="6sf-0g-IY3"/>
                         <outlet property="portText" destination="yD8-LZ-cwh" id="RNt-QM-o1B"/>
+                        <outlet property="protocolLevelText" destination="7ef-gW-8QL" id="YGQ-wm-SZ9"/>
                         <outlet property="tlsSwitch" destination="gio-7J-cc9" id="U2N-z1-mXI"/>
                         <outlet property="userText" destination="02e-dA-gQg" id="AnF-hA-SZ4"/>
                     </connections>

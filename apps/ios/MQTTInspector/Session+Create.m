@@ -22,7 +22,8 @@
                    keepalive:(int)keepalive
                  autoconnect:(BOOL)autoconnect
                       dnssrv:(BOOL)dnssrv
-                      dnsdomain:(NSString *)dnsdomain
+                   dnsdomain:(NSString *)dnsdomain
+               protocolLevel:(UInt8)protocolLevel
       inManagedObjectContext:(NSManagedObjectContext *)context;
 {
     Session *session = [Session existSessionWithName:name inManagedObjectContext:context];
@@ -48,6 +49,7 @@
         session.autoconnect = @(autoconnect);
         session.dnssrv = @(dnssrv);
         session.dnsdomain = dnsdomain;
+        session.protocolLevel = @(protocolLevel);
         session.state = @(-1);
     }
     
