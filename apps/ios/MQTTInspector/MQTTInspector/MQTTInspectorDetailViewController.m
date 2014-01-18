@@ -273,8 +273,8 @@
         self.title = [NSString stringWithFormat:@"%@ - %@", self.session.name, [self url]];
 
         self.mqttSession = [[MQTTSession alloc] initWithClientId:[self effectiveClientId]
-                                                        userName:self.session.user
-                                                        password:self.session.passwd
+                                                        userName:[self.session.auth boolValue] ? self.session.user : nil
+                                                        password:[self.session.auth boolValue] ? self.session.passwd : nil
                                                        keepAlive:[self.session.keepalive intValue]
                                                     cleanSession:[self.session.cleansession boolValue]
                                                             will:NO
