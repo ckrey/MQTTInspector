@@ -24,6 +24,10 @@
                       dnssrv:(BOOL)dnssrv
                    dnsdomain:(NSString *)dnsdomain
                protocolLevel:(UInt8)protocolLevel
+             attributefilter:(NSString *)attributefilter
+                 topicfilter:(NSString *)topicfilter
+                  datafilter:(NSString *)datafilter
+               includefilter:(BOOL)includefilter
       inManagedObjectContext:(NSManagedObjectContext *)context;
 {
     Session *session = [Session existSessionWithName:name inManagedObjectContext:context];
@@ -50,6 +54,11 @@
         session.dnssrv = @(dnssrv);
         session.dnsdomain = dnsdomain;
         session.protocolLevel = @(protocolLevel);
+        session.attributefilter = attributefilter;
+        session.topicfilter = topicfilter;
+        session.datafilter = datafilter;
+        session.includefilter = @(includefilter);
+
         session.state = @(-1);
     }
     

@@ -250,6 +250,10 @@
                                                 dnssrv:NO
                                              dnsdomain:@""
                                          protocolLevel:3
+                                       attributefilter:@""
+                                           topicfilter:@""
+                                            datafilter:@""
+                                         includefilter:YES
                                 inManagedObjectContext:_managedObjectContext];
                 }
                 

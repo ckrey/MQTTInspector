@@ -2,7 +2,7 @@
 //  Session.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 13.01.14.
+//  Created by Christoph Krey on 27.01.14.
 //  Copyright (c) 2014 Christoph Krey. All rights reserved.
 //
 
@@ -16,10 +16,12 @@
 
 @implementation Session
 
+@dynamic attributefilter;
 @dynamic auth;
 @dynamic autoconnect;
 @dynamic cleansession;
 @dynamic clientid;
+@dynamic datafilter;
 @dynamic dnsdomain;
 @dynamic dnssrv;
 @dynamic host;
@@ -27,10 +29,12 @@
 @dynamic name;
 @dynamic passwd;
 @dynamic port;
+@dynamic protocolLevel;
 @dynamic state;
 @dynamic tls;
+@dynamic topicfilter;
 @dynamic user;
-@dynamic protocolLevel;
+@dynamic includefilter;
 @dynamic hasCommands;
 @dynamic hasMesssages;
 @dynamic hasPubs;

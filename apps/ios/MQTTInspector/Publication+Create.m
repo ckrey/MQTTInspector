@@ -30,7 +30,7 @@
         publication.data = data;
         publication.qos = @(qos);
         publication.retained = @(retained);
-        publication.position = @(-1);
+        publication.position = @([Publication newPosition:session]);
         publication.belongsTo = session;
         publication.state = @(0);
     }
@@ -57,6 +57,11 @@
         if ([matches count]) {
             publication = [matches lastObject];
             publication.state = @(0);
+            for (Publication *pub in session.hasPubs) {
+                if (!pub.position) {
+                    pub.position = @([Publication newPosition:session]);
+                }
+            }
         }
     }
     
@@ -64,5 +69,19 @@
     
     
 }
+
++ (NSUInteger)newPosition:(Session *)session
+{
+    NSUInteger position = 0;
+    
+    for (Publication *pub in session.hasPubs) {
+        if ([pub.position unsignedIntegerValue] >= position) {
+            position = [pub.position unsignedIntegerValue] + 1;
+        }
+    }
+    return position;
+}
+
+
 
 @end

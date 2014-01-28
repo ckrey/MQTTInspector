@@ -33,7 +33,7 @@
             subscription.qos = @(qos);
             
             subscription.color = @([Subscription uniqueHue:session]);
-            subscription.position = @(-1);
+            subscription.position = @([Subscription newPosition:session]);
             subscription.belongsTo = session;
         } else {
             subscription = [matches lastObject];
@@ -64,6 +64,11 @@
         if ([matches count]) {
             subscription = [matches lastObject];
             subscription.state = @(0);
+            for (Subscription *sub in session.hasSubs) {
+                if (!sub.position) {
+                    sub.position = @([Subscription newPosition:session]);
+                }
+            }
         }
     }
     
@@ -89,6 +94,18 @@
             }
         }
     }
+}
+
++ (NSUInteger)newPosition:(Session *)session
+{
+    NSUInteger position = 0;
+    
+    for (Subscription *sub in session.hasSubs) {
+        if ([sub.position unsignedIntegerValue] >= position) {
+            position = [sub.position unsignedIntegerValue] + 1;
+        }
+    }
+    return position;
 }
 
 - (UIColor *)getColor

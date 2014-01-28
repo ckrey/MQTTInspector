@@ -23,6 +23,7 @@
 #import "MQTTInspectorAppDelegate.h"
 
 @interface MQTTInspectorDetailViewController ()
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *versionButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *disconnectButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *connectButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *clearButton;
@@ -34,6 +35,7 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *level;
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 @property (weak, nonatomic) IBOutlet UISwitch *runningSwitch;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *filterButton;
 
 @property (strong, nonatomic) MQTTInspectorLogsTableViewController *logsTVC;
 @property (strong, nonatomic) MQTTInspectorTopicsTableViewController *topicsTVC;
@@ -47,6 +49,10 @@
 @property (strong, nonatomic) NSManagedObjectContext *queueManagedObjectContext;
 @property (nonatomic) float queueIn;
 @property (nonatomic) float queueOut;
+
+@property (nonatomic) CGRect mrect;
+@property (nonatomic) CGRect srect;
+@property (nonatomic) CGRect prect;
 
 @end
 
@@ -81,6 +87,7 @@
 {
     [super viewWillAppear:animated];
     [self viewChanged:nil];
+    self.versionButton.title =  [NSBundle mainBundle].infoDictionary[@"CFBundleVersion"];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -88,7 +95,10 @@
     [super viewDidAppear:animated];
     
     /* start with organizer if no session selected */
-    if (!self.session) {
+    if (self.session) {
+        self.clearButton.enabled = TRUE;
+        self.filterButton.enabled = TRUE;
+    } else {
         [self.masterPopoverController presentPopoverFromBarButtonItem:self.navigationController.navigationItem.backBarButtonItem permittedArrowDirections:(UIPopoverArrowDirectionAny) animated:TRUE];
     }
 }
@@ -111,8 +121,8 @@
             }
         }
     }
-
-
+    
+    
     NSIndexPath *indexPath = nil;
     
     if ([sender isKindOfClass:[UITableViewCell class]]) {
@@ -149,8 +159,8 @@
                                                           dateStyle:NSDateFormatterShortStyle
                                                           timeStyle:NSDateFormatterMediumStyle];
             }
-
-
+            
+            
             if ([segue.destinationViewController respondsToSelector:@selector(setTopic:)]) {
                 [segue.destinationViewController performSelector:@selector(setTopic:)
                                                       withObject:theTopic];
@@ -181,9 +191,9 @@
     string = [string stringByReplacingOccurrencesOfString:@"%c" withString:clientId];
     
     [self.mqttSession publishData:[string dataUsingEncoding:NSUTF8StringEncoding]
-                                 onTopic:pub.topic
-                                  retain:[pub.retained boolValue]
-                                     qos:[pub.qos intValue]];
+                          onTopic:pub.topic
+                           retain:[pub.retained boolValue]
+                              qos:[pub.qos intValue]];
 }
 
 
@@ -198,34 +208,39 @@
     return clientId;
 }
 
-- (IBAction)rotate:(UIRotationGestureRecognizer *)sender {
+- (IBAction)pan:(UIPanGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        [sender setTranslation:CGPointMake(self.subs.frame.size.width, self.subs.frame.size.height) inView:sender.view];
+    }
+    
     if (sender.state == UIGestureRecognizerStateChanged) {
+        CGPoint point = [sender translationInView:sender.view];
 #ifdef DEBUG
-        NSLog(@"Rotate: %f", sender.rotation);
+        NSLog(@"Pan: x=%f y=%f", point.x, point.y);
 #endif
         CGRect mrect = self.messages.frame;
         CGRect srect = self.subs.frame;
         CGRect prect = self.pubs.frame;
-        
-        double dx;
-        if (sender.rotation < 0.0) {
-            dx = -10;
-        } else {
-            dx = 10;
-        }
-        
-        mrect.origin.x += dx;
-        mrect.size.width -= dx;
-        srect.size.width += dx;
-        prect.size.width += dx;
-        
-        if (mrect.size.width > 20 && srect.size.width > 20) {
+
+        if (point.x > 8 && point.x < mrect.origin.x + mrect.size.width - 8 &&
+            point.y > 8 && point.y < mrect.size.height - 8) {
+            
+            mrect.origin.x = point.x + 8;
+            mrect.size.width = sender.view.frame.size.width - point.x - 8;
+            
+            srect.size.width = point.x;
+            srect.size.height = point.y;
+            
+            prect.origin.y = point.y + 8 + srect.origin.y;
+            prect.size.width = point.x;
+            prect.size.height = mrect.size.height - point.y - 8;
+            
             self.messages.frame = mrect;
             self.subs.frame = srect;
             self.pubs.frame = prect;
+        } else {
         }
     }
-
 }
 - (IBAction)editSubs:(UILongPressGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateEnded) {
@@ -238,31 +253,6 @@
     }
 }
 
-- (IBAction)pinch:(UIPinchGestureRecognizer *)sender {
-    if (sender.state == UIGestureRecognizerStateChanged) {
-#ifdef DEBUG
-        NSLog(@"Pinch: %f", sender.scale);
-#endif
-        CGRect srect = self.subs.frame;
-        CGRect prect = self.pubs.frame;
-        double dy;
-        if (sender.scale > 1.0) {
-            dy = 10;
-        } else {
-            dy = -10;
-        }
-        
-        srect.size.height += dy;
-        prect.origin.y += dy;
-        prect.size.height -= dy;
-        
-        if (srect.size.height > 20 && prect.size.height > 20) {
-            self.subs.frame = srect;
-            self.pubs.frame = prect;
-        }
-    }
-}
-
 - (IBAction)runningChanged:(UISwitch *)sender {
     //
 }
@@ -271,7 +261,7 @@
     if (self.session) {
         
         self.title = [NSString stringWithFormat:@"%@ - %@", self.session.name, [self url]];
-
+        
         self.mqttSession = [[MQTTSession alloc] initWithClientId:[self effectiveClientId]
                                                         userName:[self.session.auth boolValue] ? self.session.user : nil
                                                         password:[self.session.auth boolValue] ? self.session.passwd : nil
@@ -289,7 +279,7 @@
         
         if ([self.session.cleansession boolValue]) {
             for (Subscription *sub in self.session.hasSubs) {
-                 sub.state = @(0);
+                sub.state = @(0);
             }
         }
         
@@ -361,8 +351,6 @@
         }
         _session = session;
         
-        self.level.enabled = TRUE;
-
         self.subsTVC = nil;
         UITableViewController *stvc = [[UITableViewController alloc] init];
         stvc.tableView = self.subs;
@@ -372,16 +360,16 @@
         UITableViewController *ptvc = [[UITableViewController alloc] init];
         ptvc.tableView = self.pubs;
         [ptvc.tableView reloadData];
-
+        
         [self viewChanged:nil];
+        self.clearButton.enabled = TRUE;
+        self.filterButton.enabled = TRUE;
         
         if ([session.autoconnect boolValue]) {
             [self connect:nil];
-            self.clearButton.enabled = TRUE;
             self.disconnectButton.enabled = TRUE;
             self.connectButton.enabled = FALSE;
         } else {
-            self.clearButton.enabled = FALSE;
             self.disconnectButton.enabled = FALSE;
             self.connectButton.enabled = TRUE;
         }
@@ -390,7 +378,7 @@
     if (self.masterPopoverController != nil) {
         [self.masterPopoverController dismissPopoverAnimated:YES];
     }
-        
+    
 }
 
 #pragma mark - MQTTSessionDelegate
@@ -424,7 +412,7 @@
         UITableViewController *stvc = [[UITableViewController alloc] init];
         stvc.tableView = self.subs;
         [stvc.tableView reloadData];
-
+        
         self.pubsTVC = nil;
         UITableViewController *ptvc = [[UITableViewController alloc] init];
         ptvc.tableView = self.pubs;
@@ -439,7 +427,7 @@
         MQTTInspectorAppDelegate *delegate = [UIApplication sharedApplication].delegate;
         [delegate connectionClosed];
     }
-
+    
     if (error) {
         if ((self.lastError.domain == error.domain) && (self.lastError.code == error.code)) {
             self.errorCount++;
@@ -528,60 +516,123 @@
     NSString *dnsdomain = self.session.dnsdomain;
     BOOL dnssrv = [self.session.dnssrv boolValue];
     UInt8 protocolLevel = [self.session.protocolLevel intValue];
-
-    [self startQueue];
-    [self.queueManagedObjectContext performBlock:^{
+    NSString *attributefilter = self.session.attributefilter;
+    NSString *datafilter = self.session.datafilter;
+    NSString *topicfilter = self.session.topicfilter;
+    BOOL includefilter = [self.session.includefilter boolValue];
+    
+    BOOL filter = TRUE;
+    NSError *error;
+    
+    NSString *attributes = [NSString stringWithFormat:@"q%d r%d i%u", qos, retained, mid];
+    NSRegularExpression *attributeRegex =
+    [NSRegularExpression regularExpressionWithPattern:attributefilter ? attributefilter : @"" options:0 error:&error];
+    if (attributeRegex) {
+        NSUInteger attributeMatches = [attributeRegex numberOfMatchesInString:attributes
+                                                             options:0
+                                                               range:NSMakeRange(0, [attributes length])];
+        if ((attributeMatches == 0) == includefilter) {
 #ifdef DEBUG
-        NSLog(@"newLog");
+            NSLog(@"filter regexp %@ does not match attributes %@ %@", attributefilter, attributes, @(includefilter));
 #endif
-        Session *mySession = [Session sessionWithName:name
-                                                 host:host
-                                                 port:port
-                                                  tls:tls
-                                                 auth:auth
-                                                 user:user
-                                               passwd:passwd
-                                             clientid:clientid
-                                         cleansession:cleansession
-                                            keepalive:keepalive
-                                          autoconnect:autoconnect
-                                               dnssrv:dnssrv
-                                            dnsdomain:dnsdomain
-                                        protocolLevel:protocolLevel
-                               inManagedObjectContext:self.queueManagedObjectContext];
-
-        [Message messageAt:timestamp
-                     topic:topic
-                      data:data
-                       qos:qos
-                       retained:retained
-                       mid:mid
-                   session:mySession
-    inManagedObjectContext:self.queueManagedObjectContext];
-        
-        [self limit:[Message allMessagesOfSession:mySession
+            filter = FALSE;
+        }
+    }
+    
+    NSString *dataString = [MQTTInspectorDataViewController dataToString:data];
+    NSRegularExpression *dataRegex =
+    [NSRegularExpression regularExpressionWithPattern:datafilter ? datafilter : @"" options:0 error:&error];
+    if (dataRegex){
+        NSUInteger dataMatches = [dataRegex numberOfMatchesInString:dataString
+                                                            options:0
+                                                              range:NSMakeRange(0, [dataString length])];
+        if ((dataMatches == 0) == includefilter) {
+#ifdef DEBUG
+            NSLog(@"filter regexp %@ does not match data %@ %@", datafilter, dataString, @(includefilter));
+#endif
+            filter = FALSE;
+        }
+    }
+    
+    NSRegularExpression *topicRegex =
+    [NSRegularExpression regularExpressionWithPattern:topicfilter ? topicfilter : @"" options:0 error:&error];
+    if (topicRegex) {
+        NSUInteger topicMatches = [topicRegex numberOfMatchesInString:topic
+                                                              options:0
+                                                                range:NSMakeRange(0, [topic length])];
+        if ((topicMatches == 0) == includefilter) {
+#ifdef DEBUG
+            NSLog(@"filter regexp %@ does not match topic %@ %@", topicfilter, topic, @(includefilter));
+#endif
+            filter = FALSE;
+        }
+    }
+    
+    if (!attributeRegex || !dataRegex || !topicRegex) {
+        self.filterButton.tintColor = [UIColor blueColor];
+    } else {
+        self.filterButton.tintColor = filter ? [UIColor greenColor] : [UIColor redColor];
+    }
+    
+    if (filter) {
+        [self startQueue];
+        [self.queueManagedObjectContext performBlock:^{
+            Session *mySession = [Session sessionWithName:name
+                                                     host:host
+                                                     port:port
+                                                      tls:tls
+                                                     auth:auth
+                                                     user:user
+                                                   passwd:passwd
+                                                 clientid:clientid
+                                             cleansession:cleansession
+                                                keepalive:keepalive
+                                              autoconnect:autoconnect
+                                                   dnssrv:dnssrv
+                                                dnsdomain:dnsdomain
+                                            protocolLevel:protocolLevel
+                                          attributefilter:attributefilter
+                                              topicfilter:topicfilter
+                                               datafilter:datafilter
+                                            includefilter:includefilter
+                                   inManagedObjectContext:self.queueManagedObjectContext];
+            
+#ifdef DEBUG
+            NSLog(@"newLog");
+#endif
+            [Message messageAt:timestamp
+                         topic:topic
+                          data:data
+                           qos:qos
+                      retained:retained
+                           mid:mid
+                       session:mySession
+        inManagedObjectContext:self.queueManagedObjectContext];
+            
+            [self limit:[Message allMessagesOfSession:mySession
+                               inManagedObjectContext:self.queueManagedObjectContext]
+                    max:MAX_LOG];
+            
+#ifdef DEBUG
+            NSLog(@"newTopic");
+#endif
+            [Topic topicNamed:topic
+                    timestamp:timestamp
+                         data:data
+                          qos:qos
+                     retained:retained
+                          mid:mid
+                      session:mySession
+       inManagedObjectContext:self.queueManagedObjectContext];
+            
+            [self limit:[Topic allTopicsOfSession:mySession
                            inManagedObjectContext:self.queueManagedObjectContext]
-                max:MAX_LOG];
-        
-#ifdef DEBUG
-        NSLog(@"newTopic");
-#endif
-        [Topic topicNamed:topic
-                timestamp:timestamp
-                     data:data
-                      qos:qos
-                 retained:retained
-                      mid:mid
-                  session:mySession
-   inManagedObjectContext:self.queueManagedObjectContext];
-        
-        [self limit:[Topic allTopicsOfSession:mySession
-                       inManagedObjectContext:self.queueManagedObjectContext]
-                max:MAX_TOPIC];
-
-        [self.queueManagedObjectContext save:NULL];
-        [self finishQueue];
-    }];
+                    max:MAX_TOPIC];
+            
+            [self.queueManagedObjectContext save:NULL];
+            [self finishQueue];
+        }];
+    }
 }
 
 - (void)received:(int)type qos:(int)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
@@ -601,7 +652,11 @@
     NSString *dnsdomain = self.session.dnsdomain;
     BOOL dnssrv = [self.session.dnssrv boolValue];
     UInt8 protocolLevel = [self.session.protocolLevel intValue];
-
+    NSString *attributefilter = self.session.attributefilter;
+    NSString *datafilter = self.session.datafilter;
+    NSString *topicfilter = self.session.topicfilter;
+    BOOL includefilter = [self.session.includefilter boolValue];
+    
     [self startQueue];
     [self.queueManagedObjectContext performBlock:^{
 #ifdef DEBUG
@@ -621,6 +676,10 @@
                                                dnssrv:dnssrv
                                             dnsdomain:dnsdomain
                                         protocolLevel:protocolLevel
+                                      attributefilter:attributefilter
+                                          topicfilter:topicfilter
+                                           datafilter:datafilter
+                                        includefilter:includefilter
                                inManagedObjectContext:self.queueManagedObjectContext];
         
         [Command commandAt:timestamp
@@ -660,15 +719,19 @@
     int keepalive = [self.session.keepalive intValue];
     BOOL autoconnect = [self.session.autoconnect boolValue];
     UInt8 protocolLevel = [self.session.protocolLevel intValue];
-
+    NSString *attributefilter = self.session.attributefilter;
+    NSString *datafilter = self.session.datafilter;
+    NSString *topicfilter = self.session.topicfilter;
+    BOOL includefilter = [self.session.includefilter boolValue];
+    
     [self startQueue];
     [self.queueManagedObjectContext performBlock:^{
 #ifdef DEBUG
         NSLog(@"newCommand out");
 #endif
-
+        
         Session *mySession = [Session sessionWithName:name
-                                                  host:host
+                                                 host:host
                                                  port:port
                                                   tls:tls
                                                  auth:auth
@@ -679,10 +742,14 @@
                                             keepalive:keepalive
                                           autoconnect:autoconnect
                                                dnssrv:dnssrv
-                                               dnsdomain:dnsdomain
+                                            dnsdomain:dnsdomain
                                         protocolLevel:protocolLevel
+                                      attributefilter:attributefilter
+                                          topicfilter:topicfilter
+                                           datafilter:datafilter
+                                        includefilter:includefilter
                                inManagedObjectContext:self.queueManagedObjectContext];
-
+        
         [Command commandAt:timestamp
                    inbound:NO
                       type:type
@@ -746,10 +813,10 @@
 + (void)alert:(NSString *)message
 {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSBundle mainBundle].infoDictionary[@"CFBundleName"]
-                                                message:message
-                                               delegate:nil
-                                      cancelButtonTitle:@"OK"
-                                      otherButtonTitles:nil];
+                                                        message:message
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
     [alertView show];
 }
 
@@ -760,7 +827,7 @@
             ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) ? @"" :
             [NSString stringWithFormat:@"%@://", [self.session.tls boolValue] ? @"mqtts" : @"mqtt"],
             [self.session.auth boolValue] ? [NSString stringWithFormat:@"%@@",
-                                                    self.session.user] : @"",
+                                             self.session.user] : @"",
             self.session.host,
             self.session.port];
     

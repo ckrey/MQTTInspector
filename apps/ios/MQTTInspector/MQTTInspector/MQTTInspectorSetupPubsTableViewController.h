@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "Session+Create.h"
+#import "MQTTInspectorCoreDataTableViewController.h"
 
-@interface MQTTInspectorSetupPubsTableViewController : UITableViewController <NSFetchedResultsControllerDelegate>
+@interface MQTTInspectorSetupPubsTableViewController : MQTTInspectorCoreDataTableViewController
 @property (strong, nonatomic) Session *session;
 @end

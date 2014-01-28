@@ -25,6 +25,10 @@
                       dnssrv:(BOOL)dnssrv
                    dnsdomain:(NSString *)dnsdomain
                protocolLevel:(UInt8)protocolLevel
+             attributefilter:(NSString *)attributefilter
+                 topicfilter:(NSString *)topicfilter
+                  datafilter:(NSString *)datafilter
+               includefilter:(BOOL)includefilter
       inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)allSessions:(NSManagedObjectContext *)context;
 
