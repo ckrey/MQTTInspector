@@ -94,6 +94,7 @@
 {
     [super viewDidAppear:animated];
     
+    self.level.enabled = TRUE;
     /* start with organizer if no session selected */
     if (self.session) {
         self.clearButton.enabled = TRUE;
@@ -262,6 +263,9 @@
         
         self.title = [NSString stringWithFormat:@"%@ - %@", self.session.name, [self url]];
         
+        if (self.mqttSession) {
+            [self.mqttSession close];
+        }
         self.mqttSession = [[MQTTSession alloc] initWithClientId:[self effectiveClientId]
                                                         userName:[self.session.auth boolValue] ? self.session.user : nil
                                                         password:[self.session.auth boolValue] ? self.session.passwd : nil
@@ -286,6 +290,7 @@
         [self.mqttSession connectToHost:self.session.host port:[self.session.port intValue] usingSSL:[self.session.tls boolValue]];
     }
 }
+
 - (IBAction)disconnect:(UIBarButtonItem *)sender {
     if (self.session) {
         self.title = self.session.name;
@@ -341,7 +346,8 @@
     self.managedObjectContext = session.managedObjectContext;
     
     self.title = session.name;
-    
+    self.level.enabled = TRUE;
+
     if ((_session != session) || ([self.session.state intValue] != MQTTSessionEventConnected)) {
         if (_session) {
             if (self.mqttSession)
@@ -384,16 +390,25 @@
 #pragma mark - MQTTSessionDelegate
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
 {
+#ifdef DEBUG
+    NSArray *events = @[
+                        @"MQTTSessionEventConnected",
+                        @"MQTTSessionEventConnectionRefused",
+                        @"MQTTSessionEventConnectionClosed",
+                        @"MQTTSessionEventConnectionError",
+                        @"MQTTSessionEventProtocolError"
+                        ];
+    
+    NSLog(@"handleEvent: %@ (%d) %@", events[eventCode % [events count]], eventCode, [error description]);
+#endif
+
     if (session != self.mqttSession) {
 #ifdef DEBUG
-        NSLog(@"handle Event: old Session");
+        NSLog(@"handleEvent: old Session");
 #endif
         return;
     }
     
-#ifdef DEBUG
-    NSLog(@"handleEvent: %d %@", eventCode, [error description]);
-#endif
     self.session.state = @(eventCode);
     if ([self.session.state intValue] == MQTTSessionEventConnected) {
         self.subsTVC = [[MQTTInspectorSubsTableViewController alloc] init];

@@ -297,6 +297,18 @@
                 string = dictionary[@"protocollevel"];
                 if (string) session.protocolLevel = @([string integerValue]);
                 
+                string = dictionary[@"includefilter"];
+                if (string) session.includefilter = @([string boolValue]);
+                
+                string = dictionary[@"attributefilter"];
+                if (string) session.attributefilter = string;
+                
+                string = dictionary[@"datafilter"];
+                if (string) session.datafilter = string;
+                
+                string = dictionary[@"topicfilter"];
+                if (string) session.topicfilter = string;
+
                 NSArray *subs = dictionary[@"subs"];
                 if (subs) for (NSDictionary *subDict in subs) {
                     NSString *topic = subDict[@"topic"];

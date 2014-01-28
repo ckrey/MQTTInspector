@@ -176,6 +176,10 @@
                            @"dnsdomain": self.session.dnsdomain ? self.session.dnsdomain : @"",
                            @"autoconnect": [NSString stringWithFormat:@"%@", self.session.autoconnect ? self.session.autoconnect : @(0)],
                            @"protocollevel": [NSString stringWithFormat:@"%@", self.session.protocolLevel ? self.session.protocolLevel : @(0)],
+                           @"includefilter": [NSString stringWithFormat:@"%@", self.session.includefilter ? self.session.includefilter : @(1)],
+                           @"attributefilter": self.session.attributefilter ? self.session.attributefilter : @"",
+                           @"datafilter": self.session.datafilter ? self.session.datafilter : @"",
+                           @"topicfilter": self.session.topicfilter ? self.session.topicfilter : @"",
                            @"subs": subs,
                            @"pubs": pubs
                            };
