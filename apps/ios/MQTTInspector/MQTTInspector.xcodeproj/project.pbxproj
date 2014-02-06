@@ -26,7 +26,6 @@
 		84684E8D1832193B00AE13B5 /* Publication+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84684E8C1832193B00AE13B5 /* Publication+Create.m */; };
 		84684E9118321D1200AE13B5 /* MQTTInspectorPubsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84684E9018321D1200AE13B5 /* MQTTInspectorPubsTableViewController.m */; };
 		84684E9418321D2300AE13B5 /* MQTTInspectorSubsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84684E9318321D2300AE13B5 /* MQTTInspectorSubsTableViewController.m */; };
-		847355D718955B060028FE7A /* MQTTClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 845DBE7B1885764C00EDB183 /* MQTTClient.framework */; };
 		847355DA189692FC0028FE7A /* MQTTInspectorFilterTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 847355D9189692FC0028FE7A /* MQTTInspectorFilterTVC.m */; };
 		847355E21896EA1A0028FE7A /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 847355E11896EA1A0028FE7A /* Session.m */; };
 		847355E51897032E0028FE7A /* MQTTInspectorCoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 847355E41897032E0028FE7A /* MQTTInspectorCoreDataTableViewController.m */; };
@@ -57,6 +56,7 @@
 		84B1C73C183B554D0062D1EE /* MQTTInspectorDNSSRVTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B1C73B183B554D0062D1EE /* MQTTInspectorDNSSRVTableViewController.m */; };
 		84BB7155183A8963005AF544 /* Command.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BB7154183A8963005AF544 /* Command.m */; };
 		84BB715B183A8964005AF544 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BB715A183A8964005AF544 /* Message.m */; };
+		84DEECB818A38956001F6527 /* MQTTClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 845DBE7B1885764C00EDB183 /* MQTTClient.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -172,7 +172,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				847355D718955B060028FE7A /* MQTTClient.framework in Frameworks */,
+				84DEECB818A38956001F6527 /* MQTTClient.framework in Frameworks */,
 				84147D1018365C740018E601 /* libresolv.dylib in Frameworks */,
 				8492C955182E63D300A40D8B /* CoreGraphics.framework in Frameworks */,
 				8492C959182E63D300A40D8B /* CoreData.framework in Frameworks */,
@@ -615,6 +615,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/ckrey/Developer/MQTT-Client-Framework/MQTTClient/dist",
+					"/Users/ckrey/MQTT-Client-Framework/MQTTClient/dist",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MQTTInspector/MQTTInspector-Prefix.pch";
@@ -632,6 +633,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/ckrey/Developer/MQTT-Client-Framework/MQTTClient/dist",
+					"/Users/ckrey/MQTT-Client-Framework/MQTTClient/dist",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MQTTInspector/MQTTInspector-Prefix.pch";
