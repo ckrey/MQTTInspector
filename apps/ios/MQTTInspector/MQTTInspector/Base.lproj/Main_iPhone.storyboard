@@ -101,7 +101,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="FMi-c5-lZd"/>
                                     <barButtonItem style="plain" id="yEE-Fv-V3N">
                                         <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="7mz-JB-5gN">
-                                            <rect key="frame" x="83" y="7" width="62" height="30"/>
+                                            <rect key="frame" x="50" y="7" width="62" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <segments>
                                                 <segment title="T"/>
@@ -117,6 +117,14 @@
                                         <connections>
                                             <segue destination="Fzg-75-a34" kind="push" identifier="setSession:" id="0nn-EB-64L"/>
                                         </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" id="GrR-Wt-khj">
+                                        <textField key="customView" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="1024" textAlignment="center" minimumFontSize="17" id="dMN-HD-BBg">
+                                            <rect key="frame" x="150" y="7" width="55" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                        </textField>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="nHk-C2-OAs"/>
                                     <barButtonItem systemItem="action" id="yRK-u7-QqS">
@@ -278,6 +286,7 @@
                     <connections>
                         <outlet property="clearButton" destination="qDy-YJ-80F" id="xIq-gZ-GSx"/>
                         <outlet property="connectButton" destination="LMr-kV-o9d" id="DEG-C6-LY6"/>
+                        <outlet property="countText" destination="dMN-HD-BBg" id="m5k-pg-DSO"/>
                         <outlet property="disconnectButton" destination="QvP-wG-4el" id="hSt-hW-ScY"/>
                         <outlet property="filterButton" destination="E3j-Ig-W54" id="FFf-bi-sE4"/>
                         <outlet property="level" destination="7mz-JB-5gN" id="sSO-17-My4"/>

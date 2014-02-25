@@ -42,6 +42,7 @@
 @property (strong, nonatomic) MQTTInspectorCommandsTableViewController *commandsTVC;
 @property (strong, nonatomic) MQTTInspectorSubsTableViewController *subsTVC;
 @property (strong, nonatomic) MQTTInspectorPubsTableViewController *pubsTVC;
+@property (weak, nonatomic) IBOutlet UITextField *countText;
 
 @property (strong, nonatomic) UIAlertView *alertView;
 @property (strong, nonatomic) NSError *lastError;
@@ -102,6 +103,7 @@
     } else {
         [self.masterPopoverController presentPopoverFromBarButtonItem:self.navigationController.navigationItem.backBarButtonItem permittedArrowDirections:(UIPopoverArrowDirectionAny) animated:TRUE];
     }
+    [self showCount];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -325,7 +327,9 @@
                 break;
         }
     }
+    [self showCount];
 }
+
 - (IBAction)clear:(UIBarButtonItem *)sender {
     if (self.session) {
         for (Message *message in self.session.hasMesssages) {
@@ -337,7 +341,9 @@
         for (Command *command in self.session.hasCommands) {
             [self.managedObjectContext deleteObject:command];
         }
+        [self.managedObjectContext save:NULL];
     }
+    [self showCount];
 }
 
 #pragma mark - Managing the detail item
@@ -384,7 +390,7 @@
     if (self.masterPopoverController != nil) {
         [self.masterPopoverController dismissPopoverAnimated:YES];
     }
-    
+    [self showCount];
 }
 
 #pragma mark - MQTTSessionDelegate
@@ -492,6 +498,30 @@
         self.queueOut = 1;
     }
     [self.progress setProgress:self.queueOut/self.queueIn animated:YES];
+    [self showCount];
+}
+
+- (void)showCount
+{
+    if (self.session) {
+        switch (self.level.selectedSegmentIndex) {
+            case 2:
+                self.countText.text = [NSString stringWithFormat:@"%lu",
+                                       (unsigned long)[self.session.hasCommands count]];
+                break;
+            case 1:
+                self.countText.text = [NSString stringWithFormat:@"%lu",
+                                       (unsigned long)[self.session.hasMesssages count]];
+                break;
+            case 0:
+            default:
+                self.countText.text = [NSString stringWithFormat:@"%lu",
+                                       (unsigned long)[self.session.hasTopics count]];
+                break;
+        }
+    } else {
+        self.countText.text = @"";
+    }
 }
 
 - (void)limit:(NSArray *)array max:(int)max

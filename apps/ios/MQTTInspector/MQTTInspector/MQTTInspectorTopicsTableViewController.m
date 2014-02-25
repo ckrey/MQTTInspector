@@ -41,8 +41,11 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         return [NSString stringWithFormat:@"Topics"];
+        //id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
+        //return [NSString stringWithFormat:@"Topics (%lu)", (unsigned long)[sectionInfo numberOfObjects]];
     } else {
         return nil;
     }

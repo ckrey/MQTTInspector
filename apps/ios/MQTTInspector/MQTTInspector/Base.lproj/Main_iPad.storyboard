@@ -445,7 +445,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="7Sf-rY-oQX"/>
                                     <barButtonItem enabled="NO" style="plain" id="rkX-jl-QCG">
                                         <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="9kF-1J-LVt">
-                                            <rect key="frame" x="222" y="8" width="231" height="29"/>
+                                            <rect key="frame" x="193" y="8" width="231" height="29"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <segments>
                                                 <segment title="Topics"/>
@@ -464,6 +464,14 @@
                                             </segue>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem style="plain" id="EyU-zm-vJH">
+                                        <textField key="customView" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="1024" textAlignment="center" minimumFontSize="17" id="2wu-ft-dpd">
+                                            <rect key="frame" x="462" y="7" width="48" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                        </textField>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="aCG-Ln-ymd"/>
                                     <barButtonItem title="PUB" id="8LF-bv-fPO">
                                         <connections>
@@ -474,24 +482,17 @@
                                     </barButtonItem>
                                     <barButtonItem style="plain" id="UE4-8D-URx">
                                         <switch key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="vEq-dr-K4Z">
-                                            <rect key="frame" x="589" y="7" width="51" height="31"/>
+                                            <rect key="frame" x="585" y="7" width="51" height="31"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <connections>
                                                 <action selector="runningChanged:" destination="JEX-9P-axG" eventType="valueChanged" id="TRp-c1-ryk"/>
                                             </connections>
                                         </switch>
                                     </barButtonItem>
-                                    <barButtonItem enabled="NO" style="plain" id="l5S-9e-SGS">
-                                        <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Hr0-7s-ZsI">
-                                            <rect key="frame" x="650" y="7" width="37" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" title="Clear">
-                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="clear:" destination="JEX-9P-axG" eventType="touchUpInside" id="R8t-5Z-Ahv"/>
-                                            </connections>
-                                        </button>
+                                    <barButtonItem title="Clear" style="plain" id="l5S-9e-SGS">
+                                        <connections>
+                                            <action selector="clear:" destination="JEX-9P-axG" id="m9z-9P-BYk"/>
+                                        </connections>
                                     </barButtonItem>
                                 </items>
                             </toolbar>
@@ -633,6 +634,7 @@
                     <connections>
                         <outlet property="clearButton" destination="l5S-9e-SGS" id="51V-QM-M7q"/>
                         <outlet property="connectButton" destination="ICA-8x-esm" id="nQb-u1-WZ1"/>
+                        <outlet property="countText" destination="2wu-ft-dpd" id="FLe-YV-QMq"/>
                         <outlet property="disconnectButton" destination="rbN-WN-CEY" id="wKv-Ce-0tU"/>
                         <outlet property="filterButton" destination="GWd-Ek-Tou" id="T5M-iC-4j2"/>
                         <outlet property="level" destination="9kF-1J-LVt" id="LwE-ue-GXx"/>
