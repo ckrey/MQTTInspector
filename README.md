@@ -33,6 +33,8 @@ A general MQTT testing app for iOS (iPhone and iPad)
 * View traps
 * automatically repeating PUBs
 
+# Screenshots
+
 ![alt 1](apps/ios/MQTTInspector/dist/App Store/ipad-1.png "1")
 ![alt 2](apps/ios/MQTTInspector/dist/App Store/ipad-2.png "2")
 ![alt 3](apps/ios/MQTTInspector/dist/App Store/ipad-3.png "3")
