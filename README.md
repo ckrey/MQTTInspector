@@ -20,6 +20,15 @@ A general MQTT testing app for iOS (iPhone and iPad)
 * Export (share) edit, and import your complete session settings via email / json
 * Filter incoming messages using regular expressions on topics, data and attributes
 
+# Testimonials
+
+* “@Sine_Wave_Tech: #MQTT going mainstream, hit the #Apple #appstore - great advance for #IoT https://t.co/3oXRJDsXYp”
+* “@voluntas: MQTTInspector 買ってみた。 http://t.co/0Wxbb0OTmG” (http://translate.google.de/#auto/en/買ってみた。
+* “@dobermai: Don’t know what I would have done without the MQTTInspector App by @ChristophKrey today. Mandatory #mqtt app for every iOS device!”
+* “@OwnTracks: Looking for a versatile MQTT debugging app? Check out MQTT Inspector for iOS by @ChristophKrey http://t.co/pTAR928DrW I'm loving it! [JP]”
+* “@jpmens: If you want to see a demo of what MQTT Inspector for iOS will look like, @ChristophKrey has a video here http://t.co/JhiRJL5soy”
+* “@jpmens: MQTT Inspector for iOS with app-side filtering & settings import/export https://t.co/Re2yQPYsUC (info: http://t.co/z26ATPPIX4)”
+
 # Future enhancements
 * View traps
 * automatically repeating PUBs
