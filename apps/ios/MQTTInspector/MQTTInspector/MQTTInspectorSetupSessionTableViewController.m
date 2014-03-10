@@ -29,6 +29,8 @@
 @property (weak, nonatomic) IBOutlet UISwitch *autoConnectSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *protocolLevelText;
 
+@property (strong, nonatomic) UIDocumentInteractionController *dic;
+
 @end
 
 @implementation MQTTInspectorSetupSessionTableViewController
@@ -139,12 +141,8 @@
 - (IBAction)protocolLevelChanged:(UITextField *)sender {
     self.session.protocolLevel = @([sender.text intValue]);
 }
+
 - (IBAction)send:(UIBarButtonItem *)sender {
-    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
-    picker.mailComposeDelegate = self;
-    
-    [picker setSubject:[NSString stringWithFormat:@"Export Session %@", self.session.name]];
-    
     NSMutableArray *subs = [[NSMutableArray alloc] init];
     for (Subscription *sub in self.session.hasSubs) {
         [subs addObject:@{@"topic": [sub.topic description],
@@ -160,7 +158,7 @@
                           @"retained": [pub.retained description]
                           }];
     }
-
+    
     NSDictionary *dict = @{@"_type": @"MQTTInspector-Session",
                            @"name": self.session.name ? self.session.name : @"",
                            @"host": self.session.host ? self.session.host : @"",
@@ -188,27 +186,17 @@
     NSData *myData = [NSJSONSerialization dataWithJSONObject:dict
                                                      options:NSJSONWritingPrettyPrinted
                                                        error:&error];
-                      
-    [picker addAttachmentData:myData mimeType:@"application/json"
-                     fileName:[NSString stringWithFormat:@"Session-%@.mqti", self.session.name]];
     
-    NSString *emailBody = @"see attached file";
-    [picker setMessageBody:emailBody isHTML:NO];
+    NSURL *directoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&error];
+    NSString *fileName = [NSString stringWithFormat:@"Session-%@.mqti", self.session.name];
+    NSURL *fileURL = [directoryURL URLByAppendingPathComponent:fileName];
     
-    [self presentViewController:picker animated:YES completion:^{
-        // done
-    }];
+    [[NSFileManager defaultManager] createFileAtPath:[fileURL path] contents:myData attributes:nil];
+    
+    self.dic = [UIDocumentInteractionController interactionControllerWithURL:fileURL];
+    self.dic.delegate = self;
+    [self.dic presentOptionsMenuFromBarButtonItem:sender animated:YES];
+    
 }
-
-- (void)mailComposeController:(MFMailComposeViewController *)controller
-          didFinishWithResult:(MFMailComposeResult)result
-                        error:(NSError *)error
-{
-    [controller dismissViewControllerAnimated:YES completion:^{
-        // done
-    }];
-}
-
-
 
 @end

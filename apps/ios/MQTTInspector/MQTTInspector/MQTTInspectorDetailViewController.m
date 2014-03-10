@@ -362,26 +362,37 @@
             }
         }
         _session = session;
-
-        self.subsTVC = [[MQTTInspectorSubsTableViewController alloc] init];
-        self.subsTVC.mother = self;
-        self.subsTVC.tableView = self.subs;
-        [self.subsTVC.tableView reloadData];
-
-        self.pubsTVC = [[MQTTInspectorPubsTableViewController alloc] init];
-        self.pubsTVC.mother = self;
-        self.pubsTVC.tableView = self.pubs;
-        [self.pubsTVC.tableView reloadData];
-
+        
+        
         [self viewChanged:nil];
         self.clearButton.enabled = TRUE;
         self.filterButton.enabled = TRUE;
         
         if ([session.autoconnect boolValue]) {
+            self.subsTVC = [[MQTTInspectorSubsTableViewController alloc] init];
+            self.subsTVC.mother = self;
+            self.subsTVC.tableView = self.subs;
+            [self.subsTVC.tableView reloadData];
+            
+            self.pubsTVC = [[MQTTInspectorPubsTableViewController alloc] init];
+            self.pubsTVC.mother = self;
+            self.pubsTVC.tableView = self.pubs;
+            [self.pubsTVC.tableView reloadData];
+            
             [self connect:nil];
             self.disconnectButton.enabled = TRUE;
             self.connectButton.enabled = FALSE;
         } else {
+            self.subsTVC = nil;
+            UITableViewController *stvc = [[UITableViewController alloc] init];
+            stvc.tableView = self.subs;
+            [stvc.tableView reloadData];
+            
+            self.pubsTVC = nil;
+            UITableViewController *ptvc = [[UITableViewController alloc] init];
+            ptvc.tableView = self.pubs;
+            [ptvc.tableView reloadData];
+            
             self.disconnectButton.enabled = FALSE;
             self.connectButton.enabled = TRUE;
         }
