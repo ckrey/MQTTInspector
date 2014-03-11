@@ -188,10 +188,13 @@
                                                        error:&error];
     
     NSURL *directoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&error];
-    NSString *fileName = [NSString stringWithFormat:@"Session-%@.mqti", self.session.name];
+    NSString *fileName = [NSString stringWithFormat:@"session.mqti"];
     NSURL *fileURL = [directoryURL URLByAppendingPathComponent:fileName];
     
-    [[NSFileManager defaultManager] createFileAtPath:[fileURL path] contents:myData attributes:nil];
+
+    [[NSFileManager defaultManager] createFileAtPath:[fileURL path]
+                                            contents:myData
+                                          attributes:nil];
     
     self.dic = [UIDocumentInteractionController interactionControllerWithURL:fileURL];
     self.dic.delegate = self;

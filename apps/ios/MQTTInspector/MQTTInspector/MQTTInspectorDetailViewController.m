@@ -94,16 +94,22 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self enableButtons];
     
-    self.level.enabled = TRUE;
     /* start with organizer if no session selected */
-    if (self.session) {
-        self.clearButton.enabled = TRUE;
-        self.filterButton.enabled = TRUE;
-    } else {
-        [self.masterPopoverController presentPopoverFromBarButtonItem:self.navigationController.navigationItem.backBarButtonItem permittedArrowDirections:(UIPopoverArrowDirectionAny) animated:TRUE];
+    if (!self.session) {
+        [self.masterPopoverController presentPopoverFromBarButtonItem:self.navigationController.navigationItem.backBarButtonItem
+                                             permittedArrowDirections:(UIPopoverArrowDirectionAny) animated:TRUE];
     }
     [self showCount];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    if (self.session) {
+        self.title = self.session.name;
+        [self.mqttSession close];
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -268,6 +274,7 @@
         if (self.mqttSession) {
             [self.mqttSession close];
         }
+
         self.mqttSession = [[MQTTSession alloc] initWithClientId:[self effectiveClientId]
                                                         userName:[self.session.auth boolValue] ? self.session.user : nil
                                                         password:[self.session.auth boolValue] ? self.session.passwd : nil
@@ -352,52 +359,24 @@
     self.managedObjectContext = session.managedObjectContext;
     
     self.title = session.name;
-    self.level.enabled = TRUE;
-
-    if ((_session != session) || ([self.session.state intValue] != MQTTSessionEventConnected)) {
-        if (_session) {
-            if (self.mqttSession)
-            {
-                [self.mqttSession close];
-            }
+    
+    if (_session != session || [self.session.state intValue] != MQTTSessionEventConnected) {
+        if (self.mqttSession)
+        {
+            [self.mqttSession close];
         }
+        session.state = @(-1);
         _session = session;
         
-        
         [self viewChanged:nil];
-        self.clearButton.enabled = TRUE;
-        self.filterButton.enabled = TRUE;
         
         if ([session.autoconnect boolValue]) {
-            self.subsTVC = [[MQTTInspectorSubsTableViewController alloc] init];
-            self.subsTVC.mother = self;
-            self.subsTVC.tableView = self.subs;
-            [self.subsTVC.tableView reloadData];
-            
-            self.pubsTVC = [[MQTTInspectorPubsTableViewController alloc] init];
-            self.pubsTVC.mother = self;
-            self.pubsTVC.tableView = self.pubs;
-            [self.pubsTVC.tableView reloadData];
-            
             [self connect:nil];
-            self.disconnectButton.enabled = TRUE;
-            self.connectButton.enabled = FALSE;
-        } else {
-            self.subsTVC = nil;
-            UITableViewController *stvc = [[UITableViewController alloc] init];
-            stvc.tableView = self.subs;
-            [stvc.tableView reloadData];
-            
-            self.pubsTVC = nil;
-            UITableViewController *ptvc = [[UITableViewController alloc] init];
-            ptvc.tableView = self.pubs;
-            [ptvc.tableView reloadData];
-            
-            self.disconnectButton.enabled = FALSE;
-            self.connectButton.enabled = TRUE;
         }
     }
     
+    [self enableButtons];
+
     if (self.masterPopoverController != nil) {
         [self.masterPopoverController dismissPopoverAnimated:YES];
     }
@@ -435,10 +414,6 @@
         self.pubsTVC = [[MQTTInspectorPubsTableViewController alloc] init];
         self.pubsTVC.mother = self;
         self.pubsTVC.tableView = self.pubs;
-        
-        self.connectButton.enabled = FALSE;
-        self.disconnectButton.enabled = TRUE;
-        self.pubButton.enabled = TRUE;
     } else {
         self.subsTVC = nil;
         UITableViewController *stvc = [[UITableViewController alloc] init];
@@ -449,11 +424,9 @@
         UITableViewController *ptvc = [[UITableViewController alloc] init];
         ptvc.tableView = self.pubs;
         [ptvc.tableView reloadData];
-        
-        self.connectButton.enabled = TRUE;
-        self.disconnectButton.enabled = FALSE;
-        self.pubButton.enabled = FALSE;
     }
+    
+    [self enableButtons];
     
     if ([self.session.state intValue] == MQTTSessionEventConnectionClosed) {
         MQTTInspectorAppDelegate *delegate = [UIApplication sharedApplication].delegate;
@@ -896,6 +869,37 @@
 - (IBAction)longPub:(UILongPressGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateEnded) {
         [self performSegueWithIdentifier:@"enlargePubs" sender:sender];
+    }
+}
+
+- (void)enableButtons
+{
+#ifdef DEBUG
+    NSLog(@"self.session.state: %@", self.session.state);
+#endif
+
+    if (self.session) {
+        self.level.enabled = TRUE;
+        self.clearButton.enabled = TRUE;
+        self.filterButton.enabled = TRUE;
+
+        switch ([self.session.state intValue]) {
+        case MQTTSessionEventConnected:
+            self.connectButton.enabled = FALSE;
+            self.disconnectButton.enabled = TRUE;
+            self.pubButton.enabled = TRUE;
+            break;
+            
+        default:
+            self.connectButton.enabled = TRUE;
+            self.disconnectButton.enabled = FALSE;
+            self.pubButton.enabled = FALSE;
+            break;
+        }
+    } else {
+        self.level.enabled = FALSE;
+        self.clearButton.enabled = FALSE;
+        self.filterButton.enabled = FALSE;
     }
 }
 

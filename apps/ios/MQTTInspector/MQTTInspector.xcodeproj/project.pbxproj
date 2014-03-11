@@ -49,6 +49,7 @@
 		8492C988182E63D400A40D8B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8492C986182E63D400A40D8B /* InfoPlist.strings */; };
 		8492C98A182E63D400A40D8B /* MQTTInspectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8492C989182E63D400A40D8B /* MQTTInspectorTests.m */; };
 		8492C99C182EDF8F00A40D8B /* Session+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 8492C99B182EDF8F00A40D8B /* Session+Create.m */; };
+		849D457F18CE6E4F00201BF3 /* MQTTClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 845DBE7B1885764C00EDB183 /* MQTTClient.framework */; };
 		84A1985C1830EC0B00A77080 /* Message+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1985B1830EC0B00A77080 /* Message+Create.m */; };
 		84A1986818310FC000A77080 /* MQTTInspectorLogsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1986718310FC000A77080 /* MQTTInspectorLogsTableViewController.m */; };
 		84A1987A183114BF00A77080 /* Topic+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A19879183114BF00A77080 /* Topic+Create.m */; };
@@ -56,7 +57,6 @@
 		84B1C73C183B554D0062D1EE /* MQTTInspectorDNSSRVTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B1C73B183B554D0062D1EE /* MQTTInspectorDNSSRVTableViewController.m */; };
 		84BB7155183A8963005AF544 /* Command.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BB7154183A8963005AF544 /* Command.m */; };
 		84BB715B183A8964005AF544 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BB715A183A8964005AF544 /* Message.m */; };
-		84DEECB818A38956001F6527 /* MQTTClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 845DBE7B1885764C00EDB183 /* MQTTClient.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -172,7 +172,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84DEECB818A38956001F6527 /* MQTTClient.framework in Frameworks */,
+				849D457F18CE6E4F00201BF3 /* MQTTClient.framework in Frameworks */,
 				84147D1018365C740018E601 /* libresolv.dylib in Frameworks */,
 				8492C955182E63D300A40D8B /* CoreGraphics.framework in Frameworks */,
 				8492C959182E63D300A40D8B /* CoreData.framework in Frameworks */,
@@ -614,7 +614,6 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/ckrey/Developer/MQTT-Client-Framework/MQTTClient/dist",
 					"/Users/ckrey/MQTT-Client-Framework/MQTTClient/dist",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -632,7 +631,6 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/ckrey/Developer/MQTT-Client-Framework/MQTTClient/dist",
 					"/Users/ckrey/MQTT-Client-Framework/MQTTClient/dist",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

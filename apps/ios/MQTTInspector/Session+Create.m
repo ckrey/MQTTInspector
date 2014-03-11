@@ -86,7 +86,6 @@
     } else {
         if ([matches count]) {
             session = [matches lastObject];
-            session.state = @(-1);
         }
     }
     
