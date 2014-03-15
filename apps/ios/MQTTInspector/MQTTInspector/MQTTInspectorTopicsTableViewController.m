@@ -21,7 +21,8 @@
 {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Topic" inManagedObjectContext:self.mother.managedObjectContext];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Topic"
+                                              inManagedObjectContext:self.mother.session.managedObjectContext];
     [fetchRequest setEntity:entity];
     
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"belongsTo = %@", self.mother.session];
@@ -44,8 +45,6 @@
 
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         return [NSString stringWithFormat:@"Topics"];
-        //id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
-        //return [NSString stringWithFormat:@"Topics (%lu)", (unsigned long)[sectionInfo numberOfObjects]];
     } else {
         return nil;
     }

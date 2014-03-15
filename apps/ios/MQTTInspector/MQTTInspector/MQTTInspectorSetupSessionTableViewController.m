@@ -65,7 +65,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"setSession:"]) {
+    if ([segue.identifier isEqualToString:@"setSessionForDNS:"] || [segue.identifier isEqualToString:@"setSessionForSubs:"] || [segue.identifier isEqualToString:@"setSessionForPubs:"]) {
         if ([segue.destinationViewController respondsToSelector:@selector(setSession:)]) {
             [segue.destinationViewController performSelector:@selector(setSession:)
                                                   withObject:self.session];

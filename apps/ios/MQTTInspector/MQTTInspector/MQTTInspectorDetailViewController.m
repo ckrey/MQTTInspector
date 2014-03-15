@@ -22,6 +22,9 @@
 #import "MQTTInspectorSetupSubsTableViewController.h"
 #import "MQTTInspectorAppDelegate.h"
 
+static Session *theSession;
+static MQTTSession *theMQTTSession;
+
 @interface MQTTInspectorDetailViewController ()
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *versionButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *disconnectButton;
@@ -104,17 +107,9 @@
     [self showCount];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    if (self.session) {
-        self.title = self.session.name;
-        [self.mqttSession close];
-    }
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"setSession:"]) {
+    if ([segue.identifier isEqualToString:@"setSessionForPub:"] || [segue.identifier isEqualToString:@"setSessionForFilter:"]) {
         if ([segue.destinationViewController respondsToSelector:@selector(setMother:)]) {
             [segue.destinationViewController performSelector:@selector(setMother:)
                                                   withObject:self];
@@ -266,13 +261,52 @@
     //
 }
 
+/*
+ * MQTTSession is managed here in the setSession, connect and disconnect
+ */
+
+- (void)setMqttSession:(MQTTSession *)mqttSession
+{
+    _mqttSession = mqttSession;
+    theMQTTSession = _mqttSession;
+}
+ 
+#pragma mark - Managing the detail item
+- (void)setSession:(Session *)session
+{    
+    if (theSession) {
+        if (theMQTTSession) {
+            [theMQTTSession close];
+            theMQTTSession.delegate = nil;
+        }
+    }
+    
+    _session = session;
+    theSession = _session;
+    
+    _session.state = @(-1);
+    
+    if ([session.autoconnect boolValue]) {
+        [self connect:nil];
+    }
+    
+    if (self.masterPopoverController != nil) {
+        [self.masterPopoverController dismissPopoverAnimated:YES];
+    }
+
+    [self viewChanged:nil];
+    self.title = session.name;
+    [self showCount];
+    [self enableButtons];
+}
+
+
 - (IBAction)connect:(UIBarButtonItem *)sender {
     if (self.session) {
         
-        self.title = [NSString stringWithFormat:@"%@ - %@", self.session.name, [self url]];
-        
         if (self.mqttSession) {
             [self.mqttSession close];
+            self.mqttSession.delegate = nil;
         }
 
         self.mqttSession = [[MQTTSession alloc] initWithClientId:[self effectiveClientId]
@@ -297,13 +331,15 @@
         }
         
         [self.mqttSession connectToHost:self.session.host port:[self.session.port intValue] usingSSL:[self.session.tls boolValue]];
+        
+        self.title = [NSString stringWithFormat:@"%@-%@", self.session.name, [self url]];
     }
 }
 
 - (IBAction)disconnect:(UIBarButtonItem *)sender {
     if (self.session) {
-        self.title = self.session.name;
         [self.mqttSession close];
+        self.title = self.session.name;
     }
 }
 
@@ -340,45 +376,15 @@
 - (IBAction)clear:(UIBarButtonItem *)sender {
     if (self.session) {
         for (Message *message in self.session.hasMesssages) {
-            [self.managedObjectContext deleteObject:message];
+            [self.session.managedObjectContext deleteObject:message];
         }
         for (Topic *topic in self.session.hasTopics) {
-            [self.managedObjectContext deleteObject:topic];
+            [self.session.managedObjectContext deleteObject:topic];
         }
         for (Command *command in self.session.hasCommands) {
-            [self.managedObjectContext deleteObject:command];
+            [self.session.managedObjectContext deleteObject:command];
         }
-        [self.managedObjectContext save:NULL];
-    }
-    [self showCount];
-}
-
-#pragma mark - Managing the detail item
-- (void)setSession:(Session *)session
-{
-    self.managedObjectContext = session.managedObjectContext;
-    
-    self.title = session.name;
-    
-    if (_session != session || [self.session.state intValue] != MQTTSessionEventConnected) {
-        if (self.mqttSession)
-        {
-            [self.mqttSession close];
-        }
-        session.state = @(-1);
-        _session = session;
-        
-        [self viewChanged:nil];
-        
-        if ([session.autoconnect boolValue]) {
-            [self connect:nil];
-        }
-    }
-    
-    [self enableButtons];
-
-    if (self.masterPopoverController != nil) {
-        [self.masterPopoverController dismissPopoverAnimated:YES];
+        [self.session.managedObjectContext save:NULL];
     }
     [self showCount];
 }
@@ -396,6 +402,7 @@
                         ];
     
     NSLog(@"handleEvent: %@ (%d) %@", events[eventCode % [events count]], eventCode, [error description]);
+    NSLog(@"session/self.mqttSession: %@/%@", session, self.mqttSession);
 #endif
 
     if (session != self.mqttSession) {
@@ -406,6 +413,7 @@
     }
     
     self.session.state = @(eventCode);
+    
     if ([self.session.state intValue] == MQTTSessionEventConnected) {
         self.subsTVC = [[MQTTInspectorSubsTableViewController alloc] init];
         self.subsTVC.mother = self;
@@ -426,8 +434,6 @@
         [ptvc.tableView reloadData];
     }
     
-    [self enableButtons];
-    
     if ([self.session.state intValue] == MQTTSessionEventConnectionClosed) {
         MQTTInspectorAppDelegate *delegate = [UIApplication sharedApplication].delegate;
         [delegate connectionClosed];
@@ -446,6 +452,8 @@
         }
     }
     self.lastError = error;
+
+    [self enableButtons];
 }
 
 #define MAX_LOG 512
@@ -456,7 +464,7 @@
 {
     if (!_queueManagedObjectContext) {
         _queueManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [_queueManagedObjectContext setParentContext:self.managedObjectContext];
+        [_queueManagedObjectContext setParentContext:self.session.managedObjectContext];
     }
     return _queueManagedObjectContext;
 }

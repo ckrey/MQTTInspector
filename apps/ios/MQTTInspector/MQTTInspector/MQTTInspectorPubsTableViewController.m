@@ -30,7 +30,8 @@
 {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Publication" inManagedObjectContext:self.mother.managedObjectContext];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Publication"
+                                              inManagedObjectContext:self.mother.session.managedObjectContext];
     [fetchRequest setEntity:entity];
     
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"belongsTo = %@", self.mother.session];
@@ -47,7 +48,10 @@
     
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.mother.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                                                managedObjectContext:self.mother.session.managedObjectContext
+                                                                                                  sectionNameKeyPath:nil
+                                                                                                           cacheName:nil];
     aFetchedResultsController.delegate = self;
     
     

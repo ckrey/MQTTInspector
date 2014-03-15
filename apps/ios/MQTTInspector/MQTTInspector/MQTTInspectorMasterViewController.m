@@ -14,15 +14,14 @@
 #import "Publication+Create.h"
 
 @interface MQTTInspectorMasterViewController ()
+
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @implementation MQTTInspectorMasterViewController
 
 - (void)viewDidLoad
-{
-    self.detailViewController.managedObjectContext = self.managedObjectContext;
-    
+{    
     if ([[Session allSessions:self.managedObjectContext] count] == 0) {
         
         /* DEMO DB SETUP only if DB is empty */
@@ -144,7 +143,7 @@
         }
     }
     
-    if ([segue.identifier isEqualToString:@"setSession:"]) {
+    if ([segue.identifier isEqualToString:@"setSession:"] || [segue.identifier isEqualToString:@"setSessionForEdit:"]) {
         
         NSIndexPath *indexPath = nil;
         

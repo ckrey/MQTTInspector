@@ -60,6 +60,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		844051CD18D35D5700D50E47 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 844051C718D35D5700D50E47 /* MQTTClient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8461912A1883E56800101409;
+			remoteInfo = MQTTClient;
+		};
+		844051CF18D35D5700D50E47 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 844051C718D35D5700D50E47 /* MQTTClient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8461913A1883E56800101409;
+			remoteInfo = MQTTClientTests;
+		};
 		8492C981182E63D400A40D8B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8492C947182E63D300A40D8B /* Project object */;
@@ -104,6 +118,7 @@
 		84283FF71846ABD70078DA05 /* MQTTInspector 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 5.xcdatamodel"; sourceTree = "<group>"; };
 		84283FFE1846AD430078DA05 /* Topic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Topic.h; sourceTree = "<group>"; };
 		84283FFF1846AD430078DA05 /* Topic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Topic.m; sourceTree = "<group>"; };
+		844051C718D35D5700D50E47 /* MQTTClient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MQTTClient.xcodeproj; path = "../../../../MQTT-Client-Framework/MQTTClient/MQTTClient.xcodeproj"; sourceTree = "<group>"; };
 		845DBE6F1884310700EDB183 /* MQTTInspector 1.3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 1.3.xcdatamodel"; sourceTree = "<group>"; };
 		845DBE7B1885764C00EDB183 /* MQTTClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MQTTClient.framework; path = "../../../../MQTT-Client-Framework/MQTTClient/dist/MQTTClient.framework"; sourceTree = "<group>"; };
 		84684E881832192800AE13B5 /* Subscription+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Subscription+Create.h"; path = "../Subscription+Create.h"; sourceTree = "<group>"; };
@@ -195,6 +210,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		844051C818D35D5700D50E47 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				844051CE18D35D5700D50E47 /* libMQTTClient.a */,
+				844051D018D35D5700D50E47 /* MQTTClientTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		84684E8E18321CCD00AE13B5 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -249,6 +273,7 @@
 		8492C951182E63D300A40D8B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				844051C718D35D5700D50E47 /* MQTTClient.xcodeproj */,
 				845DBE7B1885764C00EDB183 /* MQTTClient.framework */,
 				84147D0F18365C740018E601 /* libresolv.dylib */,
 				84147D0A18363C540018E601 /* CFNetwork.framework */,
@@ -388,7 +413,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = MQTTInspector;
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Christoph Krey";
 				TargetAttributes = {
 					8492C97A182E63D400A40D8B = {
@@ -407,6 +432,12 @@
 			mainGroup = 8492C946182E63D300A40D8B;
 			productRefGroup = 8492C950182E63D300A40D8B /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 844051C818D35D5700D50E47 /* Products */;
+					ProjectRef = 844051C718D35D5700D50E47 /* MQTTClient.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				8492C94E182E63D300A40D8B /* MQTTInspector */,
@@ -414,6 +445,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		844051CE18D35D5700D50E47 /* libMQTTClient.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libMQTTClient.a;
+			remoteRef = 844051CD18D35D5700D50E47 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		844051D018D35D5700D50E47 /* MQTTClientTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = MQTTClientTests.xctest;
+			remoteRef = 844051CF18D35D5700D50E47 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8492C94D182E63D300A40D8B /* Resources */ = {
@@ -537,7 +585,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -577,7 +624,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -644,7 +690,6 @@
 		8492C991182E63D400A40D8B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MQTTInspector.app/MQTTInspector";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -667,7 +712,6 @@
 		8492C992182E63D400A40D8B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/MQTTInspector.app/MQTTInspector";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",

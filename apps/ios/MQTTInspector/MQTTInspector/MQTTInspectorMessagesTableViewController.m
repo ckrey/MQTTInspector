@@ -44,7 +44,7 @@
     // nil for section name key path means "no sections".
     NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
                                                              initWithFetchRequest:[self fetchRequestForTableView]
-                                                             managedObjectContext:self.mother.managedObjectContext
+                                                             managedObjectContext:self.mother.session.managedObjectContext
                                                              sectionNameKeyPath:nil cacheName:nil];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
@@ -228,9 +228,10 @@
             points = i * 10 + match;
         }
     }
+#ifdef SPECIALDEBUG
     NSLog(@"topic %@(%lu) matches %@(%lu) specific:%d match:%d",
           topic, (unsigned long)[topicComponents count], subscription, (unsigned long)[subscriptionComponents count], i, match);
-
+#endif
     return points;
 }
 

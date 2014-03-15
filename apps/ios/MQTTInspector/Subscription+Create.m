@@ -110,7 +110,7 @@
 
 - (UIColor *)getColor
 {
-#ifdef DEBUG
+#ifdef SPECIALDEBUG
     NSLog(@"getColor %@:%@", self.topic, self.color);
 #endif
     return [UIColor colorWithHue:[self.color floatValue] saturation:0.3 brightness:1.0 alpha:1.0];

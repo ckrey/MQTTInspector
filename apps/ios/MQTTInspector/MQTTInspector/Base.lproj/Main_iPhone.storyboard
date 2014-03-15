@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="rS3-R9-Ivy">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="rS3-R9-Ivy">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -46,7 +46,7 @@
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
-                                    <segue destination="SsW-Pg-FKC" kind="push" identifier="setSession:" trigger="accessoryAction" id="su9-8n-X2X"/>
+                                    <segue destination="SsW-Pg-FKC" kind="push" identifier="setSessionForEdit:" trigger="accessoryAction" id="su9-8n-X2X"/>
                                     <segue destination="Ah7-4n-0Wa" kind="push" identifier="setSession:" id="6YL-zb-kSY"/>
                                 </connections>
                             </tableViewCell>
@@ -115,7 +115,7 @@
                                     </barButtonItem>
                                     <barButtonItem enabled="NO" systemItem="search" id="E3j-Ig-W54">
                                         <connections>
-                                            <segue destination="Fzg-75-a34" kind="push" identifier="setSession:" id="0nn-EB-64L"/>
+                                            <segue destination="Fzg-75-a34" kind="push" identifier="setSessionForFilter:" id="0nn-EB-64L"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem enabled="NO" style="plain" id="GrR-Wt-khj">
@@ -129,7 +129,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="nHk-C2-OAs"/>
                                     <barButtonItem enabled="NO" systemItem="action" id="yRK-u7-QqS">
                                         <connections>
-                                            <segue destination="T4B-t3-Lg3" kind="push" identifier="setSession:" id="Y1P-PR-qjb"/>
+                                            <segue destination="T4B-t3-Lg3" kind="push" identifier="setSessionForPub:" id="Y1P-PR-qjb"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" id="ALj-YU-dsc">
@@ -316,7 +316,7 @@
                     </connections>
                 </panGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2043" y="64"/>
+            <point key="canvasLocation" x="1102" y="-708"/>
         </scene>
         <!--Inspector Data View Controller - Detail-->
         <scene sceneID="vaz-9v-svC">
@@ -348,7 +348,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PoR-nr-v6O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2586" y="-356"/>
+            <point key="canvasLocation" x="2050" y="-1272"/>
         </scene>
         <!--Inspector Setup Subs Table View Controller - SUBs-->
         <scene sceneID="y1O-A6-JVZ">
@@ -392,7 +392,7 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1522" y="832"/>
+            <point key="canvasLocation" x="2050" y="844"/>
         </scene>
         <!--Inspector Setup Sub Table View Controller - SUB-->
         <scene sceneID="ud0-xh-Djz">
@@ -474,7 +474,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jUk-qc-9Xx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2043" y="832"/>
+            <point key="canvasLocation" x="2483" y="832"/>
         </scene>
         <!--Inspector FilterTVC - Filter-->
         <scene sceneID="y8m-Bf-X5J">
@@ -620,7 +620,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LJT-BB-fUZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2478" y="658"/>
+            <point key="canvasLocation" x="2050" y="86"/>
         </scene>
         <!--Inspector Ad Hoc Pub Table View Controller - PUB-->
         <scene sceneID="SDf-6u-WTE">
@@ -761,7 +761,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="apK-cZ-1n3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2979" y="318"/>
+            <point key="canvasLocation" x="2050" y="-594"/>
         </scene>
         <!--Inspector Setup Session Table View Controller - Session-->
         <scene sceneID="HUT-WX-Z84">
@@ -810,7 +810,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="Ef1-uO-m1e" kind="push" identifier="setSession:" trigger="accessoryAction" id="abM-j7-65x"/>
+                                            <segue destination="Ef1-uO-m1e" kind="push" identifier="setSessionForSubs:" trigger="accessoryAction" id="abM-j7-65x"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="OgT-yE-nZr">
@@ -829,7 +829,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="Jow-r1-Mgi" kind="push" identifier="setSession:" trigger="accessoryAction" id="xgv-I9-4TC"/>
+                                            <segue destination="Jow-r1-Mgi" kind="push" identifier="setSessionForPubs:" trigger="accessoryAction" id="xgv-I9-4TC"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -933,7 +933,7 @@
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
-                                                        <segue destination="cLa-I2-nJM" kind="push" identifier="setSession:" id="2UK-C5-UHE"/>
+                                                        <segue destination="cLa-I2-nJM" kind="push" identifier="setSessionForDNS:" id="2UK-C5-UHE"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -1158,7 +1158,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hen-xB-bCI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="970" y="1205"/>
+            <point key="canvasLocation" x="1102" y="64"/>
         </scene>
         <!--InspectorDNSSRV Table View Controller - DNS SRV-->
         <scene sceneID="Rzq-dt-MrN">
@@ -1207,7 +1207,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KO6-Av-vUy" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="TXx-aV-juZ" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1522" y="2237"/>
+            <point key="canvasLocation" x="2050" y="2245"/>
         </scene>
         <!--Inspector Setup Pubs Table View Controller - PUBs-->
         <scene sceneID="avV-tY-qUz">
@@ -1224,9 +1224,6 @@
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gsZ-vl-uyV" id="kR5-pa-zfB">
                                     <rect key="frame" x="0.0" y="0.0" width="253" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <connections>
-                                        <outletCollection property="gestureRecognizers" destination="x2q-gK-zFP" appends="YES" id="OL9-SC-AgJ"/>
-                                    </connections>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="0.59849044210000002" green="0.98461457770000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -1237,10 +1234,11 @@
                         <connections>
                             <outlet property="dataSource" destination="Jow-r1-Mgi" id="w9i-S6-P7a"/>
                             <outlet property="delegate" destination="Jow-r1-Mgi" id="OgK-Vm-6hB"/>
+                            <outletCollection property="gestureRecognizers" destination="x2q-gK-zFP" appends="YES" id="T7f-IO-ds5"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="PUBs" id="G2J-nj-rAg">
-                        <barButtonItem key="rightBarButtonItem" title="Item" systemItem="add" id="j3k-kf-bt2">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="j3k-kf-bt2">
                             <connections>
                                 <segue destination="ZLc-uR-Z9t" kind="push" identifier="newPub" id="ioj-6f-rAF"/>
                             </connections>
@@ -1254,7 +1252,7 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1522" y="1546"/>
+            <point key="canvasLocation" x="2050" y="1546"/>
         </scene>
         <!--Inspector Setup Pub Table View Controller - PUB-->
         <scene sceneID="vAY-W6-Uy5">
@@ -1410,7 +1408,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BRY-eB-Uzs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2043" y="1532"/>
+            <point key="canvasLocation" x="2499" y="1546"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
@@ -1419,7 +1417,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="su9-8n-X2X"/>
+        <segue reference="vzT-Kq-iiF"/>
         <segue reference="ioj-6f-rAF"/>
         <segue reference="EdI-4Q-WGu"/>
     </inferredMetricsTieBreakers>

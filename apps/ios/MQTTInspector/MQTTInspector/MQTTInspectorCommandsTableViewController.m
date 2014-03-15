@@ -27,7 +27,8 @@
 {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Command" inManagedObjectContext:self.mother.managedObjectContext];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Command"
+                                              inManagedObjectContext:self.mother.session.managedObjectContext];
     [fetchRequest setEntity:entity];
     
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"belongsTo = %@", self.mother.session];

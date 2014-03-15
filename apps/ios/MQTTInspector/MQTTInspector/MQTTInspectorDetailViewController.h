@@ -14,7 +14,6 @@
 
 @property (strong, nonatomic) Session *session;
 @property (strong, nonatomic) MQTTSession *mqttSession;
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 + (void)alert:(NSString *)message;
 - (void)publish:(Publication *)pub;
