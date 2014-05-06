@@ -28,6 +28,7 @@
                  topicfilter:(NSString *)topicfilter
                   datafilter:(NSString *)datafilter
                includefilter:(BOOL)includefilter
+                   sizelimit:(int)sizelimit
       inManagedObjectContext:(NSManagedObjectContext *)context;
 {
     Session *session = [Session existSessionWithName:name inManagedObjectContext:context];
@@ -58,6 +59,7 @@
         session.topicfilter = topicfilter;
         session.datafilter = datafilter;
         session.includefilter = @(includefilter);
+        session.sizelimit = @(sizelimit);
 
         session.state = @(-1);
     }

@@ -2,7 +2,7 @@
 //  Session.h
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 27.01.14.
+//  Created by Christoph Krey on 06.05.14.
 //  Copyright (c) 2014 Christoph Krey. All rights reserved.
 //
 
@@ -22,16 +22,17 @@
 @property (nonatomic, retain) NSString * dnsdomain;
 @property (nonatomic, retain) NSNumber * dnssrv;
 @property (nonatomic, retain) NSString * host;
+@property (nonatomic, retain) NSNumber * includefilter;
 @property (nonatomic, retain) NSNumber * keepalive;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * passwd;
 @property (nonatomic, retain) NSNumber * port;
 @property (nonatomic, retain) NSNumber * protocolLevel;
+@property (nonatomic, retain) NSNumber * sizelimit;
 @property (nonatomic, retain) NSNumber * state;
 @property (nonatomic, retain) NSNumber * tls;
 @property (nonatomic, retain) NSString * topicfilter;
 @property (nonatomic, retain) NSString * user;
-@property (nonatomic, retain) NSNumber * includefilter;
 @property (nonatomic, retain) NSOrderedSet *hasCommands;
 @property (nonatomic, retain) NSOrderedSet *hasMesssages;
 @property (nonatomic, retain) NSOrderedSet *hasPubs;

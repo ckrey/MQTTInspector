@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Topic+Create.h"
+#import "Message+Create.h"
+#import "Command+Create.h"
 
 @interface MQTTInspectorDataViewController : UIViewController
 + (NSString *)dataToString:(NSData *)data;
 
-@property (strong, nonatomic) NSString *topic;
-@property (strong, nonatomic) NSData *data;
+@property (strong, nonatomic) id object;
 @end

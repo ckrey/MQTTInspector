@@ -32,10 +32,6 @@
         // handle error
     } else {
         if (![matches count]) {
-#ifdef DEBUG
-            NSLog(@"insertNewObjectForEntityForName Command %@", timestamp);
-#endif
-
             command = [NSEntityDescription insertNewObjectForEntityForName:@"Command" inManagedObjectContext:context];
             
             command.timestamp = timestamp;

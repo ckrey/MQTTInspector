@@ -29,6 +29,7 @@
                  topicfilter:(NSString *)topicfilter
                   datafilter:(NSString *)datafilter
                includefilter:(BOOL)includefilter
+                   sizelimit:(int)sizelimit
       inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)allSessions:(NSManagedObjectContext *)context;
 

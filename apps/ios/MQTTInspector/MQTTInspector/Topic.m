@@ -2,8 +2,8 @@
 //  Topic.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 27.11.13.
-//  Copyright (c) 2013 Christoph Krey. All rights reserved.
+//  Created by Christoph Krey on 05.05.14.
+//  Copyright (c) 2014 Christoph Krey. All rights reserved.
 //
 
 #import "Topic.h"
@@ -14,6 +14,7 @@
 
 @dynamic count;
 @dynamic data;
+@dynamic justupdated;
 @dynamic mid;
 @dynamic qos;
 @dynamic retained;

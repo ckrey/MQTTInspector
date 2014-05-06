@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="4.0" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13C1021" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Command" representedClassName="Command" syncable="YES">
+        <attribute name="data" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="duped" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="inbound" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="mid" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="qos" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="retained" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="belongsTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Session" inverseName="hasCommands" inverseEntity="Session" syncable="YES"/>
+    </entity>
+    <entity name="Message" representedClassName="Message" syncable="YES">
+        <attribute name="data" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="mid" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="qos" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="retained" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="state" optional="YES" transient="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="topic" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="belongsTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Session" inverseName="hasMesssages" inverseEntity="Session" syncable="YES"/>
+    </entity>
+    <entity name="Publication" representedClassName="Publication" syncable="YES">
+        <attribute name="data" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="qos" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="retained" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="state" optional="YES" transient="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="topic" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="belongsTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Session" inverseName="hasPubs" inverseEntity="Session" syncable="YES"/>
+    </entity>
+    <entity name="Session" representedClassName="Session" syncable="YES">
+        <attribute name="attributefilter" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="auth" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="autoconnect" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="cleansession" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="clientid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="datafilter" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dnsdomain" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dnssrv" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="host" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="includefilter" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="jsonformatter" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="keepalive" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="passwd" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="port" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="protocolLevel" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="sizelimit" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="state" optional="YES" transient="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="tls" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="topicfilter" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="user" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="hasCommands" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Command" inverseName="belongsTo" inverseEntity="Command" syncable="YES"/>
+        <relationship name="hasMesssages" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Message" inverseName="belongsTo" inverseEntity="Message" syncable="YES"/>
+        <relationship name="hasPubs" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Publication" inverseName="belongsTo" inverseEntity="Publication" syncable="YES"/>
+        <relationship name="hasSubs" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Subscription" inverseName="belongsTo" inverseEntity="Subscription" syncable="YES"/>
+        <relationship name="hasTopics" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Topic" inverseName="belongsTo" inverseEntity="Topic" syncable="YES"/>
+    </entity>
+    <entity name="Subscription" representedClassName="Subscription" syncable="YES">
+        <attribute name="color" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="qos" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="state" optional="YES" transient="YES" attributeType="Integer 16" syncable="YES"/>
+        <attribute name="topic" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="belongsTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Session" inverseName="hasSubs" inverseEntity="Session" syncable="YES"/>
+    </entity>
+    <entity name="Topic" representedClassName="Topic" syncable="YES">
+        <attribute name="count" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="data" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="mid" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="new" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="qos" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="retained" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="topic" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="belongsTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Session" inverseName="hasTopics" inverseEntity="Session" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Command" positionX="0" positionY="0" width="128" height="180"/>
+        <element name="Message" positionX="0" positionY="0" width="128" height="165"/>
+        <element name="Publication" positionX="0" positionY="0" width="128" height="165"/>
+        <element name="Session" positionX="0" positionY="0" width="128" height="435"/>
+        <element name="Subscription" positionX="0" positionY="0" width="128" height="135"/>
+        <element name="Topic" positionX="0" positionY="0" width="128" height="180"/>
+    </elements>
+</model>

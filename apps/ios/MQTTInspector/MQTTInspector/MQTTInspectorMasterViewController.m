@@ -46,6 +46,7 @@
                                topicfilter:@".*"
                                 datafilter:@".*"
                              includefilter:YES
+                                 sizelimit:0
                     inManagedObjectContext:self.managedObjectContext];
         [Subscription subscriptionWithTopic:@"MQTTInspector/#"
                                         qos:1
@@ -89,6 +90,7 @@
                                topicfilter:@".*"
                                 datafilter:@".*"
                              includefilter:YES
+                                 sizelimit:0
                     inManagedObjectContext:self.managedObjectContext];
         [Subscription subscriptionWithTopic:@"MQTTInspector/#"
                                         qos:1
@@ -136,6 +138,7 @@
                                         topicfilter:@".*"
                                          datafilter:@".*"
                                       includefilter:YES
+                                          sizelimit:0
                              inManagedObjectContext:self.managedObjectContext];
         if ([segue.destinationViewController respondsToSelector:@selector(setSession:)]) {
             [segue.destinationViewController performSelector:@selector(setSession:)

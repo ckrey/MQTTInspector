@@ -10,12 +10,15 @@
 
 @interface Topic (Create)
 + (Topic *)topicNamed:(NSString *)name
-                 timestamp:(NSDate *)timestamp
-                  data:(NSData *)data
+            timestamp:(NSDate *)timestamp
+                 data:(NSData *)data
                   qos:(int)qos
              retained:(BOOL)retained
                   mid:(unsigned int)mid
-               session:(Session *)session
+              session:(Session *)session
+inManagedObjectContext:(NSManagedObjectContext *)context;
++ (Topic *)existsTopicNamed:(NSString *)name
+              session:(Session *)session
 inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)allTopicsOfSession:(Session *)session inManagedObjectContext:(NSManagedObjectContext *)context;
 
@@ -24,5 +27,6 @@ inManagedObjectContext:(NSManagedObjectContext *)context;
 - (NSString *)attributeTextPart2;
 - (NSString *)attributeTextPart3;
 - (NSString *)dataText;
+- (BOOL)isJustupdated;
 
 @end

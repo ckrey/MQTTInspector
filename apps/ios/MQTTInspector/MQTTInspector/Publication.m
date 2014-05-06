@@ -2,7 +2,7 @@
 //  Publication.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 07.01.14.
+//  Created by Christoph Krey on 05.05.14.
 //  Copyright (c) 2014 Christoph Krey. All rights reserved.
 //
 
@@ -14,11 +14,11 @@
 
 @dynamic data;
 @dynamic name;
+@dynamic position;
 @dynamic qos;
 @dynamic retained;
 @dynamic state;
 @dynamic topic;
-@dynamic position;
 @dynamic belongsTo;
 
 @end

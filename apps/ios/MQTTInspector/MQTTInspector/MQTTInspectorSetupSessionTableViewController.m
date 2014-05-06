@@ -28,6 +28,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *domainSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *autoConnectSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *protocolLevelText;
+@property (weak, nonatomic) IBOutlet UITextField *sizeLimitText;
 
 @property (strong, nonatomic) UIDocumentInteractionController *dic;
 
@@ -60,7 +61,7 @@
     self.domainText.text = self.session.dnsdomain;
     self.autoConnectSwitch.on = [self.session.autoconnect boolValue];
     self.protocolLevelText.text = [NSString stringWithFormat:@"%@", self.session.protocolLevel];
-    
+    self.sizeLimitText.text = [NSString stringWithFormat:@"%@", self.session.sizelimit];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -142,6 +143,10 @@
     self.session.protocolLevel = @([sender.text intValue]);
 }
 
+- (IBAction)sizeLimitChanged:(UITextField *)sender {
+    self.session.sizelimit = @([sender.text intValue]);
+}
+
 - (IBAction)send:(UIBarButtonItem *)sender {
     NSMutableArray *subs = [[NSMutableArray alloc] init];
     for (Subscription *sub in self.session.hasSubs) {
@@ -174,6 +179,7 @@
                            @"dnsdomain": self.session.dnsdomain ? self.session.dnsdomain : @"",
                            @"autoconnect": [NSString stringWithFormat:@"%@", self.session.autoconnect ? self.session.autoconnect : @(0)],
                            @"protocollevel": [NSString stringWithFormat:@"%@", self.session.protocolLevel ? self.session.protocolLevel : @(0)],
+                           @"sizeLimit": [NSString stringWithFormat:@"%@", self.session.sizelimit ? self.session.sizelimit : @(0)],
                            @"includefilter": [NSString stringWithFormat:@"%@", self.session.includefilter ? self.session.includefilter : @(1)],
                            @"attributefilter": self.session.attributefilter ? self.session.attributefilter : @"",
                            @"datafilter": self.session.datafilter ? self.session.datafilter : @"",

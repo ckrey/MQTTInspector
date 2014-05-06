@@ -143,35 +143,24 @@ static MQTTSession *theMQTTSession;
     
     if (indexPath) {
         if ([segue.identifier isEqualToString:@"setMessage:"]) {
-            NSData *theData;
-            NSString *theTopic;
+            id theObject;
             
             if (self.logsTVC) {
                 Message *message = [[self.logsTVC fetchedResultsController] objectAtIndexPath:indexPath];
-                theData = message.data;
-                theTopic = message.topic;
+                theObject = message;
             }
             if (self.topicsTVC) {
                 Topic *topic = [[self.topicsTVC fetchedResultsController] objectAtIndexPath:indexPath];
-                theData = topic.data;
-                theTopic = topic.topic;
+                theObject = topic;
             }
             if (self.commandsTVC) {
                 Command *command = [[self.commandsTVC fetchedResultsController] objectAtIndexPath:indexPath];
-                theData = command.data;
-                theTopic = [NSDateFormatter localizedStringFromDate:command.timestamp
-                                                          dateStyle:NSDateFormatterShortStyle
-                                                          timeStyle:NSDateFormatterMediumStyle];
+                theObject = command;
             }
             
-            
-            if ([segue.destinationViewController respondsToSelector:@selector(setTopic:)]) {
-                [segue.destinationViewController performSelector:@selector(setTopic:)
-                                                      withObject:theTopic];
-            }
-            if ([segue.destinationViewController respondsToSelector:@selector(setData:)]) {
-                [segue.destinationViewController performSelector:@selector(setData:)
-                                                      withObject:theData];
+            if ([segue.destinationViewController respondsToSelector:@selector(setObject:)]) {
+                [segue.destinationViewController performSelector:@selector(setObject:)
+                                                      withObject:theObject];
             }
         }
     }
@@ -384,7 +373,11 @@ static MQTTSession *theMQTTSession;
         for (Command *command in self.session.hasCommands) {
             [self.session.managedObjectContext deleteObject:command];
         }
-        [self.session.managedObjectContext save:NULL];
+        NSError *error;
+        if (![self.session.managedObjectContext save:&error]) {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
     }
     [self showCount];
 }
@@ -540,25 +533,14 @@ static MQTTSession *theMQTTSession;
 {
     NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
     NSString *name = self.session.name;
-    NSString *host = self.session.host;
-    int port = [self.session.port intValue];
-    BOOL tls = [self.session.tls boolValue];
-    BOOL auth = [self.session.auth boolValue];
-    NSString *user = self.session.user;
-    NSString *passwd = self.session.passwd;
-    NSString *clientid = self.session.clientid;
-    BOOL cleansession = [self.session.cleansession boolValue];
-    int keepalive = [self.session.keepalive intValue];
-    BOOL autoconnect = [self.session.autoconnect boolValue];
-    NSString *dnsdomain = self.session.dnsdomain;
-    BOOL dnssrv = [self.session.dnssrv boolValue];
-    UInt8 protocolLevel = [self.session.protocolLevel intValue];
     NSString *attributefilter = self.session.attributefilter;
     NSString *datafilter = self.session.datafilter;
     NSString *topicfilter = self.session.topicfilter;
     BOOL includefilter = [self.session.includefilter boolValue];
     
     BOOL filter = TRUE;
+    data = [self limitedData:data];
+    
     NSError *error;
     
     NSString *attributes = [NSString stringWithFormat:@"q%d r%d i%u", qos, retained, mid];
@@ -576,6 +558,7 @@ static MQTTSession *theMQTTSession;
         }
     }
     
+
     NSString *dataString = [MQTTInspectorDataViewController dataToString:data];
     NSRegularExpression *dataRegex =
     [NSRegularExpression regularExpressionWithPattern:datafilter ? datafilter : @"" options:0 error:&error];
@@ -614,26 +597,9 @@ static MQTTSession *theMQTTSession;
     if (filter) {
         [self startQueue];
         [self.queueManagedObjectContext performBlock:^{
-            Session *mySession = [Session sessionWithName:name
-                                                     host:host
-                                                     port:port
-                                                      tls:tls
-                                                     auth:auth
-                                                     user:user
-                                                   passwd:passwd
-                                                 clientid:clientid
-                                             cleansession:cleansession
-                                                keepalive:keepalive
-                                              autoconnect:autoconnect
-                                                   dnssrv:dnssrv
-                                                dnsdomain:dnsdomain
-                                            protocolLevel:protocolLevel
-                                          attributefilter:attributefilter
-                                              topicfilter:topicfilter
-                                               datafilter:datafilter
-                                            includefilter:includefilter
-                                   inManagedObjectContext:self.queueManagedObjectContext];
-            
+            Session *mySession = [Session existSessionWithName:name
+                                        inManagedObjectContext:self.queueManagedObjectContext];
+
 #ifdef DEBUG
             NSLog(@"newLog");
 #endif
@@ -653,20 +619,38 @@ static MQTTSession *theMQTTSession;
 #ifdef DEBUG
             NSLog(@"newTopic");
 #endif
-            [Topic topicNamed:topic
-                    timestamp:timestamp
-                         data:data
-                          qos:qos
-                     retained:retained
-                          mid:mid
-                      session:mySession
-       inManagedObjectContext:self.queueManagedObjectContext];
+            Topic *theTopic = [Topic existsTopicNamed:topic
+                                              session:mySession
+                               inManagedObjectContext:self.queueManagedObjectContext];
+            if (theTopic) {
+                theTopic.count = @([theTopic.count intValue] + 1);
+                theTopic.data = data;
+                theTopic.qos = @(qos);
+                theTopic.mid = @(mid);
+                theTopic.retained = @(retained);
+                theTopic.timestamp = timestamp;
+                theTopic.justupdated = theTopic.count;
+            } else {
+                [Topic topicNamed:topic
+                        timestamp:timestamp
+                             data:data
+                              qos:qos
+                         retained:retained
+                              mid:mid
+                          session:mySession
+           inManagedObjectContext:self.queueManagedObjectContext];
+                [self limit:[Topic allTopicsOfSession:mySession
+                               inManagedObjectContext:self.queueManagedObjectContext]
+                        max:MAX_TOPIC];
+            }
             
-            [self limit:[Topic allTopicsOfSession:mySession
-                           inManagedObjectContext:self.queueManagedObjectContext]
-                    max:MAX_TOPIC];
+            NSError *error;
             
-            [self.queueManagedObjectContext save:NULL];
+            if (![self.queueManagedObjectContext save:NULL]) {
+                NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+                abort();
+            }
+
             [self finishQueue];
         }];
     }
@@ -676,49 +660,16 @@ static MQTTSession *theMQTTSession;
 {
     NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
     NSString *name = self.session.name;
-    NSString *host = self.session.host;
-    int port = [self.session.port intValue];
-    BOOL tls = [self.session.tls boolValue];
-    BOOL auth = [self.session.auth boolValue];
-    NSString *user = self.session.user;
-    NSString *passwd = self.session.passwd;
-    NSString *clientid = self.session.clientid;
-    BOOL cleansession = [self.session.cleansession boolValue];
-    int keepalive = [self.session.keepalive intValue];
-    BOOL autoconnect = [self.session.autoconnect boolValue];
-    NSString *dnsdomain = self.session.dnsdomain;
-    BOOL dnssrv = [self.session.dnssrv boolValue];
-    UInt8 protocolLevel = [self.session.protocolLevel intValue];
-    NSString *attributefilter = self.session.attributefilter;
-    NSString *datafilter = self.session.datafilter;
-    NSString *topicfilter = self.session.topicfilter;
-    BOOL includefilter = [self.session.includefilter boolValue];
     
+    data = [self limitedData:data];
+
     [self startQueue];
     [self.queueManagedObjectContext performBlock:^{
 #ifdef DEBUG
         NSLog(@"newCommand in");
 #endif
-        Session *mySession = [Session sessionWithName:name
-                                                 host:host
-                                                 port:port
-                                                  tls:tls
-                                                 auth:auth
-                                                 user:user
-                                               passwd:passwd
-                                             clientid:clientid
-                                         cleansession:cleansession
-                                            keepalive:keepalive
-                                          autoconnect:autoconnect
-                                               dnssrv:dnssrv
-                                            dnsdomain:dnsdomain
-                                        protocolLevel:protocolLevel
-                                      attributefilter:attributefilter
-                                          topicfilter:topicfilter
-                                           datafilter:datafilter
-                                        includefilter:includefilter
-                               inManagedObjectContext:self.queueManagedObjectContext];
-        
+        Session *mySession = [Session existSessionWithName:name
+                                    inManagedObjectContext:self.queueManagedObjectContext];
         [Command commandAt:timestamp
                    inbound:YES
                       type:type
@@ -734,7 +685,13 @@ static MQTTSession *theMQTTSession;
                            inManagedObjectContext:self.queueManagedObjectContext]
                 max:MAX_COMMAND];
         
-        [self.queueManagedObjectContext save:NULL];
+        NSError *error;
+        
+        if (![self.queueManagedObjectContext save:NULL]) {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+
         [self finishQueue];
     }];
 }
@@ -743,49 +700,17 @@ static MQTTSession *theMQTTSession;
 {
     NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
     NSString *name = self.session.name;
-    NSString *host = self.session.host;
-    int port = [self.session.port intValue];
-    BOOL tls = [self.session.tls boolValue];
-    BOOL auth = [self.session.auth boolValue];
-    NSString *user = self.session.user;
-    NSString *passwd = self.session.passwd;
-    NSString *clientid = self.session.clientid;
-    BOOL cleansession = [self.session.cleansession boolValue];
-    NSString *dnsdomain = self.session.dnsdomain;
-    BOOL dnssrv = [self.session.dnssrv boolValue];
-    int keepalive = [self.session.keepalive intValue];
-    BOOL autoconnect = [self.session.autoconnect boolValue];
-    UInt8 protocolLevel = [self.session.protocolLevel intValue];
-    NSString *attributefilter = self.session.attributefilter;
-    NSString *datafilter = self.session.datafilter;
-    NSString *topicfilter = self.session.topicfilter;
-    BOOL includefilter = [self.session.includefilter boolValue];
+    
+    data = [self limitedData:data];
     
     [self startQueue];
     [self.queueManagedObjectContext performBlock:^{
 #ifdef DEBUG
         NSLog(@"newCommand out");
 #endif
-        
-        Session *mySession = [Session sessionWithName:name
-                                                 host:host
-                                                 port:port
-                                                  tls:tls
-                                                 auth:auth
-                                                 user:user
-                                               passwd:passwd
-                                             clientid:clientid
-                                         cleansession:cleansession
-                                            keepalive:keepalive
-                                          autoconnect:autoconnect
-                                               dnssrv:dnssrv
-                                            dnsdomain:dnsdomain
-                                        protocolLevel:protocolLevel
-                                      attributefilter:attributefilter
-                                          topicfilter:topicfilter
-                                           datafilter:datafilter
-                                        includefilter:includefilter
-                               inManagedObjectContext:self.queueManagedObjectContext];
+        Session *mySession = [Session existSessionWithName:name
+                                    inManagedObjectContext:self.queueManagedObjectContext];
+
         
         [Command commandAt:timestamp
                    inbound:NO
@@ -802,7 +727,13 @@ static MQTTSession *theMQTTSession;
                            inManagedObjectContext:self.queueManagedObjectContext]
                 max:MAX_COMMAND];
         
-        [self.queueManagedObjectContext save:NULL];
+        NSError *error;
+        
+        if (![self.queueManagedObjectContext save:NULL]) {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+
         [self finishQueue];
     }];
 }
@@ -911,5 +842,14 @@ static MQTTSession *theMQTTSession;
     }
 }
 
+- (NSData *)limitedData:(NSData *)data
+{
+    NSData *limitedData = data;
+    int limit = [self.session.sizelimit intValue];
+    if (limit) {
+        limitedData = [data subdataWithRange:NSMakeRange(0, MIN(data.length, limit))];
+    }
+    return limitedData;
+}
 
 @end

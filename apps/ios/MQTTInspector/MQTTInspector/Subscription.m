@@ -2,7 +2,7 @@
 //  Subscription.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 07.01.14.
+//  Created by Christoph Krey on 05.05.14.
 //  Copyright (c) 2014 Christoph Krey. All rights reserved.
 //
 
@@ -13,10 +13,10 @@
 @implementation Subscription
 
 @dynamic color;
+@dynamic position;
 @dynamic qos;
 @dynamic state;
 @dynamic topic;
-@dynamic position;
 @dynamic belongsTo;
 
 @end

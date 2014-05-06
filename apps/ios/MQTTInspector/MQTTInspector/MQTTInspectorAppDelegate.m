@@ -254,6 +254,7 @@
                                            topicfilter:@""
                                             datafilter:@""
                                          includefilter:YES
+                                             sizelimit:0
                                 inManagedObjectContext:_managedObjectContext];
                 }
                 
@@ -296,6 +297,9 @@
                 
                 string = dictionary[@"protocollevel"];
                 if (string) session.protocolLevel = @([string integerValue]);
+                
+                string = dictionary[@"sizelimit"];
+                if (string) session.sizelimit = @([string integerValue]);
                 
                 string = dictionary[@"includefilter"];
                 if (string) session.includefilter = @([string boolValue]);

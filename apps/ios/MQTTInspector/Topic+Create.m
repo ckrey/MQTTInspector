@@ -11,14 +11,9 @@
 
 @implementation Topic (Create)
 
-+ (Topic *)topicNamed:(NSString *)name
-            timestamp:(NSDate *)timestamp
-                 data:(NSData *)data
-                  qos:(int)qos
-             retained:(BOOL)retained
-                  mid:(unsigned int)mid
-              session:(Session *)session
-inManagedObjectContext:(NSManagedObjectContext *)context
++ (Topic *)existsTopicNamed:(NSString *)name
+                    session:(Session *)session
+     inManagedObjectContext:(NSManagedObjectContext *)context
 {
     Topic *topic = nil;
     
@@ -32,29 +27,38 @@ inManagedObjectContext:(NSManagedObjectContext *)context
     if (!matches) {
         // handle error
     } else {
-        if (![matches count]) {
-            topic = [NSEntityDescription insertNewObjectForEntityForName:@"Topic" inManagedObjectContext:context];
-            
-            topic.topic = name;
-            topic.timestamp = timestamp;
-            topic.data = data;
-            topic.qos = @(qos);
-            topic.retained = @(retained);
-            topic.mid = @(mid);
-            topic.belongsTo = session;
-            topic.count = @(0);
-        } else {
+        if ([matches count]) {
             topic = [matches lastObject];
-            topic.timestamp = timestamp;
-            topic.data = data;
-            topic.qos = @(qos);
-            topic.mid = @(mid);
-            topic.count = @([topic.count intValue] + 1);
         }
     }
-    
     return topic;
+}
+
++ (Topic *)topicNamed:(NSString *)name
+            timestamp:(NSDate *)timestamp
+                 data:(NSData *)data
+                  qos:(int)qos
+             retained:(BOOL)retained
+                  mid:(unsigned int)mid
+              session:(Session *)session
+inManagedObjectContext:(NSManagedObjectContext *)context
+{
+    Topic *topic = [Topic existsTopicNamed:name session:session inManagedObjectContext:context];
     
+    if (!topic) {
+        topic = [NSEntityDescription insertNewObjectForEntityForName:@"Topic" inManagedObjectContext:context];
+        
+        topic.topic = name;
+        topic.timestamp = timestamp;
+        topic.data = data;
+        topic.qos = @(qos);
+        topic.retained = @(retained);
+        topic.mid = @(mid);
+        topic.belongsTo = session;
+        topic.count = @(0);
+        topic.justupdated = @(INTMAX_MAX);
+    }
+    return topic;
 }
 
 + (NSArray *)allTopicsOfSession:(Session *)session inManagedObjectContext:(NSManagedObjectContext *)context
@@ -108,5 +112,9 @@ inManagedObjectContext:(NSManagedObjectContext *)context
     return [MQTTInspectorDataViewController dataToString:self.data];
 }
 
+- (BOOL)isJustupdated
+{
+    return [self.justupdated boolValue];
+}
 
 @end

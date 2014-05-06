@@ -96,6 +96,9 @@
         cell.textLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
     }
 
+    cell.imageView.image = nil;
+    cell.imageView.animationImages = nil;
+    [cell.imageView stopAnimating];
 }
 
 @end

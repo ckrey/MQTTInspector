@@ -85,6 +85,29 @@
        if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
         cell.textLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
     }
+    
+    cell.imageView.image = nil;
+    cell.imageView.animationImages = nil;
+    [cell.imageView stopAnimating];
+    
+#ifdef DEBUG
+    NSLog(@"topic %@ is %d", topic.topic, [topic.justupdated boolValue]);
+#endif
+    if ([topic isJustupdated]) {
+        cell.imageView.image = [UIImage imageNamed:@"new.png"];
+        cell.imageView.animationImages = @[[UIImage imageNamed:@"new.png"],
+                                           [UIImage imageNamed:@"old.png"]];
+        cell.imageView.animationDuration = 1.0;
+        [cell.imageView startAnimating];
+        [self performSelector:@selector(setOld:) withObject:topic afterDelay:3.0];
+    } else  {
+        cell.imageView.image = [UIImage imageNamed:@"old.png"];
+    }
+}
+
+- (void)setOld:(Topic *)topic
+{
+    topic.justupdated = [NSNumber numberWithBool:FALSE];
 }
 
 @end
