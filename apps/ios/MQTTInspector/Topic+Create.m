@@ -57,6 +57,7 @@ inManagedObjectContext:(NSManagedObjectContext *)context
         topic.belongsTo = session;
         topic.count = @(0);
         topic.justupdated = @(INTMAX_MAX);
+
     }
     return topic;
 }
@@ -115,6 +116,11 @@ inManagedObjectContext:(NSManagedObjectContext *)context
 - (BOOL)isJustupdated
 {
     return [self.justupdated boolValue];
+}
+
+- (void)setOld
+{
+    self.justupdated = [NSNumber numberWithBool:FALSE];
 }
 
 @end

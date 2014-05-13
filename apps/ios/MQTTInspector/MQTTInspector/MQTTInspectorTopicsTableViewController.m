@@ -42,7 +42,6 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         return [NSString stringWithFormat:@"Topics"];
     } else {
@@ -86,6 +85,7 @@
         cell.textLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
     }
     
+    
     cell.imageView.image = nil;
     cell.imageView.animationImages = nil;
     [cell.imageView stopAnimating];
@@ -99,15 +99,10 @@
                                            [UIImage imageNamed:@"old.png"]];
         cell.imageView.animationDuration = 1.0;
         [cell.imageView startAnimating];
-        [self performSelector:@selector(setOld:) withObject:topic afterDelay:3.0];
+        [topic performSelector:@selector(setOld) withObject:nil afterDelay:3.0];
     } else  {
         cell.imageView.image = [UIImage imageNamed:@"old.png"];
     }
-}
-
-- (void)setOld:(Topic *)topic
-{
-    topic.justupdated = [NSNumber numberWithBool:FALSE];
 }
 
 @end

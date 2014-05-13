@@ -152,6 +152,7 @@ size_t isutf8(unsigned char *str, size_t len)
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
+    
 #ifdef DEBUG
     NSLog(@"observeValueForKeyPath %@ %@ %@ %@", keyPath, object, change, context);
 #endif
@@ -168,17 +169,13 @@ size_t isutf8(unsigned char *str, size_t len)
                                                           [UIImage imageNamed:@"old.png"]];
             self.justupdatedImageView.animationDuration = 1.0;
             [self.justupdatedImageView startAnimating];
-            [self performSelector:@selector(setOld:) withObject:topic afterDelay:3.0];
+            [topic performSelector:@selector(setOld) withObject:nil afterDelay:3.0];
         } else  {
             self.justupdatedImageView.image = [UIImage imageNamed:@"old.png"];
         }
     }
+    
     [self show];
-}
-
-- (void)setOld:(Topic *)topic
-{
-    topic.justupdated = [NSNumber numberWithBool:FALSE];
 }
 
 - (NSString *)dataToPrettyString:(NSData *)data

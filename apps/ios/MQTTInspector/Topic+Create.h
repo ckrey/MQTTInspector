@@ -28,5 +28,6 @@ inManagedObjectContext:(NSManagedObjectContext *)context;
 - (NSString *)attributeTextPart3;
 - (NSString *)dataText;
 - (BOOL)isJustupdated;
+- (void)setOld;
 
 @end
