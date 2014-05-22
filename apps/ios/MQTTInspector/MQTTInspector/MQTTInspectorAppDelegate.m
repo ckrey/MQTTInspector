@@ -8,19 +8,13 @@
 
 #import "MQTTInspectorAppDelegate.h"
 #import "MQTTInspectorMasterViewController.h"
-#import "MQTTInspectorDetailViewController.h"
 #import "Session+Create.h"
 #import "Subscription+Create.h"
 #import "Publication+Create.h"
 
 @interface MQTTInspectorAppDelegate ()
 @property (nonatomic) UIBackgroundTaskIdentifier bgTask;
-@property (strong, nonatomic) void (^completionHandler)(UIBackgroundFetchResult);
-@property (strong, nonatomic) NSTimer *backgroundTimer;
-
 @end
-
-#define BACKGROUND_DISCONNECT_AFTER 10.0
 
 @implementation MQTTInspectorAppDelegate
 
@@ -32,6 +26,7 @@
 {
     NSLog(@"didFinishLaunchingWithOptions");
 
+    // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
         UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
@@ -49,10 +44,6 @@
         MQTTInspectorMasterViewController *controller = (MQTTInspectorMasterViewController *)navigationController.topViewController;
         controller.managedObjectContext = self.managedObjectContext;
     }
-    
-    self.completionHandler = nil;
-    [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-
     return YES;
 }
 							
@@ -77,33 +68,6 @@
                                
                                [self connectionClosed];
                            }];
-    
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-}
-
-- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-    NSLog(@"App performFetchWithCompletionHandler");
-    
-    self.completionHandler = completionHandler;
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"MQTTInspector" object:nil userInfo:@{@"event":@"startfetch"}];
-    
-    self.backgroundTimer = [NSTimer timerWithTimeInterval:BACKGROUND_DISCONNECT_AFTER
-                                                   target:self
-                                                 selector:@selector(disconnectInBackground)
-                                                 userInfo:Nil
-                                                  repeats:FALSE];
-    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-    [runLoop addTimer:self.backgroundTimer
-              forMode:NSDefaultRunLoopMode];
-}
-
-- (void)disconnectInBackground
-{
-    NSLog(@"App disconnectInBackground");
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"MQTTInspector" object:nil userInfo:@{@"event":@"endfetch"}];
 }
 
 - (void)connectionClosed
@@ -113,10 +77,6 @@
     if (self.bgTask != UIBackgroundTaskInvalid) {
         [[UIApplication sharedApplication] endBackgroundTask:self.bgTask];
         self.bgTask = UIBackgroundTaskInvalid;
-    }
-    if (self.completionHandler) {
-        self.completionHandler(UIBackgroundFetchResultNewData);
-        self.completionHandler = nil;
     }
 }
 
@@ -131,6 +91,7 @@
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     NSLog(@"applicationDidBecomeActive");
+
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

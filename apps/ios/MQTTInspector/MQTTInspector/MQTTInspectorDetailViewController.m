@@ -73,10 +73,6 @@ static MQTTSession *theMQTTSession;
                                              selector:@selector(willEnter:)
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
-    [[NSNotificationCenter defaultCenter ]addObserver:self
-                                             selector:@selector(backgroundfetch:)
-                                                 name:@"MQTTInspector"
-                                               object:nil];
 }
 
 - (void)willResign:(NSNotification *)notification
@@ -88,18 +84,6 @@ static MQTTSession *theMQTTSession;
 {
     if ([self.session.autoconnect boolValue]) {
         [self connect:nil];
-    }
-}
-
-- (void)backgroundfetch:(NSNotification *)notification
-{
-    if ([notification.userInfo[@"event"] isEqualToString:@"startfetch"]) {
-        if ([self.session.autoconnect boolValue]) {
-            [self connect:nil];
-        }
-    }
-    if ([notification.userInfo[@"event"] isEqualToString:@"endfetch"]) {
-        [self disconnect:nil];
     }
 }
 
@@ -611,14 +595,6 @@ static MQTTSession *theMQTTSession;
     }
     
     if (filter) {
-        
-        UILocalNotification *notification = [[UILocalNotification alloc] init];
-        notification.alertBody = @"Message received";
-        notification.soundName = UILocalNotificationDefaultSoundName;
-        notification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
-        notification.alertLaunchImage = @"AppIcon";
-        [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-
         [self startQueue];
         [self.queueManagedObjectContext performBlock:^{
             Session *mySession = [Session existSessionWithName:name
