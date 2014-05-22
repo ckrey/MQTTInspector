@@ -17,5 +17,7 @@
 
 + (void)alert:(NSString *)message;
 - (void)publish:(Publication *)pub;
+- (void)willResign:(NSNotification *)notification;
+- (void)willEnter:(NSNotification *)notification;
 
 @end
