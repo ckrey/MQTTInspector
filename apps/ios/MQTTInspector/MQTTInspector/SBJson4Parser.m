@@ -165,7 +165,7 @@ typedef enum {
 
 		case SBJson4ChunkObject:
 			NSParameterAssert(keyStack.count);
-			[dict setObject:obj forKey:[keyStack lastObject]];
+			dict[[keyStack lastObject]] = obj;
 			[keyStack removeLastObject];
 			break;
 
@@ -237,7 +237,7 @@ typedef enum {
 }
 
 - (void)parserFoundBoolean:(BOOL)x {
-	[self parserFound:[NSNumber numberWithBool:x] isValue:YES ];
+	[self parserFound:@(x) isValue:YES ];
 }
 
 - (void)parserFoundNull {
@@ -268,10 +268,10 @@ typedef enum {
 - (NSString *)pathString {
     NSMutableString *pathString = [NSMutableString stringWithString:@"$"];
     for(NSUInteger i=1;i<[path count];i++) {
-        if([[path objectAtIndex:i] isKindOfClass:[NSNumber class]])
-            [pathString appendString:[NSString stringWithFormat:@"[%@]",[path objectAtIndex:i]]];
+        if([path[i] isKindOfClass:[NSNumber class]])
+            [pathString appendString:[NSString stringWithFormat:@"[%@]",path[i]]];
         else
-            [pathString appendString:[NSString stringWithFormat:@".%@",[path objectAtIndex:i]]];
+            [pathString appendString:[NSString stringWithFormat:@".%@",path[i]]];
     }
     return pathString;
 }

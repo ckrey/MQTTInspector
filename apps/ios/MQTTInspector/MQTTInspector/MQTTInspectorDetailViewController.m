@@ -394,7 +394,7 @@ static MQTTSession *theMQTTSession;
                         @"MQTTSessionEventProtocolError"
                         ];
     
-    NSLog(@"handleEvent: %@ (%d) %@", events[eventCode % [events count]], eventCode, [error description]);
+    NSLog(@"handleEvent: %@ (%ld) %@", events[eventCode % [events count]], (long)eventCode, [error description]);
     NSLog(@"session/self.mqttSession: %@/%@", session, self.mqttSession);
 #endif
 

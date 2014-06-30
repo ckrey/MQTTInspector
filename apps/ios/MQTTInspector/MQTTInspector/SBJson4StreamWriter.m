@@ -46,10 +46,10 @@ static NSNumber *kNegativeInfinity;
 @implementation SBJson4StreamWriter
 
 + (void)initialize {
-    kPositiveInfinity = [NSNumber numberWithDouble:+HUGE_VAL];
-    kNegativeInfinity = [NSNumber numberWithDouble:-HUGE_VAL];
-    kTrue = [NSNumber numberWithBool:YES];
-    kFalse = [NSNumber numberWithBool:NO];
+    kPositiveInfinity = @(+HUGE_VAL);
+    kNegativeInfinity = @(-HUGE_VAL);
+    kTrue = @YES;
+    kFalse = @NO;
 }
 
 #pragma mark Housekeeping
@@ -94,7 +94,7 @@ static NSNumber *kNegativeInfinity;
 
 		if (![self writeString:k])
 			return NO;
-		if (![self writeValue:[dict objectForKey:k]])
+		if (![self writeValue:dict[k]])
 			return NO;
 	}
 
@@ -277,7 +277,7 @@ static const char *strForChar(int c) {
 	[_state appendSeparator:self];
 	if (_humanReadable) [_state appendWhitespace:self];
 
-	NSMutableData *buf = [cache objectForKey:string];
+	NSMutableData *buf = cache[string];
 	if (!buf) {
 
         NSUInteger len = [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
@@ -304,7 +304,7 @@ static const char *strForChar(int c) {
             [buf appendBytes:utf8 + written length:i - written];
 
         [buf appendBytes:"\"" length:1];
-        [cache setObject:buf forKey:string];
+        cache[string] = buf;
     }
 
 	[_delegate writer:self appendBytes:[buf bytes] length:[buf length]];

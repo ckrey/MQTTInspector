@@ -59,8 +59,8 @@
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *result = self.resolverResults[indexPath.row];
-    self.session.host = [result objectForKey:kSRVResolverTarget];
-    self.session.port = [result objectForKey:kSRVResolverPort];
+    self.session.host = result[kSRVResolverTarget];
+    self.session.port = result[kSRVResolverPort];
     return indexPath;
 }
 
@@ -68,12 +68,12 @@
 {
     NSDictionary *result = self.resolverResults[indexPath.row];
     cell.textLabel.text = [NSString stringWithFormat:@"%@:%@",
-                           [result objectForKey:kSRVResolverTarget],
-                           [result objectForKey:kSRVResolverPort]];
+                           result[kSRVResolverTarget],
+                           result[kSRVResolverPort]];
     
     cell.detailTextLabel.text = [NSString stringWithFormat:@"Priority:%@ Weight:%@",
-                                 [result objectForKey:kSRVResolverPriority],
-                                 [result objectForKey:kSRVResolverWeight]];
+                                 result[kSRVResolverPriority],
+                                 result[kSRVResolverWeight]];
     
 }
 

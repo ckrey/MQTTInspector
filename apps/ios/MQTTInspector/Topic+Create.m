@@ -120,7 +120,7 @@ inManagedObjectContext:(NSManagedObjectContext *)context
 
 - (void)setOld
 {
-    self.justupdated = [NSNumber numberWithBool:FALSE];
+    self.justupdated = @FALSE;
 }
 
 @end

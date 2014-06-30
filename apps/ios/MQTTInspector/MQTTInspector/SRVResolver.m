@@ -193,18 +193,15 @@
     if (rr != NULL) {
         NSString *      target;
         
-        target = [NSString stringWithCString:rr->data.SRV->target encoding:NSASCIIStringEncoding];
+        target = @(rr->data.SRV->target);
         if (target != nil) {
             NSDictionary *  result;
             NSIndexSet *    resultIndexSet;
         
-            result = [NSDictionary dictionaryWithObjectsAndKeys:
-                [NSNumber numberWithUnsignedInt:rr->data.SRV->priority], kSRVResolverPriority,
-                [NSNumber numberWithUnsignedInt:rr->data.SRV->weight],   kSRVResolverWeight,
-                [NSNumber numberWithUnsignedInt:rr->data.SRV->port],     kSRVResolverPort,
-                target,                                                  kSRVResolverTarget, 
-                nil
-            ];
+            result = @{kSRVResolverPriority: @((uint)rr->data.SRV->priority),
+                       kSRVResolverWeight: @((uint)rr->data.SRV->weight),
+                       kSRVResolverPort: @((uint)rr->data.SRV->port),
+                       kSRVResolverTarget: target};
             assert(result != nil);
             
             resultIndexSet = [NSIndexSet indexSetWithIndex:self.results.count];

@@ -246,7 +246,7 @@ size_t isutf8(unsigned char *str, size_t len)
 
         const char *cp = [message cStringUsingEncoding:NSISOLatin1StringEncoding];
         if (cp) {
-            NSString *u = [NSString stringWithUTF8String:cp];
+            NSString *u = @(cp);
             return [NSString stringWithFormat:@"%@", u];
         } else {
             return [NSString stringWithFormat:@"%@", [data description]];

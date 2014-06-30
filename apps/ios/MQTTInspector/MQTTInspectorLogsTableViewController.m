@@ -54,12 +54,10 @@
     Message *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
     UIFont *fontBold = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
-    NSDictionary *attributesBold = [NSDictionary dictionaryWithObject:fontBold
-                                                                forKey:NSFontAttributeName];
+    NSDictionary *attributesBold = @{NSFontAttributeName: fontBold};
     
     UIFont *fontLight = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
-    NSDictionary *attributesLight = [NSDictionary dictionaryWithObject:fontLight
-                                                               forKey:NSFontAttributeName];
+    NSDictionary *attributesLight = @{NSFontAttributeName: fontLight};
 
     
     NSMutableAttributedString *as = [[NSMutableAttributedString alloc]
