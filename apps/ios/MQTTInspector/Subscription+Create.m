@@ -35,11 +35,13 @@
             subscription.color = @([Subscription uniqueHue:session]);
             subscription.position = @([Subscription newPosition:session]);
             subscription.belongsTo = session;
+            subscription.state = @(false);
         } else {
             subscription = [matches lastObject];
-
+            if (subscription.state == nil) {
+                subscription.state = @(false);
+            }
         }
-        subscription.state = @(0);
     }
 
     return subscription;
@@ -63,7 +65,6 @@
     } else {
         if ([matches count]) {
             subscription = [matches lastObject];
-            subscription.state = @(0);
             for (Subscription *sub in session.hasSubs) {
                 if (!sub.position) {
                     sub.position = @([Subscription newPosition:session]);

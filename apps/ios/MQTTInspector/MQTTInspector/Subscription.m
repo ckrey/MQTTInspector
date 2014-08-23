@@ -2,7 +2,7 @@
 //  Subscription.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 05.05.14.
+//  Created by Christoph Krey on 21.08.14.
 //  Copyright (c) 2014 Christoph Krey. All rights reserved.
 //
 

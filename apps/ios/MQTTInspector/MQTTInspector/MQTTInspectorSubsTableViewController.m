@@ -145,13 +145,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Subscription *subscription = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    if ([subscription.state intValue]) {
+    if ([subscription.state boolValue]) {
         [self.mother.mqttSession unsubscribeTopic:subscription.topic];
-        subscription.state = @(0);
+        subscription.state = @(false);
     } else {
         [self.mother.mqttSession subscribeToTopic:subscription.topic
                                               atLevel:[subscription.qos intValue]];
-        subscription.state = @(2); // assuming subscribe works
+        subscription.state = @(true); // assuming subscribe works
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

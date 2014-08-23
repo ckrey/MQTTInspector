@@ -32,7 +32,6 @@
         publication.retained = @(retained);
         publication.position = @([Publication newPosition:session]);
         publication.belongsTo = session;
-        publication.state = @(0);
     }
     
     return publication;
@@ -56,7 +55,6 @@
     } else {
         if ([matches count]) {
             publication = [matches lastObject];
-            publication.state = @(0);
             for (Publication *pub in session.hasPubs) {
                 if (!pub.position) {
                     pub.position = @([Publication newPosition:session]);

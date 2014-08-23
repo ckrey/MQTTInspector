@@ -259,10 +259,10 @@ static MQTTSession *theMQTTSession;
     _mqttSession = mqttSession;
     theMQTTSession = _mqttSession;
 }
- 
+
 #pragma mark - Managing the detail item
 - (void)setSession:(Session *)session
-{    
+{
     if (theSession) {
         if (theMQTTSession) {
             [theMQTTSession close];
@@ -282,7 +282,7 @@ static MQTTSession *theMQTTSession;
     if (self.masterPopoverController != nil) {
         [self.masterPopoverController dismissPopoverAnimated:YES];
     }
-
+    
     [self viewChanged:nil];
     self.title = session.name;
     [self showCount];
@@ -383,6 +383,14 @@ static MQTTSession *theMQTTSession;
 }
 
 #pragma mark - MQTTSessionDelegate
+- (void)connected:(MQTTSession *)session sessionPresent:(BOOL)sessionPresent {
+    if (!sessionPresent) {
+        for (Subscription *sub in self.session.hasSubs) {
+            sub.state = @(false);
+        }
+    }
+}
+
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
 {
 #ifdef DEBUG
@@ -527,7 +535,7 @@ static MQTTSession *theMQTTSession;
 - (void)newMessage:(MQTTSession *)session
               data:(NSData *)data
            onTopic:(NSString *)topic
-               qos:(int)qos
+               qos:(MQTTQosLevel)qos
           retained:(BOOL)retained
                mid:(unsigned int)mid
 {
