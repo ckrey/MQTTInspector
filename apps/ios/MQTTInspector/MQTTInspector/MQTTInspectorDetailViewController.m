@@ -399,7 +399,8 @@ static MQTTSession *theMQTTSession;
                         @"MQTTSessionEventConnectionRefused",
                         @"MQTTSessionEventConnectionClosed",
                         @"MQTTSessionEventConnectionError",
-                        @"MQTTSessionEventProtocolError"
+                        @"MQTTSessionEventProtocolError",
+                        @"MQTTSessionEventConnectionClosedByBroker"
                         ];
     
     NSLog(@"handleEvent: %@ (%ld) %@", events[eventCode % [events count]], (long)eventCode, [error description]);
