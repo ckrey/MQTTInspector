@@ -41,7 +41,7 @@
                                autoconnect:YES
                                     dnssrv:YES
                                  dnsdomain:@"mosquitto.org"
-                             protocolLevel:3
+                             protocolLevel:4
                            attributefilter:@".*"
                                topicfilter:@".*"
                                 datafilter:@".*"
@@ -85,7 +85,7 @@
                                autoconnect:NO
                                     dnssrv:NO
                                  dnsdomain:@"eclipse.org"
-                             protocolLevel:3
+                             protocolLevel:4
                            attributefilter:@".*"
                                topicfilter:@".*"
                                 datafilter:@".*"
@@ -133,7 +133,7 @@
                                         autoconnect:YES
                                              dnssrv:NO
                                              dnsdomain:@""
-                                      protocolLevel:3
+                                      protocolLevel:4
                                     attributefilter:@".*"
                                         topicfilter:@".*"
                                          datafilter:@".*"

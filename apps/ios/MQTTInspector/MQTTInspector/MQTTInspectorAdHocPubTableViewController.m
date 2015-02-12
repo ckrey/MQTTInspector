@@ -47,6 +47,12 @@
     self.pub.qos = @(self.qosSegment.selectedSegmentIndex);
     
     [self.mother publish:self.pub];
+    NSArray *vcs = self.navigationController.viewControllers;
+    if (vcs[vcs.count - 1] == self) {
+        [self.navigationController popViewControllerAnimated:TRUE];
+    } else {
+        [self dismissViewControllerAnimated:TRUE completion:nil];
+    }
 }
 
 @end

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7119ECBD5405007C083892B6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D87D4EFD77FBFD2DA8EC5BD3 /* libPods.a */; };
 		84147CDB1832662B0018E601 /* Command+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147CDA1832662B0018E601 /* Command+Create.m */; };
 		84147CDE183269D50018E601 /* MQTTInspectorCommandsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147CDD183269D50018E601 /* MQTTInspectorCommandsTableViewController.m */; };
 		84147CF71834CDD10018E601 /* MQTTInspectorSetupPubsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147CF61834CDD10018E601 /* MQTTInspectorSetupPubsTableViewController.m */; };
@@ -52,12 +53,12 @@
 		8492C988182E63D400A40D8B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8492C986182E63D400A40D8B /* InfoPlist.strings */; };
 		8492C98A182E63D400A40D8B /* MQTTInspectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8492C989182E63D400A40D8B /* MQTTInspectorTests.m */; };
 		8492C99C182EDF8F00A40D8B /* Session+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 8492C99B182EDF8F00A40D8B /* Session+Create.m */; };
-		849D457F18CE6E4F00201BF3 /* MQTTClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 845DBE7B1885764C00EDB183 /* MQTTClient.framework */; };
 		84A1985C1830EC0B00A77080 /* Message+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1985B1830EC0B00A77080 /* Message+Create.m */; };
 		84A1986818310FC000A77080 /* MQTTInspectorLogsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1986718310FC000A77080 /* MQTTInspectorLogsTableViewController.m */; };
 		84A1987A183114BF00A77080 /* Topic+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A19879183114BF00A77080 /* Topic+Create.m */; };
 		84A1987D1831179D00A77080 /* MQTTInspectorTopicsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1987C1831179D00A77080 /* MQTTInspectorTopicsTableViewController.m */; };
 		84B1C73C183B554D0062D1EE /* MQTTInspectorDNSSRVTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B1C73B183B554D0062D1EE /* MQTTInspectorDNSSRVTableViewController.m */; };
+		84B97F9F1A8CF23200F04760 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84B97F9E1A8CF23200F04760 /* Launch Screen.xib */; };
 		84CF334E1918AC3300E433A1 /* SBJson4Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CF33411918AC3300E433A1 /* SBJson4Parser.m */; };
 		84CF334F1918AC3300E433A1 /* SBJson4StreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CF33431918AC3300E433A1 /* SBJson4StreamParser.m */; };
 		84CF33501918AC3300E433A1 /* SBJson4StreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CF33451918AC3300E433A1 /* SBJson4StreamParserState.m */; };
@@ -79,6 +80,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		02EC590D0928FE1689E637DD /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		84147CD91832662B0018E601 /* Command+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Command+Create.h"; path = "../Command+Create.h"; sourceTree = "<group>"; };
 		84147CDA1832662B0018E601 /* Command+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Command+Create.m"; path = "../Command+Create.m"; sourceTree = "<group>"; };
 		84147CDC183269D50018E601 /* MQTTInspectorCommandsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTInspectorCommandsTableViewController.h; sourceTree = "<group>"; };
@@ -114,7 +116,6 @@
 		8423B4B6187C5B8D006B08AC /* MQTTInspector 1.2a.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 1.2a.xcdatamodel"; sourceTree = "<group>"; };
 		84283FF71846ABD70078DA05 /* MQTTInspector 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 5.xcdatamodel"; sourceTree = "<group>"; };
 		845DBE6F1884310700EDB183 /* MQTTInspector 1.3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 1.3.xcdatamodel"; sourceTree = "<group>"; };
-		845DBE7B1885764C00EDB183 /* MQTTClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MQTTClient.framework; path = "../../../../MQTT-Client-Framework/MQTTClient/dist/MQTTClient.framework"; sourceTree = "<group>"; };
 		84684E881832192800AE13B5 /* Subscription+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Subscription+Create.h"; path = "../Subscription+Create.h"; sourceTree = "<group>"; };
 		84684E891832192800AE13B5 /* Subscription+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Subscription+Create.m"; path = "../Subscription+Create.m"; sourceTree = "<group>"; };
 		84684E8B1832193B00AE13B5 /* Publication+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Publication+Create.h"; path = "../Publication+Create.h"; sourceTree = "<group>"; };
@@ -174,6 +175,7 @@
 		84A1987C1831179D00A77080 /* MQTTInspectorTopicsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTInspectorTopicsTableViewController.m; sourceTree = "<group>"; };
 		84B1C73A183B554D0062D1EE /* MQTTInspectorDNSSRVTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTInspectorDNSSRVTableViewController.h; sourceTree = "<group>"; };
 		84B1C73B183B554D0062D1EE /* MQTTInspectorDNSSRVTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTInspectorDNSSRVTableViewController.m; sourceTree = "<group>"; };
+		84B97F9E1A8CF23200F04760 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		84BB7121183A3EE7005AF544 /* MQTTInspector 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 3.xcdatamodel"; sourceTree = "<group>"; };
 		84BB7125183A82FC005AF544 /* MQTTInspector 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 4.xcdatamodel"; sourceTree = "<group>"; };
 		84C308F1183A2F6B0031C606 /* MQTTInspector 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 2.xcdatamodel"; sourceTree = "<group>"; };
@@ -196,6 +198,8 @@
 		84CF335A1918BF0700E433A1 /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
 		84CF335B1918BF0700E433A1 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
 		84ECF5E41916624E00B99683 /* MQTTInspector 1.4.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 1.4.2.xcdatamodel"; sourceTree = "<group>"; };
+		D87D4EFD77FBFD2DA8EC5BD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB27ED3878E4AB6D64BD59B6 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,12 +207,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				849D457F18CE6E4F00201BF3 /* MQTTClient.framework in Frameworks */,
 				84147D1018365C740018E601 /* libresolv.dylib in Frameworks */,
 				8492C955182E63D300A40D8B /* CoreGraphics.framework in Frameworks */,
 				8492C959182E63D300A40D8B /* CoreData.framework in Frameworks */,
 				8492C957182E63D300A40D8B /* UIKit.framework in Frameworks */,
 				8492C953182E63D300A40D8B /* Foundation.framework in Frameworks */,
+				7119ECBD5405007C083892B6 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +269,7 @@
 				8492C983182E63D400A40D8B /* MQTTInspectorTests */,
 				8492C951182E63D300A40D8B /* Frameworks */,
 				8492C950182E63D300A40D8B /* Products */,
+				E8B970C4EED728C9E18A6AEC /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -280,7 +285,6 @@
 		8492C951182E63D300A40D8B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				845DBE7B1885764C00EDB183 /* MQTTClient.framework */,
 				84147D0F18365C740018E601 /* libresolv.dylib */,
 				84147D0A18363C540018E601 /* CFNetwork.framework */,
 				84147D0818363BFC0018E601 /* libdns_services.dylib */,
@@ -289,6 +293,7 @@
 				8492C956182E63D300A40D8B /* UIKit.framework */,
 				8492C958182E63D300A40D8B /* CoreData.framework */,
 				8492C97C182E63D400A40D8B /* XCTest.framework */,
+				D87D4EFD77FBFD2DA8EC5BD3 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -305,6 +310,7 @@
 				84CF335E1918C0BA00E433A1 /* Setup */,
 				84CF335D1918C08E00E433A1 /* Monitor */,
 				8492C975182E63D400A40D8B /* Images.xcassets */,
+				84B97F9E1A8CF23200F04760 /* Launch Screen.xib */,
 				8469BE7E1916DF6100DB43F5 /* old.png */,
 				8469BE7F1916DF6100DB43F5 /* new.png */,
 				84CF33581918AC3D00E433A1 /* SBJson */,
@@ -415,6 +421,15 @@
 			name = Setup;
 			sourceTree = "<group>";
 		};
+		E8B970C4EED728C9E18A6AEC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FB27ED3878E4AB6D64BD59B6 /* Pods.debug.xcconfig */,
+				02EC590D0928FE1689E637DD /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -422,9 +437,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8492C98D182E63D400A40D8B /* Build configuration list for PBXNativeTarget "MQTTInspector" */;
 			buildPhases = (
+				2E71F7F5D3628866D6688D66 /* Check Pods Manifest.lock */,
 				8492C94B182E63D300A40D8B /* Sources */,
 				8492C94C182E63D300A40D8B /* Frameworks */,
 				8492C94D182E63D300A40D8B /* Resources */,
+				91A50C70F9D8936B78C48E04 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -500,6 +517,7 @@
 				8469BE801916DF6100DB43F5 /* old.png in Resources */,
 				8492C976182E63D400A40D8B /* Images.xcassets in Resources */,
 				8492C968182E63D300A40D8B /* Main_iPhone.storyboard in Resources */,
+				84B97F9F1A8CF23200F04760 /* Launch Screen.xib in Resources */,
 				8492C95F182E63D300A40D8B /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -513,6 +531,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2E71F7F5D3628866D6688D66 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		91A50C70F9D8936B78C48E04 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8492C94B182E63D300A40D8B /* Sources */ = {
@@ -691,18 +742,17 @@
 		};
 		8492C98E182E63D400A40D8B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FB27ED3878E4AB6D64BD59B6 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"/Users/ckrey/MQTT-Client-Framework/MQTTClient/dist",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MQTTInspector/MQTTInspector-Prefix.pch";
 				INFOPLIST_FILE = "MQTTInspector/MQTTInspector-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -711,18 +761,17 @@
 		};
 		8492C98F182E63D400A40D8B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 02EC590D0928FE1689E637DD /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"/Users/ckrey/MQTT-Client-Framework/MQTTClient/dist",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MQTTInspector/MQTTInspector-Prefix.pch";
 				INFOPLIST_FILE = "MQTTInspector/MQTTInspector-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;

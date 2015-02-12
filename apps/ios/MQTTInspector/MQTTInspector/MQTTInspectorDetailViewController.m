@@ -752,12 +752,12 @@ static MQTTSession *theMQTTSession;
     //
 }
 
-- (void)buffered:(MQTTSession *)session queued:(NSUInteger)queued flowingIn:(NSUInteger)flowingIn flowingOut:(NSUInteger)flowingOut
+- (void)buffered:(MQTTSession *)session flowingIn:(NSUInteger)flowingIn flowingOut:(NSUInteger)flowingOut
 {
 #ifdef DEBUG
-    NSLog(@"Connection buffered q%lu i%lu o%lu", (unsigned long)queued, (unsigned long)flowingIn, (unsigned long)flowingOut);
+    NSLog(@"Connection buffered i%lu o%lu", (unsigned long)flowingIn, (unsigned long)flowingOut);
 #endif
-    if (queued + flowingIn + flowingOut) {
+    if (flowingIn + flowingOut) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = TRUE;
     } else {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = FALSE;

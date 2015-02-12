@@ -205,7 +205,7 @@
                                            autoconnect:NO
                                                 dnssrv:NO
                                              dnsdomain:@""
-                                         protocolLevel:3
+                                         protocolLevel:4
                                        attributefilter:@""
                                            topicfilter:@""
                                             datafilter:@""
