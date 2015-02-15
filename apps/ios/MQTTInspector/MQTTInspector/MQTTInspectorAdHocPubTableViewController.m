@@ -34,7 +34,7 @@
                          inManagedObjectContext:self.mother.session.managedObjectContext];
     
     self.topicText.text = self.pub.topic;
-    self.dataText.text = [MQTTInspectorDataViewController dataToString:self.pub.data];
+    self.dataText.text = [[NSString alloc] initWithData:self.pub.data encoding:NSUTF8StringEncoding];
     self.qosSegment.selectedSegmentIndex = [self.pub.qos intValue];
     self.retainSwitch.on = [self.pub.retained boolValue];
 }

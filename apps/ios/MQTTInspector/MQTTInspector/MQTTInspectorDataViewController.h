@@ -12,7 +12,5 @@
 #import "Command+Create.h"
 
 @interface MQTTInspectorDataViewController : UIViewController
-+ (NSString *)dataToString:(NSData *)data;
-
 @property (strong, nonatomic) id object;
 @end

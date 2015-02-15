@@ -98,7 +98,7 @@ inManagedObjectContext:(NSManagedObjectContext *)context
 
 - (NSString *)dataText
 {
-    return [MQTTInspectorDataViewController dataToString:self.data];
+    return [[NSString alloc] initWithData:self.data encoding:NSUTF8StringEncoding];
 }
 
 

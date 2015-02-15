@@ -168,7 +168,7 @@ static MQTTSession *theMQTTSession;
 
 - (void)publish:(Publication *)pub
 {
-    NSString *string = [MQTTInspectorDataViewController dataToString:pub.data];
+    NSString *string = [[NSString alloc] initWithData:pub.data encoding:NSUTF8StringEncoding];
     
     // REPLACE %t with timeIntervalSince1970
     NSString *nowString = [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]];
@@ -568,7 +568,7 @@ static MQTTSession *theMQTTSession;
     }
     
 
-    NSString *dataString = [MQTTInspectorDataViewController dataToString:data];
+    NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSRegularExpression *dataRegex =
     [NSRegularExpression regularExpressionWithPattern:datafilter ? datafilter : @"" options:0 error:&error];
     if (dataRegex){
