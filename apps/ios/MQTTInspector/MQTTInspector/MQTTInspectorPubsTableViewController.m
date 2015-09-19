@@ -10,11 +10,13 @@
 #import "Publication+Create.h"
 #import "MQTTInspectorDataViewController.h"
 #import "MQTTInspectorDetailViewController.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface MQTTInspectorPubsTableViewController ()
 @end
 
 @implementation MQTTInspectorPubsTableViewController
+static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (void)setTableView:(UITableView *)tableView
 {
@@ -59,7 +61,7 @@
 	if (![aFetchedResultsController performFetch:&error]) {
         // Replace this implementation with code to handle     the error appropriately.
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-	    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+	    DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
 	    abort();
 	}
     
@@ -101,9 +103,8 @@
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
-#ifdef DEBUG
-    NSLog(@"PUBs moveRowAtIndexPath %ld > %ld", (long)sourceIndexPath.row, (long)destinationIndexPath.row);
-#endif
+    DDLogVerbose(@"PUBs moveRowAtIndexPath %ld > %ld",
+                 (long)sourceIndexPath.row, (long)destinationIndexPath.row);
     self.noupdate = TRUE;
     
     for (NSUInteger i = 0; i < MIN(destinationIndexPath.row, sourceIndexPath.row); i++) {

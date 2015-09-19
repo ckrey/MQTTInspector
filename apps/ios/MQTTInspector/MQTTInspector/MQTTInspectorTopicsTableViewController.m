@@ -10,12 +10,14 @@
 #import "Topic+Create.h"
 #import "Subscription+Create.h"
 #import "MQTTInspectorDataViewController.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface MQTTInspectorTopicsTableViewController ()
 
 @end
 
 @implementation MQTTInspectorTopicsTableViewController
+static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (NSFetchRequest *)fetchRequestForTableView
 {
@@ -88,9 +90,7 @@
     cell.imageView.animationImages = nil;
     [cell.imageView stopAnimating];
     
-#ifdef DEBUG
-    NSLog(@"topic %@ is %d", topic.topic, [topic.justupdated boolValue]);
-#endif
+    DDLogVerbose(@"topic %@ is %d", topic.topic, [topic.justupdated boolValue]);
     if ([topic isJustupdated]) {
         cell.imageView.image = [UIImage imageNamed:@"new.png"];
         cell.imageView.animationImages = @[[UIImage imageNamed:@"new.png"],

@@ -15,6 +15,15 @@ A general MQTT testing app for iOS (iPhone and iPad)
 * Panel showing low-level communication with broker
 * Panels can be frozen (halts all display activity) for, say, taking screenshots
 
+# New features in 1.7
+* [NEW] show version number in lauch screen
+* [NEW] Fabric.io Crashlytics included
+* [NEW] Cocoalumberjack Pod included
+* [NEW] SB4Json as Pod
+* [FIX] crash when trying to display connect error
+* [FIX] crash when receiving binary payload
+* [NEW] return key in text fields closes keyboard
+
 # New features in 1.3
 * Drag to adjust screen sizes
 * Export (share) edit, and import your complete session settings via email / json

@@ -21,6 +21,7 @@
 #import "MQTTInspectorSetupPubsTableViewController.h"
 #import "MQTTInspectorSetupSubsTableViewController.h"
 #import "MQTTInspectorAppDelegate.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 static Session *theSession;
 static MQTTSession *theMQTTSession;
@@ -47,7 +48,6 @@ static MQTTSession *theMQTTSession;
 @property (strong, nonatomic) MQTTInspectorPubsTableViewController *pubsTVC;
 @property (weak, nonatomic) IBOutlet UITextField *countText;
 
-@property (strong, nonatomic) UIAlertView *alertView;
 @property (strong, nonatomic) NSError *lastError;
 @property (nonatomic) int errorCount;
 @property (strong, nonatomic) NSManagedObjectContext *queueManagedObjectContext;
@@ -61,10 +61,12 @@ static MQTTSession *theMQTTSession;
 @end
 
 @implementation MQTTInspectorDetailViewController
+static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [[NSNotificationCenter defaultCenter ]addObserver:self
                                              selector:@selector(willResign:)
                                                  name:UIApplicationWillResignActiveNotification
@@ -208,9 +210,7 @@ static MQTTSession *theMQTTSession;
     
     if (sender.state == UIGestureRecognizerStateChanged) {
         CGPoint point = [sender translationInView:sender.view];
-#ifdef DEBUG
-        NSLog(@"Pan: x=%f y=%f", point.x, point.y);
-#endif
+        DDLogVerbose(@"Pan: x=%f y=%f", point.x, point.y);
         CGRect mrect = self.messages.frame;
         CGRect srect = self.subs.frame;
         CGRect prect = self.pubs.frame;
@@ -375,7 +375,7 @@ static MQTTSession *theMQTTSession;
         }
         NSError *error;
         if (![self.session.managedObjectContext save:&error]) {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         }
     }
@@ -393,7 +393,6 @@ static MQTTSession *theMQTTSession;
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
 {
-#ifdef DEBUG
     NSArray *events = @[
                         @"MQTTSessionEventConnected",
                         @"MQTTSessionEventConnectionRefused",
@@ -403,14 +402,11 @@ static MQTTSession *theMQTTSession;
                         @"MQTTSessionEventConnectionClosedByBroker"
                         ];
     
-    NSLog(@"handleEvent: %@ (%ld) %@", events[eventCode % [events count]], (long)eventCode, [error description]);
-    NSLog(@"session/self.mqttSession: %@/%@", session, self.mqttSession);
-#endif
+    DDLogVerbose(@"handleEvent: %@ (%ld) %@", events[eventCode % [events count]], (long)eventCode, [error description]);
+    DDLogVerbose(@"session/self.mqttSession: %@/%@", session, self.mqttSession);
 
     if (session != self.mqttSession) {
-#ifdef DEBUG
-        NSLog(@"handleEvent: old Session");
-#endif
+        DDLogVerbose(@"handleEvent: old Session");
         return;
     }
     
@@ -520,15 +516,11 @@ static MQTTSession *theMQTTSession;
 
 - (void)limit:(NSArray *)array max:(int)max
 {
-#ifdef DEBUG
-    NSLog(@"#count %lu/%d", (unsigned long)[array count], max);
-#endif
+    DDLogVerbose(@"#count %lu/%d", (unsigned long)[array count], max);
     
     for (NSInteger i = [array count]; i > max; i--) {
         NSManagedObject *object = array[i - 1];
-#ifdef DEBUG
-        NSLog(@"delete %@", object);
-#endif
+        DDLogVerbose(@"delete %@", object);
         [object.managedObjectContext deleteObject:object];
     }
 }
@@ -560,26 +552,39 @@ static MQTTSession *theMQTTSession;
                                                              options:0
                                                                range:NSMakeRange(0, [attributes length])];
         if ((attributeMatches == 0) == includefilter) {
-#ifdef DEBUG
-            NSLog(@"filter regexp %@ does not match attributes %@ %@", attributefilter, attributes, @(includefilter));
-#endif
+            DDLogVerbose(@"filter regexp %@ does not match attributes %@ %@",
+                         attributefilter, attributes, @(includefilter));
             filter = FALSE;
         }
     }
     
 
-    NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSRegularExpression *dataRegex =
-    [NSRegularExpression regularExpressionWithPattern:datafilter ? datafilter : @"" options:0 error:&error];
-    if (dataRegex){
-        NSUInteger dataMatches = [dataRegex numberOfMatchesInString:dataString
-                                                            options:0
-                                                              range:NSMakeRange(0, [dataString length])];
-        if ((dataMatches == 0) == includefilter) {
-#ifdef DEBUG
-            NSLog(@"filter regexp %@ does not match data %@ %@", datafilter, dataString, @(includefilter));
-#endif
-            filter = FALSE;
+    DDLogVerbose(@"data %@", data ? data : @"nil");
+    NSString *dataString;
+    dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    DDLogVerbose(@"dataString NSUTF8StringEncoding %@", dataString ? dataString : @"nil");
+    if (!dataString) {
+        dataString = [[NSString alloc] initWithData:data encoding:NSUnicodeStringEncoding];
+        DDLogVerbose(@"dataString NSUnicodeStringEncoding %@", dataString ? dataString : @"nil");
+    }
+    if (!dataString) {
+        dataString = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
+        DDLogVerbose(@"dataString NSISOLatin1StringEncoding %@", dataString ? dataString : @"nil");
+    }
+    NSRegularExpression *dataRegex;
+
+    if (dataString) {
+        dataRegex =
+        [NSRegularExpression regularExpressionWithPattern:datafilter ? datafilter : @"" options:0 error:&error];
+        if (dataRegex){
+            NSUInteger dataMatches = [dataRegex numberOfMatchesInString:dataString
+                                                                options:0
+                                                                  range:NSMakeRange(0, [dataString length])];
+            if ((dataMatches == 0) == includefilter) {
+                DDLogVerbose(@"filter regexp %@ does not match data %@ %@",
+                             datafilter, dataString, @(includefilter));
+                filter = FALSE;
+            }
         }
     }
     
@@ -590,9 +595,8 @@ static MQTTSession *theMQTTSession;
                                                               options:0
                                                                 range:NSMakeRange(0, [topic length])];
         if ((topicMatches == 0) == includefilter) {
-#ifdef DEBUG
-            NSLog(@"filter regexp %@ does not match topic %@ %@", topicfilter, topic, @(includefilter));
-#endif
+            DDLogVerbose(@"filter regexp %@ does not match topic %@ %@",
+                         topicfilter, topic, @(includefilter));
             filter = FALSE;
         }
     }
@@ -609,9 +613,7 @@ static MQTTSession *theMQTTSession;
             Session *mySession = [Session existSessionWithName:name
                                         inManagedObjectContext:self.queueManagedObjectContext];
 
-#ifdef DEBUG
-            NSLog(@"newLog");
-#endif
+            DDLogVerbose(@"newLog");
             [Message messageAt:timestamp
                          topic:topic
                           data:data
@@ -625,9 +627,7 @@ static MQTTSession *theMQTTSession;
                                inManagedObjectContext:self.queueManagedObjectContext]
                     max:MAX_LOG];
             
-#ifdef DEBUG
-            NSLog(@"newTopic");
-#endif
+            DDLogVerbose(@"newTopic");
             Topic *theTopic = [Topic existsTopicNamed:topic
                                               session:mySession
                                inManagedObjectContext:self.queueManagedObjectContext];
@@ -656,7 +656,7 @@ static MQTTSession *theMQTTSession;
             NSError *error;
             
             if (![self.queueManagedObjectContext save:NULL]) {
-                NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+                DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
                 abort();
             }
 
@@ -674,9 +674,7 @@ static MQTTSession *theMQTTSession;
 
     [self startQueue];
     [self.queueManagedObjectContext performBlock:^{
-#ifdef DEBUG
-        NSLog(@"newCommand in");
-#endif
+        DDLogVerbose(@"newCommand in");
         Session *mySession = [Session existSessionWithName:name
                                     inManagedObjectContext:self.queueManagedObjectContext];
         [Command commandAt:timestamp
@@ -697,7 +695,7 @@ static MQTTSession *theMQTTSession;
         NSError *error;
         
         if (![self.queueManagedObjectContext save:NULL]) {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         }
 
@@ -714,9 +712,7 @@ static MQTTSession *theMQTTSession;
     
     [self startQueue];
     [self.queueManagedObjectContext performBlock:^{
-#ifdef DEBUG
-        NSLog(@"newCommand out");
-#endif
+        DDLogVerbose(@"newCommand out");
         Session *mySession = [Session existSessionWithName:name
                                     inManagedObjectContext:self.queueManagedObjectContext];
 
@@ -739,7 +735,7 @@ static MQTTSession *theMQTTSession;
         NSError *error;
         
         if (![self.queueManagedObjectContext save:NULL]) {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         }
 
@@ -754,9 +750,7 @@ static MQTTSession *theMQTTSession;
 
 - (void)buffered:(MQTTSession *)session flowingIn:(NSUInteger)flowingIn flowingOut:(NSUInteger)flowingOut
 {
-#ifdef DEBUG
-    NSLog(@"Connection buffered i%lu o%lu", (unsigned long)flowingIn, (unsigned long)flowingOut);
-#endif
+    DDLogVerbose(@"Connection buffered i%lu o%lu", (unsigned long)flowingIn, (unsigned long)flowingOut);
     if (flowingIn + flowingOut) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = TRUE;
     } else {
@@ -822,9 +816,7 @@ static MQTTSession *theMQTTSession;
 
 - (void)enableButtons
 {
-#ifdef DEBUG
-    NSLog(@"self.session.state: %@", self.session.state);
-#endif
+    DDLogVerbose(@"self.session.state: %@", self.session.state);
 
     if (self.session) {
         self.level.enabled = TRUE;

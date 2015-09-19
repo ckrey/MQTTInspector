@@ -37,8 +37,14 @@
     self.dataText.text = [[NSString alloc] initWithData:self.pub.data encoding:NSUTF8StringEncoding];
     self.qosSegment.selectedSegmentIndex = [self.pub.qos intValue];
     self.retainSwitch.on = [self.pub.retained boolValue];
+    self.topicText.delegate = self;
+    self.dataText.delegate = self;
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
+}
 
 - (IBAction)pubNow:(UIButton *)sender {
     self.pub.topic = self.topicText.text;

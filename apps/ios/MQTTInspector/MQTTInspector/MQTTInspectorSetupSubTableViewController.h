@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Subscription+Create.h"
 
-@interface MQTTInspectorSetupSubTableViewController : UITableViewController
+@interface MQTTInspectorSetupSubTableViewController : UITableViewController <UITextFieldDelegate>
 @property (strong, nonatomic) Subscription *sub;
 
 @end

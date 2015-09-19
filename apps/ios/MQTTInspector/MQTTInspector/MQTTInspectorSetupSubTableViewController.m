@@ -24,6 +24,12 @@
     
     self.topicText.text = self.sub.topic;
     self.qosSegment.selectedSegmentIndex = [self.sub.qos intValue];
+    self.topicText.delegate = self;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
 }
 
 - (IBAction)topicChanged:(UITextField *)sender {

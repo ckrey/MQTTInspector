@@ -62,6 +62,22 @@
     self.autoConnectSwitch.on = [self.session.autoconnect boolValue];
     self.protocolLevelText.text = [NSString stringWithFormat:@"%@", self.session.protocolLevel];
     self.sizeLimitText.text = [NSString stringWithFormat:@"%@", self.session.sizelimit];
+    
+    self.nameText.delegate = self;
+    self.hostText.delegate = self;
+    self.portText.delegate = self;
+    self.userText.delegate = self;
+    self.passwdText.delegate = self;
+    self.clientIdText.delegate = self;
+    self.keepaliveText.delegate = self;
+    self.domainText.delegate = self;
+    self.protocolLevelText.delegate = self;
+    self.sizeLimitText.delegate = self;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

@@ -6,12 +6,9 @@
 //  Copyright (c) 2013 Christoph Krey. All rights reserved.
 //
 
-#define SB
-
 #import "MQTTInspectorDataViewController.h"
-#ifdef SB
-#import "SBJson4.h"
-#endif
+#import <CocoaLumberjack/CocoaLumberjack.h>
+#import <SBJson/SBJson4.h>
 
 @interface MQTTInspectorDataViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *dataTextView;
@@ -22,6 +19,7 @@
 @end
 
 @implementation MQTTInspectorDataViewController
+static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -32,28 +30,28 @@
     if ([self.object isKindOfClass:[Topic class]]) {
         Topic *topic = (Topic *)self.object;
         [topic addObserver:self forKeyPath:@"justupdated"
-                        options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-                        context:nil];
+                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                   context:nil];
         [topic addObserver:self forKeyPath:@"timestamp"
-                        options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-                        context:nil];
+                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                   context:nil];
         [topic addObserver:self forKeyPath:@"qos"
-                        options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-                        context:nil];
+                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                   context:nil];
         [topic addObserver:self forKeyPath:@"retain"
-                        options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-                        context:nil];
+                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                   context:nil];
         [topic addObserver:self forKeyPath:@"mid"
-                        options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-                        context:nil];
+                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                   context:nil];
         [topic addObserver:self forKeyPath:@"count"
-                        options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-                        context:nil];
+                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                   context:nil];
         [topic addObserver:self forKeyPath:@"data"
-                        options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-                        context:nil];
+                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                   context:nil];
     }
-
+    
     [self show];
 }
 
@@ -104,10 +102,7 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    
-#ifdef DEBUG
-    NSLog(@"observeValueForKeyPath %@ %@ %@ %@", keyPath, object, change, context);
-#endif
+    DDLogVerbose(@"observeValueForKeyPath %@ %@ %@ %@", keyPath, object, change, context);
     Topic *topic = (Topic *)object;
     
     if ([keyPath isEqualToString:@"justupdated"]) {
@@ -134,21 +129,15 @@
 {
     if (self.formatSwitch.isOn) {
         __block id json;
-#ifdef SB
-        SBJson4Parser *parser = [SBJson4Parser parserWithBlock:^(id item, BOOL *stop){
-#ifdef DEBUG
-            NSLog(@"parser value %@", item);
-#endif
+        SBJson4Parser *parser = [SBJson4Parser parserWithBlock:^(id item, BOOL *stop) {
+            DDLogVerbose(@"parser value %@", item);
             json = item;
         }
                                                 allowMultiRoot:NO
                                                unwrapRootArray:NO
                                                   errorHandler:^(NSError *error) {
-#ifdef DEBUG
-                                                      NSLog(@"parser error %@", error);
-#endif
-                                                      
-        }];
+                                                      DDLogVerbose(@"parser error %@", error);
+                                                  }];
         SBJson4ParserStatus status = [parser parse:data];
         if (status == SBJson4ParserComplete) {
             SBJson4Writer *writer = [[SBJson4Writer alloc] init];
@@ -161,26 +150,6 @@
             return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         }
         
-#else // SB
-        NSError *error;
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-        if (dict) {
-            NSData *prettyData = [NSJSONSerialization dataWithJSONObject:dict
-                                                                 options:NSJSONWritingPrettyPrinted
-                                                                   error:&error];
-            NSString *message = [[NSString alloc] init];
-            for (int i = 0; i < prettyData.length; i++) {
-                char c;
-                [prettyData getBytes:&c range:NSMakeRange(i, 1)];
-                message = [message stringByAppendingFormat:@"%c", c];
-            }
-            self.formatSwitch.enabled = TRUE;
-            return message;
-        } else {
-            self.formatSwitch.enabled = FALSE;
-            return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        }
-#endif // SB
     } else {
         return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     }

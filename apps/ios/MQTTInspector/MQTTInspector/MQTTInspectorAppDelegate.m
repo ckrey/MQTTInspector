@@ -11,12 +11,16 @@
 #import "Session+Create.h"
 #import "Subscription+Create.h"
 #import "Publication+Create.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface MQTTInspectorAppDelegate ()
 @property (nonatomic) UIBackgroundTaskIdentifier bgTask;
 @end
 
 @implementation MQTTInspectorAppDelegate
+static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
@@ -24,7 +28,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSLog(@"didFinishLaunchingWithOptions");
+    [Fabric with:@[CrashlyticsKit]];
+    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:ddLogLevel];
+
+    DDLogVerbose(@"didFinishLaunchingWithOptions");
 
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
@@ -48,26 +55,25 @@
 							
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    NSLog(@"applicationWillResignActive");
+    DDLogVerbose(@"applicationWillResignActive");
 
     [self saveContext];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    NSLog(@"applicationDidEnterBackground");
+    DDLogVerbose(@"applicationDidEnterBackground");
 
     self.bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
                            {
-                               NSLog(@"BackgroundTaskExpirationHandler");
-                               
+                               DDLogVerbose(@"BackgroundTaskExpirationHandler");
                                [self connectionClosed];
                            }];
 }
 
 - (void)connectionClosed
 {
-    NSLog(@"connectionClosed");
+    DDLogVerbose(@"connectionClosed");
     
     if (self.bgTask != UIBackgroundTaskInvalid) {
         [[UIApplication sharedApplication] endBackgroundTask:self.bgTask];
@@ -75,32 +81,21 @@
     }
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    NSLog(@"applicationWillEnterForeground");
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    NSLog(@"applicationDidBecomeActive");
-}
-
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    NSLog(@"applicationWillTerminate");
-
+    DDLogVerbose(@"applicationWillTerminate");
     [self saveContext];
 }
 
 - (void)saveContext
 {
-    NSLog(@"saveContext");
+    DDLogVerbose(@"saveContext");
 
     NSError *error = nil;
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     if (managedObjectContext != nil) {
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         } 
     }
@@ -148,7 +143,7 @@
                              NSInferMappingModelAutomaticallyOption: @YES};
 
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }    
     
@@ -164,27 +159,26 @@
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-#ifdef DEBUG
-    NSLog(@"UIApplication openURL:%@ sourceApplication:%@ annotation:%@", url, sourceApplication, annotation);
-#endif
+    DDLogVerbose(@"UIApplication openURL:%@ sourceApplication:%@ annotation:%@",
+                 url, sourceApplication, annotation);
     
     if (url) {
         NSError *error;
         NSInputStream *input = [NSInputStream inputStreamWithURL:url];
         if ([input streamError]) {
-            NSLog(@"Error nputStreamWithURL %@ %@", [input streamError], url);
+            DDLogError(@"Error inputStreamWithURL %@ %@", [input streamError], url);
             return FALSE;
         }
         [input open];
         if ([input streamError]) {
-            NSLog(@"Error open %@ %@", [input streamError], url);
+            DDLogError(@"Error open %@ %@", [input streamError], url);
             return FALSE;
         }
         
         NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithStream:input options:0 error:&error];
         if (dictionary) {
             for (NSString *key in [dictionary allKeys]) {
-                NSLog(@"Init %@:%@", key, dictionary[key]);
+                DDLogVerbose(@"Init %@:%@", key, dictionary[key]);
             }
             
             if ([dictionary[@"_type"] isEqualToString:@"MQTTInspector-Session"]) {
@@ -312,15 +306,15 @@
                     if (string) pub.data = data;
                 }
             } else {
-                NSLog(@"Error invalid init file %@)", dictionary[@"_type"]);
+                DDLogError(@"Error invalid init file %@)", dictionary[@"_type"]);
                 return FALSE;
             }
         } else {
-            NSLog(@"Error illegal json in init file %@)", error);
+            DDLogError(@"Error illegal json in init file %@)", error);
             return FALSE;
         }
         
-        NSLog(@"Init file %@ successfully processed)", [url lastPathComponent]);
+        DDLogError(@"Init file %@ successfully processed)", [url lastPathComponent]);
         
     }
     [self saveContext];

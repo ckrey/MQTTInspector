@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MQTTInspectorDetailViewController.h"
 
-@interface MQTTInspectorFilterTVC : UITableViewController
+@interface MQTTInspectorFilterTVC : UITableViewController <UITextViewDelegate>
 @property (strong, nonatomic) MQTTInspectorDetailViewController *mother;
 
 @end

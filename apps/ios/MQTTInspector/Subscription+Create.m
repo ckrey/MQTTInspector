@@ -7,8 +7,11 @@
 //
 
 #import "Subscription+Create.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @implementation Subscription (Create)
+static const DDLogLevel ddLogLevel = DDLogLevelError;
+
 + (Subscription *)subscriptionWithTopic:(NSString *)topic
                             qos:(int)qos
                         session:(Session *)session
@@ -111,9 +114,7 @@
 
 - (UIColor *)getColor
 {
-#ifdef SPECIALDEBUG
-    NSLog(@"getColor %@:%@", self.topic, self.color);
-#endif
+    DDLogInfo(@"getColor %@:%@", self.topic, self.color);
     return [UIColor colorWithHue:[self.color floatValue] saturation:0.3 brightness:1.0 alpha:1.0];
 }
 

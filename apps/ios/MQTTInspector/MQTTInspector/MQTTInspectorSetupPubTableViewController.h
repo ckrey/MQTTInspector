@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Publication+Create.h"
 
-@interface MQTTInspectorSetupPubTableViewController : UITableViewController
+@interface MQTTInspectorSetupPubTableViewController : UITableViewController <UITextFieldDelegate>
 @property (strong, nonatomic) Publication *pub;
 
 @end

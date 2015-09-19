@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Session+Create.h"
 
-@interface MQTTInspectorSetupSessionTableViewController : UITableViewController <UIDocumentInteractionControllerDelegate>
+@interface MQTTInspectorSetupSessionTableViewController : UITableViewController <UIDocumentInteractionControllerDelegate, UITextFieldDelegate>
 @property (strong, nonatomic) Session *session;
 
 @end

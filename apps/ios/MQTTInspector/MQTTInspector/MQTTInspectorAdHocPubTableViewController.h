@@ -10,6 +10,6 @@
 #import "Session+Create.h"
 #import "MQTTInspectorDetailViewController.h"
 
-@interface MQTTInspectorAdHocPubTableViewController : UITableViewController
+@interface MQTTInspectorAdHocPubTableViewController : UITableViewController <UITextFieldDelegate>
 @property (strong, nonatomic) MQTTInspectorDetailViewController *mother;
 @end

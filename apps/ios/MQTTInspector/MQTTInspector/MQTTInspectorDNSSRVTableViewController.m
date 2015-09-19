@@ -8,6 +8,7 @@
 
 #import "MQTTInspectorDNSSRVTableViewController.h"
 #import "MQTTInspectorDetailViewController.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface MQTTInspectorDNSSRVTableViewController ()
 @property (strong, nonatomic) SRVResolver *resolver;
@@ -16,6 +17,7 @@
 @end
 
 @implementation MQTTInspectorDNSSRVTableViewController
+static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -97,23 +99,18 @@
 
 - (void)srvResolver:(SRVResolver *)resolver didReceiveResult:(NSDictionary *)result
 {
-#ifdef DEBUG
-    NSLog(@"didReceiveResult %@", result);
-#endif
+    DDLogVerbose(@"didReceiveResult %@", result);
     [self.resolverResults addObject:result];
 }
 
 - (void)srvResolver:(SRVResolver *)resolver didStopWithError:(NSError *)error
 {
-#ifdef DEBUG
-    NSLog(@"didStopWithError %@", error);
-#endif
+    DDLogVerbose(@"didStopWithError %@", error);
     [self.tableView reloadData];
     if (error) {
         [MQTTInspectorDetailViewController alert:
          [NSString stringWithFormat:@"DNS SRV Lookup %@", error]];
     }
 }
-
 
 @end

@@ -7,8 +7,10 @@
 //
 
 #import "Session+Create.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @implementation Session (Create)
+static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 + (Session *)sessionWithName:(NSString *)name
                         host:(NSString *)host
@@ -35,10 +37,7 @@
     
     if (!session) {
         
-#ifdef DEBUG
-        NSLog(@"insertNewObjectForEntityForName Session %@", name);
-#endif
-
+        DDLogVerbose(@"insertNewObjectForEntityForName Session %@", name);
         session = [NSEntityDescription insertNewObjectForEntityForName:@"Session" inManagedObjectContext:context];
         
         session.name = name;
@@ -70,9 +69,7 @@
 + (Session *)existSessionWithName:(NSString *)name
            inManagedObjectContext:(NSManagedObjectContext *)context
 {
-#ifdef DEBUG
-    NSLog(@"existSessionWithName %@", name);
-#endif
+    DDLogVerbose(@"existSessionWithName %@", name);
 
     Session *session = nil;
     

@@ -59,14 +59,9 @@
 		84A1987D1831179D00A77080 /* MQTTInspectorTopicsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1987C1831179D00A77080 /* MQTTInspectorTopicsTableViewController.m */; };
 		84B1C73C183B554D0062D1EE /* MQTTInspectorDNSSRVTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B1C73B183B554D0062D1EE /* MQTTInspectorDNSSRVTableViewController.m */; };
 		84B97F9F1A8CF23200F04760 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84B97F9E1A8CF23200F04760 /* Launch Screen.xib */; };
-		84CF334E1918AC3300E433A1 /* SBJson4Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CF33411918AC3300E433A1 /* SBJson4Parser.m */; };
-		84CF334F1918AC3300E433A1 /* SBJson4StreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CF33431918AC3300E433A1 /* SBJson4StreamParser.m */; };
-		84CF33501918AC3300E433A1 /* SBJson4StreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CF33451918AC3300E433A1 /* SBJson4StreamParserState.m */; };
-		84CF33511918AC3300E433A1 /* SBJson4StreamTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CF33471918AC3300E433A1 /* SBJson4StreamTokeniser.m */; };
-		84CF33521918AC3300E433A1 /* SBJson4StreamWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CF33491918AC3300E433A1 /* SBJson4StreamWriter.m */; };
-		84CF33531918AC3300E433A1 /* SBJson4StreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CF334B1918AC3300E433A1 /* SBJson4StreamWriterState.m */; };
-		84CF33541918AC3300E433A1 /* SBJson4Writer.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CF334D1918AC3300E433A1 /* SBJson4Writer.m */; };
 		84CF335C1918BF0700E433A1 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CF335B1918BF0700E433A1 /* Session.m */; };
+		84EE13AA1AE06928003D3009 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EE13A81AE06928003D3009 /* Crashlytics.framework */; };
+		84EE13AB1AE06928003D3009 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EE13A91AE06928003D3009 /* Fabric.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -179,25 +174,12 @@
 		84BB7121183A3EE7005AF544 /* MQTTInspector 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 3.xcdatamodel"; sourceTree = "<group>"; };
 		84BB7125183A82FC005AF544 /* MQTTInspector 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 4.xcdatamodel"; sourceTree = "<group>"; };
 		84C308F1183A2F6B0031C606 /* MQTTInspector 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 2.xcdatamodel"; sourceTree = "<group>"; };
-		84CF333F1918AC3300E433A1 /* SBJson4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson4.h; sourceTree = "<group>"; };
-		84CF33401918AC3300E433A1 /* SBJson4Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson4Parser.h; sourceTree = "<group>"; };
-		84CF33411918AC3300E433A1 /* SBJson4Parser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJson4Parser.m; sourceTree = "<group>"; };
-		84CF33421918AC3300E433A1 /* SBJson4StreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson4StreamParser.h; sourceTree = "<group>"; };
-		84CF33431918AC3300E433A1 /* SBJson4StreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJson4StreamParser.m; sourceTree = "<group>"; };
-		84CF33441918AC3300E433A1 /* SBJson4StreamParserState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson4StreamParserState.h; sourceTree = "<group>"; };
-		84CF33451918AC3300E433A1 /* SBJson4StreamParserState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJson4StreamParserState.m; sourceTree = "<group>"; };
-		84CF33461918AC3300E433A1 /* SBJson4StreamTokeniser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson4StreamTokeniser.h; sourceTree = "<group>"; };
-		84CF33471918AC3300E433A1 /* SBJson4StreamTokeniser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJson4StreamTokeniser.m; sourceTree = "<group>"; };
-		84CF33481918AC3300E433A1 /* SBJson4StreamWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson4StreamWriter.h; sourceTree = "<group>"; };
-		84CF33491918AC3300E433A1 /* SBJson4StreamWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJson4StreamWriter.m; sourceTree = "<group>"; };
-		84CF334A1918AC3300E433A1 /* SBJson4StreamWriterState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson4StreamWriterState.h; sourceTree = "<group>"; };
-		84CF334B1918AC3300E433A1 /* SBJson4StreamWriterState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJson4StreamWriterState.m; sourceTree = "<group>"; };
-		84CF334C1918AC3300E433A1 /* SBJson4Writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson4Writer.h; sourceTree = "<group>"; };
-		84CF334D1918AC3300E433A1 /* SBJson4Writer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJson4Writer.m; sourceTree = "<group>"; };
 		84CF33591918BEDE00E433A1 /* MQTTInspector 1.4.2.3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 1.4.2.3.xcdatamodel"; sourceTree = "<group>"; };
 		84CF335A1918BF0700E433A1 /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
 		84CF335B1918BF0700E433A1 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
 		84ECF5E41916624E00B99683 /* MQTTInspector 1.4.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 1.4.2.xcdatamodel"; sourceTree = "<group>"; };
+		84EE13A81AE06928003D3009 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
+		84EE13A91AE06928003D3009 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
 		D87D4EFD77FBFD2DA8EC5BD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB27ED3878E4AB6D64BD59B6 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -210,9 +192,11 @@
 				84147D1018365C740018E601 /* libresolv.dylib in Frameworks */,
 				8492C955182E63D300A40D8B /* CoreGraphics.framework in Frameworks */,
 				8492C959182E63D300A40D8B /* CoreData.framework in Frameworks */,
+				84EE13AB1AE06928003D3009 /* Fabric.framework in Frameworks */,
 				8492C957182E63D300A40D8B /* UIKit.framework in Frameworks */,
 				8492C953182E63D300A40D8B /* Foundation.framework in Frameworks */,
 				7119ECBD5405007C083892B6 /* libPods.a in Frameworks */,
+				84EE13AA1AE06928003D3009 /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +249,8 @@
 		8492C946182E63D300A40D8B = {
 			isa = PBXGroup;
 			children = (
+				84EE13A81AE06928003D3009 /* Crashlytics.framework */,
+				84EE13A91AE06928003D3009 /* Fabric.framework */,
 				8492C95A182E63D300A40D8B /* MQTTInspector */,
 				8492C983182E63D400A40D8B /* MQTTInspectorTests */,
 				8492C951182E63D300A40D8B /* Frameworks */,
@@ -313,7 +299,6 @@
 				84B97F9E1A8CF23200F04760 /* Launch Screen.xib */,
 				8469BE7E1916DF6100DB43F5 /* old.png */,
 				8469BE7F1916DF6100DB43F5 /* new.png */,
-				84CF33581918AC3D00E433A1 /* SBJson */,
 				84684E8E18321CCD00AE13B5 /* CoreData */,
 				8492C95B182E63D300A40D8B /* Supporting Files */,
 			);
@@ -347,28 +332,6 @@
 				8492C986182E63D400A40D8B /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		84CF33581918AC3D00E433A1 /* SBJson */ = {
-			isa = PBXGroup;
-			children = (
-				84CF333F1918AC3300E433A1 /* SBJson4.h */,
-				84CF33401918AC3300E433A1 /* SBJson4Parser.h */,
-				84CF33411918AC3300E433A1 /* SBJson4Parser.m */,
-				84CF33421918AC3300E433A1 /* SBJson4StreamParser.h */,
-				84CF33431918AC3300E433A1 /* SBJson4StreamParser.m */,
-				84CF33441918AC3300E433A1 /* SBJson4StreamParserState.h */,
-				84CF33451918AC3300E433A1 /* SBJson4StreamParserState.m */,
-				84CF33461918AC3300E433A1 /* SBJson4StreamTokeniser.h */,
-				84CF33471918AC3300E433A1 /* SBJson4StreamTokeniser.m */,
-				84CF33481918AC3300E433A1 /* SBJson4StreamWriter.h */,
-				84CF33491918AC3300E433A1 /* SBJson4StreamWriter.m */,
-				84CF334A1918AC3300E433A1 /* SBJson4StreamWriterState.h */,
-				84CF334B1918AC3300E433A1 /* SBJson4StreamWriterState.m */,
-				84CF334C1918AC3300E433A1 /* SBJson4Writer.h */,
-				84CF334D1918AC3300E433A1 /* SBJson4Writer.m */,
-			);
-			name = SBJson;
 			sourceTree = "<group>";
 		};
 		84CF335D1918C08E00E433A1 /* Monitor */ = {
@@ -442,6 +405,7 @@
 				8492C94C182E63D300A40D8B /* Frameworks */,
 				8492C94D182E63D300A40D8B /* Resources */,
 				91A50C70F9D8936B78C48E04 /* Copy Pods Resources */,
+				84EE13A71AE06906003D3009 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -548,6 +512,19 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		84EE13A71AE06906003D3009 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run e44c44a1a79cb757131e807fc29016438bc0d420 2666d328f87eea1bd136c0039a3f1814af440f1558379cb3a6d1d7081614b01e";
+		};
 		91A50C70F9D8936B78C48E04 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -577,17 +554,13 @@
 				84147CF71834CDD10018E601 /* MQTTInspectorSetupPubsTableViewController.m in Sources */,
 				841A23941917DC8200DE15B3 /* Topic.m in Sources */,
 				84147D071835204F0018E601 /* MQTTInspectorSetupSubTableViewController.m in Sources */,
-				84CF33541918AC3300E433A1 /* SBJson4Writer.m in Sources */,
 				84147D0E18365A9C0018E601 /* SRVResolver.m in Sources */,
 				84684E8D1832193B00AE13B5 /* Publication+Create.m in Sources */,
 				84684E9118321D1200AE13B5 /* MQTTInspectorPubsTableViewController.m in Sources */,
-				84CF33501918AC3300E433A1 /* SBJson4StreamParserState.m in Sources */,
 				848794B019A6135B00DF56EB /* Subscription.m in Sources */,
 				841A239A1917DC8300DE15B3 /* Command.m in Sources */,
 				84147D13183673A70018E601 /* MQTTInspectorAdHocPubTableViewController.m in Sources */,
 				848794AD19A6130700DF56EB /* Publication.m in Sources */,
-				84CF33521918AC3300E433A1 /* SBJson4StreamWriter.m in Sources */,
-				84CF334E1918AC3300E433A1 /* SBJson4Parser.m in Sources */,
 				841A239D1917DC8300DE15B3 /* Message.m in Sources */,
 				84147D161838CB720018E601 /* MQTTInspectorMessagesTableViewController.m in Sources */,
 				84684E8A1832192800AE13B5 /* Subscription+Create.m in Sources */,
@@ -597,7 +570,6 @@
 				84A1985C1830EC0B00A77080 /* Message+Create.m in Sources */,
 				84147D011834E06A0018E601 /* MQTTInspectorDataViewController.m in Sources */,
 				84CF335C1918BF0700E433A1 /* Session.m in Sources */,
-				84CF33531918AC3300E433A1 /* SBJson4StreamWriterState.m in Sources */,
 				847355DA189692FC0028FE7A /* MQTTInspectorFilterTVC.m in Sources */,
 				84A1986818310FC000A77080 /* MQTTInspectorLogsTableViewController.m in Sources */,
 				8492C971182E63D300A40D8B /* MQTTInspectorMasterViewController.m in Sources */,
@@ -606,8 +578,6 @@
 				8492C961182E63D300A40D8B /* main.m in Sources */,
 				84147CDB1832662B0018E601 /* Command+Create.m in Sources */,
 				847355E51897032E0028FE7A /* MQTTInspectorCoreDataTableViewController.m in Sources */,
-				84CF334F1918AC3300E433A1 /* SBJson4StreamParser.m in Sources */,
-				84CF33511918AC3300E433A1 /* SBJson4StreamTokeniser.m in Sources */,
 				8492C99C182EDF8F00A40D8B /* Session+Create.m in Sources */,
 				84A1987A183114BF00A77080 /* Topic+Create.m in Sources */,
 				84147CDE183269D50018E601 /* MQTTInspectorCommandsTableViewController.m in Sources */,
@@ -748,7 +718,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MQTTInspector/MQTTInspector-Prefix.pch";
 				INFOPLIST_FILE = "MQTTInspector/MQTTInspector-Info.plist";
@@ -767,7 +740,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MQTTInspector/MQTTInspector-Prefix.pch";
 				INFOPLIST_FILE = "MQTTInspector/MQTTInspector-Info.plist";

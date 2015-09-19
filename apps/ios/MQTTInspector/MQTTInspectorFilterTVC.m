@@ -26,6 +26,14 @@
     self.dataFilter.text = self.mother.session.datafilter ? self.mother.session.datafilter : @".*";
     self.attributeFilter.text = self.mother.session.attributefilter ? self.mother.session.attributefilter : @".*";
     self.filterInclude.on = self.mother.session.includefilter ? [self.mother.session.includefilter boolValue] : TRUE;
+    self.topicFilter.delegate = self;
+    self.dataFilter.delegate = self;
+    self.attributeFilter.delegate = self;
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView {
+    [textView resignFirstResponder];
+    return YES;
 }
 
 - (IBAction)save:(UIButton *)sender {
