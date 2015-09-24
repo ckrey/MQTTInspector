@@ -7,16 +7,24 @@ PODS:
     - CocoaLumberjack/Core
   - CocoaLumberjack/Extensions (2.0.1):
     - CocoaLumberjack/Default
+  - Crashlytics (3.3.1)
+  - Fabric (1.5.1):
+    - Fabric/Base (= 1.5.1)
+  - Fabric/Base (1.5.1)
   - MQTTClient (0.2.6)
   - SBJson (4.0.2)
 
 DEPENDENCIES:
   - CocoaLumberjack
+  - Crashlytics
+  - Fabric
   - MQTTClient
   - SBJson
 
 SPEC CHECKSUMS:
   CocoaLumberjack: 019d1361244274a6138c788c6cb80baabc13fb8f
+  Crashlytics: 0e61bdda9def51f1e99720f804eebe94865442b2
+  Fabric: 03c3b3fe77e11a2bc31421b989a9c7adaa4779a5
   MQTTClient: f3af97fd4e26e0644364cb24e809b9646afce202
   SBJson: c18691cc18375b14664ff0fec841f8c4faef1934
 

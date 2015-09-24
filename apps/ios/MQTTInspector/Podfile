@@ -4,10 +4,9 @@ platform :ios, '7.0'
 pod 'SBJson'
 pod 'CocoaLumberjack'
 pod 'MQTTClient'
+pod 'Fabric'
+pod 'Crashlytics'
 
 target 'MQTTInspector' do
-end
-
-target 'MQTTInspectorTests' do
 end
 
