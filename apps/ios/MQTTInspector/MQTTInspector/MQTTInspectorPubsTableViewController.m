@@ -142,7 +142,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Publication *publication = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    [self.mother publish:publication];
+    if (self.mother.mqttSession.status == MQTTSessionStatusConnected) {
+        [self.mother publish:publication];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

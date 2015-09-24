@@ -16,4 +16,7 @@ DerivedData
 .idea/
 *.hmap
 *.xccheckout
+*.xcsettings
+*.xcscmblueprint
+
 

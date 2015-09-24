@@ -94,6 +94,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     [super viewWillAppear:animated];
     [self viewChanged:nil];
     self.versionButton.title =  [NSBundle mainBundle].infoDictionary[@"CFBundleVersion"];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -106,6 +107,14 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
         [self.masterPopoverController presentPopoverFromBarButtonItem:self.navigationController.navigationItem.backBarButtonItem
                                              permittedArrowDirections:(UIPopoverArrowDirectionAny) animated:TRUE];
     }
+    self.subsTVC = [[MQTTInspectorSubsTableViewController alloc] init];
+    self.subsTVC.mother = self;
+    self.subsTVC.tableView = self.subs;
+    
+    self.pubsTVC = [[MQTTInspectorPubsTableViewController alloc] init];
+    self.pubsTVC.mother = self;
+    self.pubsTVC.tableView = self.pubs;
+    
     [self showCount];
 }
 
@@ -411,25 +420,17 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     }
     
     self.session.state = @(eventCode);
-    
+
     if ([self.session.state intValue] == MQTTSessionEventConnected) {
-        self.subsTVC = [[MQTTInspectorSubsTableViewController alloc] init];
-        self.subsTVC.mother = self;
-        self.subsTVC.tableView = self.subs;
-        
-        self.pubsTVC = [[MQTTInspectorPubsTableViewController alloc] init];
-        self.pubsTVC.mother = self;
-        self.pubsTVC.tableView = self.pubs;
-    } else {
-        self.subsTVC = nil;
-        UITableViewController *stvc = [[UITableViewController alloc] init];
-        stvc.tableView = self.subs;
-        [stvc.tableView reloadData];
-        
-        self.pubsTVC = nil;
-        UITableViewController *ptvc = [[UITableViewController alloc] init];
-        ptvc.tableView = self.pubs;
-        [ptvc.tableView reloadData];
+//        self.subsTVC = [[MQTTInspectorSubsTableViewController alloc] init];
+//        self.subsTVC.mother = self;
+//        self.subsTVC.tableView = self.subs;
+//        [self.subsTVC.tableView reloadData];
+//        
+//        self.pubsTVC = [[MQTTInspectorPubsTableViewController alloc] init];
+//        self.pubsTVC.mother = self;
+//        self.pubsTVC.tableView = self.pubs;
+//        [self.pubsTVC.tableView reloadData];
     }
     
     if ([self.session.state intValue] == MQTTSessionEventConnectionClosed) {

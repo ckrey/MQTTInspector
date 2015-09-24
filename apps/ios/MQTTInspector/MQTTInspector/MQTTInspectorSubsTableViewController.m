@@ -146,13 +146,15 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Subscription *subscription = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    if ([subscription.state boolValue]) {
-        [self.mother.mqttSession unsubscribeTopic:subscription.topic];
-        subscription.state = @(false);
-    } else {
-        [self.mother.mqttSession subscribeToTopic:subscription.topic
+    if (self.mother.mqttSession.status == MQTTSessionStatusConnected) {
+        if ([subscription.state boolValue]) {
+            [self.mother.mqttSession unsubscribeTopic:subscription.topic];
+            subscription.state = @(false);
+        } else {
+            [self.mother.mqttSession subscribeToTopic:subscription.topic
                                               atLevel:[subscription.qos intValue]];
-        subscription.state = @(true); // assuming subscribe works
+            subscription.state = @(true); // assuming subscribe works
+        }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
