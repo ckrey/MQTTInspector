@@ -30,9 +30,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
 {
     [Fabric with:@[CrashlyticsKit]];
     [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:ddLogLevel];
-
     DDLogVerbose(@"didFinishLaunchingWithOptions");
-
+    
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
         UINavigationController *navigationController = [splitViewController.viewControllers lastObject];

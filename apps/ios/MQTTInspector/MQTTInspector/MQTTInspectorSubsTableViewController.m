@@ -28,40 +28,43 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (NSFetchedResultsController *)setupFRC
 {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    // Edit the entity name as appropriate.
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Subscription"
-                                              inManagedObjectContext:self.mother.session.managedObjectContext];
-    [fetchRequest setEntity:entity];
-
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"belongsTo = %@", self.mother.session];
-    
-    // Set the batch size to a suitable number.
-    [fetchRequest setFetchBatchSize:20];
-    
-    // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"position" ascending:YES];
-    NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"topic" ascending:YES];
-    NSArray *sortDescriptors = @[sortDescriptor1, sortDescriptor2];
-    
-    [fetchRequest setSortDescriptors:sortDescriptors];
-    
-    // Edit the section name key path and cache name if appropriate.
-    // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                                                managedObjectContext:self.mother.session.managedObjectContext
-                                                                                                  sectionNameKeyPath:nil
-                                                                                                           cacheName:nil];
-    aFetchedResultsController.delegate = self;
-    
-    
-	NSError *error = nil;
-	if (![aFetchedResultsController performFetch:&error]) {
-        // Replace this implementation with code to handle     the error appropriately.
-        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-	    DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
-	    abort();
-	}
+    NSFetchedResultsController *aFetchedResultsController;
+    if (self.mother.session) {
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        // Edit the entity name as appropriate.
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"Subscription"
+                                                  inManagedObjectContext:self.mother.session.managedObjectContext];
+        [fetchRequest setEntity:entity];
+        
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"belongsTo = %@", self.mother.session];
+        
+        // Set the batch size to a suitable number.
+        [fetchRequest setFetchBatchSize:20];
+        
+        // Edit the sort key as appropriate.
+        NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"position" ascending:YES];
+        NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"topic" ascending:YES];
+        NSArray *sortDescriptors = @[sortDescriptor1, sortDescriptor2];
+        
+        [fetchRequest setSortDescriptors:sortDescriptors];
+        
+        // Edit the section name key path and cache name if appropriate.
+        // nil for section name key path means "no sections".
+        aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                        managedObjectContext:self.mother.session.managedObjectContext
+                                                                          sectionNameKeyPath:nil
+                                                                                   cacheName:nil];
+        aFetchedResultsController.delegate = self;
+        
+        
+        NSError *error = nil;
+        if (![aFetchedResultsController performFetch:&error]) {
+            // Replace this implementation with code to handle     the error appropriately.
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+    }
     
     return aFetchedResultsController;
 }

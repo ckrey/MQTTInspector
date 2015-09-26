@@ -35,7 +35,7 @@
                         <constraint firstAttribute="height" constant="43" id="msz-Hd-eiG"/>
                     </constraints>
                     <string key="text">MQTTInspector
-1.71</string>
+1.72</string>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>

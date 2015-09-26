@@ -294,6 +294,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     
     [self viewChanged:nil];
     self.title = session.name;
+    [self.subsTVC.tableView reloadData];
+    [self.pubsTVC.tableView reloadData];
     [self showCount];
     [self enableButtons];
 }
@@ -422,15 +424,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     self.session.state = @(eventCode);
 
     if ([self.session.state intValue] == MQTTSessionEventConnected) {
-//        self.subsTVC = [[MQTTInspectorSubsTableViewController alloc] init];
-//        self.subsTVC.mother = self;
-//        self.subsTVC.tableView = self.subs;
-//        [self.subsTVC.tableView reloadData];
-//        
-//        self.pubsTVC = [[MQTTInspectorPubsTableViewController alloc] init];
-//        self.pubsTVC.mother = self;
-//        self.pubsTVC.tableView = self.pubs;
-//        [self.pubsTVC.tableView reloadData];
+        [self.subsTVC.tableView reloadData];
+        [self.pubsTVC.tableView reloadData];
     }
     
     if ([self.session.state intValue] == MQTTSessionEventConnectionClosed) {
