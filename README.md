@@ -15,6 +15,19 @@ A general MQTT testing app for iOS (iPhone and iPad)
 * Panel showing low-level communication with broker
 * Panels can be frozen (halts all display activity) for, say, taking screenshots
 
+# New features in 2.0
+* [NEW] MQTT over WebSocket support
+* [NEW] Self-signed Certs support
+* [NEW] UI feedback when dragging view divider
+* [NEW] UI feedback in ad hoc publish and filter edit
+* [NEW] flip layout from horizontal to vertical divides by long pressing on message view
+* [NEW] use UISplitviewcontroller for all devices, adds split view to iPhone 6+
+
+* [FIX] crashes when dragging view divider far to the left on iPads closes #66, closes #65, closes #64
+* [FIX] timeout on connect, closes #68
+* [FIX] ignore non-UTF8 topics, avoiding crash
+* [FIX] correctly closing input stream after error, avoiding crash
+
 # New features in 1.71
 * [FIX] crash on disconnect closes #63
 

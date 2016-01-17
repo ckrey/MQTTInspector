@@ -3,24 +3,22 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 09.11.13.
-//  Copyright (c) 2013 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorAppDelegate.h"
 #import "MQTTInspectorMasterViewController.h"
-#import "Session+Create.h"
-#import "Subscription+Create.h"
-#import "Publication+Create.h"
+
+#import "Model.h"
+
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
-#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface MQTTInspectorAppDelegate ()
 @property (nonatomic) UIBackgroundTaskIdentifier bgTask;
 @end
 
 @implementation MQTTInspectorAppDelegate
-static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
@@ -32,23 +30,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:ddLogLevel];
     DDLogVerbose(@"didFinishLaunchingWithOptions");
     
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
-        UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
-        splitViewController.delegate = (id)navigationController.topViewController;
-        
-        UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
-        MQTTInspectorMasterViewController *controller = (MQTTInspectorMasterViewController *)masterNavigationController.topViewController;
-        controller.managedObjectContext = self.managedObjectContext;
-
-        UINavigationController *detailNavigationController = [splitViewController.viewControllers lastObject];
-        MQTTInspectorDetailViewController *detailController = (MQTTInspectorDetailViewController *)detailNavigationController.topViewController;
-        controller.detailViewController = detailController;
-    } else {
-        UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-        MQTTInspectorMasterViewController *controller = (MQTTInspectorMasterViewController *)navigationController.topViewController;
-        controller.managedObjectContext = self.managedObjectContext;
-    }
     return YES;
 }
 							
@@ -238,11 +219,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
                 string = dictionary[@"autoconnect"];
                 if (string) session.autoconnect = @([string boolValue]);
                 
-                string = dictionary[@"dnssrv"];
-                if (string) session.dnssrv = @([string boolValue]);
+                string = dictionary[@"websocket"];
+                if (string) session.websocket = @([string boolValue]);
                 
-                string = dictionary[@"dnsdomain"];
-                if (string) session.dnsdomain = string;
+                string = dictionary[@"allowUntrustedCertificates"];
+                if (string) session.allowUntrustedCertificates = @([string boolValue]);
                 
                 string = dictionary[@"protocollevel"];
                 if (string) session.protocolLevel = @([string integerValue]);

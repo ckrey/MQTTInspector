@@ -3,11 +3,13 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 14.11.13.
-//  Copyright (c) 2013 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorDataViewController.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+
+#import "Model.h"
+
 #import <SBJson/SBJson4.h>
 
 @interface MQTTInspectorDataViewController ()
@@ -19,7 +21,6 @@
 @end
 
 @implementation MQTTInspectorDataViewController
-static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (void)viewWillAppear:(BOOL)animated
 {

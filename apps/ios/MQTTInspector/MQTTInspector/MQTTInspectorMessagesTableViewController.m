@@ -3,13 +3,12 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 17.11.13.
-//  Copyright (c) 2013 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorMessagesTableViewController.h"
-#import "Session.h"
-#import "Subscription+Create.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+
+#import "Model.h"
 
 @interface MQTTInspectorMessagesTableViewController ()
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
@@ -18,7 +17,6 @@
 @end
 
 @implementation MQTTInspectorMessagesTableViewController
-static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (void)setTableView:(UITableView *)tableView
 {

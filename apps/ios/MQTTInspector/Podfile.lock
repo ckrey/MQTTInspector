@@ -1,31 +1,39 @@
 PODS:
-  - CocoaLumberjack (2.0.1):
-    - CocoaLumberjack/Default (= 2.0.1)
-    - CocoaLumberjack/Extensions (= 2.0.1)
-  - CocoaLumberjack/Core (2.0.1)
-  - CocoaLumberjack/Default (2.0.1):
+  - CocoaLumberjack (2.2.0):
+    - CocoaLumberjack/Default (= 2.2.0)
+    - CocoaLumberjack/Extensions (= 2.2.0)
+  - CocoaLumberjack/Core (2.2.0)
+  - CocoaLumberjack/Default (2.2.0):
     - CocoaLumberjack/Core
-  - CocoaLumberjack/Extensions (2.0.1):
+  - CocoaLumberjack/Extensions (2.2.0):
     - CocoaLumberjack/Default
-  - Crashlytics (3.3.1)
-  - Fabric (1.5.1):
-    - Fabric/Base (= 1.5.1)
-  - Fabric/Base (1.5.1)
-  - MQTTClient (0.2.6)
+  - Crashlytics (3.6.0):
+    - Fabric (~> 1.6.3)
+  - Fabric (1.6.3)
+  - MQTTClient (0.6.3):
+    - MQTTClient/Core (= 0.6.3)
+  - MQTTClient/Core (0.6.3):
+    - CocoaLumberjack
+  - MQTTClient/Websocket (0.6.3):
+    - MQTTClient/Core
+    - SocketRocket
   - SBJson (4.0.2)
+  - SocketRocket (0.4.2)
 
 DEPENDENCIES:
   - CocoaLumberjack
   - Crashlytics
   - Fabric
   - MQTTClient
+  - MQTTClient/Websocket
   - SBJson
 
 SPEC CHECKSUMS:
-  CocoaLumberjack: 019d1361244274a6138c788c6cb80baabc13fb8f
-  Crashlytics: 0e61bdda9def51f1e99720f804eebe94865442b2
-  Fabric: 03c3b3fe77e11a2bc31421b989a9c7adaa4779a5
-  MQTTClient: f3af97fd4e26e0644364cb24e809b9646afce202
+  CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
+  Crashlytics: e4e8d02914f2608fbc7bf42b1a7af838b0db67a2
+  Fabric: cbe0ca6c9531bba17910052f6f105fcbc5fa7f67
+  MQTTClient: 31b63f76cb30751dadad11b0a0a2b198425714c4
   SBJson: c18691cc18375b14664ff0fec841f8c4faef1934
+  SocketRocket: ffe08119b00ef982f6c37052a4705a057c8494ad
 
-COCOAPODS: 0.38.2
+COCOAPODS: 0.39.0

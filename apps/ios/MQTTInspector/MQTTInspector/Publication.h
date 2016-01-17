@@ -2,8 +2,8 @@
 //  Publication.h
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 21.08.14.
-//  Copyright (c) 2014 Christoph Krey. All rights reserved.
+//  Created by Christoph Krey on 22.12.15.
+//  Copyright © 2015-2016 Christoph Krey. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -11,14 +11,14 @@
 
 @class Session;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface Publication : NSManagedObject
 
-@property (nonatomic, retain) NSData * data;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * position;
-@property (nonatomic, retain) NSNumber * qos;
-@property (nonatomic, retain) NSNumber * retained;
-@property (nonatomic, retain) NSString * topic;
-@property (nonatomic, retain) Session *belongsTo;
+// Insert code here to declare functionality of your managed object subclass
 
 @end
+
+NS_ASSUME_NONNULL_END
+
+#import "Publication+CoreDataProperties.h"

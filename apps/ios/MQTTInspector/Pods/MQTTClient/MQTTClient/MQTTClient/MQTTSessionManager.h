@@ -3,13 +3,16 @@
 //  MQTTClient
 //
 //  Created by Christoph Krey on 09.07.14.
-//  Copyright (c) 2013-2015 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#if TARGET_OS_IPHONE == 1
 #import <UIKit/UIKit.h>
-
+#endif
 #import "MQTTSession.h"
+#import "MQTTSessionLegacy.h"
+#import "MQTTSSLSecurityPolicy.h"
 
 /** delegate gives your application access to received messages
  */
@@ -33,6 +36,14 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  @param retained indicates if the data retransmitted from server storage
  */
 - (void)handleMessage:(NSData *)data onTopic:(NSString *)topic retained:(BOOL)retained;
+
+@optional
+
+/** gets called when a published message was actually delivered
+ @param msgID the Message Identifier of the delivered message
+ @note this method is called after a publish with qos 1 or 2 only
+ */
+- (void)messageDelivered:(UInt16)msgID;
 @end
 
 /** SessionManager handles the MQTT session for your application
@@ -43,12 +54,45 @@ typedef NS_ENUM(int, MQTTSessionManagerState) {
  */
 @property (weak, nonatomic) id<MQTTSessionManagerDelegate> delegate;
 
-/** subscriptions as a dictionary of NSNumber instances indicating the MQTTQoSLevel.
+/** subscriptions is a dictionary of NSNumber instances indicating the MQTTQoSLevel.
  *  The keys are topic filters.
  *  The SessionManager subscribes to the given subscriptions after successfull (re-)connect
  *  according to the cleansession parameter and the state of the session as indicated by the broker.
+ *  Setting a new subscriptions dictionary initiates SUBSCRIBE or UNSUBSCRIBE messages by SessionManager
+ *  by comparing the old and new subscriptions.
  */
-@property (strong, nonatomic) NSMutableDictionary *subscriptions;
+@property (strong, nonatomic) NSDictionary<NSString *, NSNumber *> *subscriptions;
+
+/** effectiveSubscriptions s a dictionary of NSNumber instances indicating the granted MQTTQoSLevel, or 0x80 for subscription failure.
+ *  The keys are topic filters.
+ *  effectiveSubscriptions is observable and is updated everytime subscriptions change
+ *  @code
+        ...
+        MQTTSessionManager *manager = [[MQTTSessionManager alloc] init];
+        manager.delegate = self;
+ 
+        [manager addObserver:self
+            forKeyPath:@"effectiveSubscriptions"
+            options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+            context:nil];
+            manager.subscriptions = [@{@"#": @(0)} mutableCopy];
+            [manager connectTo: ...
+        ...
+        [manager removeObserver:self forKeyPath:@"effectiveSubscriptions"];
+        ...
+ 
+    - (void)observeValueForKeyPath:(NSString *)keyPath
+        ofObject:(id)object
+        change:(NSDictionary<NSString *,id> *)change
+        context:(void *)context {
+        if ([keyPath isEqualToString:@"effectiveSubscriptions"]) {
+            MQTTSessionManager *manager = (MQTTSessionManager *)object;
+            DDLogVerbose(@"effectiveSubscriptions changed: %@", manager.effectiveSubscriptions);
+        }
+    }
+ *  @endcode
+ */
+@property (readonly, strong, nonatomic) NSMutableDictionary<NSString *, NSNumber *> *effectiveSubscriptions;
 
 /** SessionManager status
  */

@@ -3,11 +3,11 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 14.11.13.
-//  Copyright (c) 2013 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "Publication+Create.h"
+#import "Publication.h"
 
 @interface MQTTInspectorSetupPubTableViewController : UITableViewController <UITextFieldDelegate>
 @property (strong, nonatomic) Publication *pub;

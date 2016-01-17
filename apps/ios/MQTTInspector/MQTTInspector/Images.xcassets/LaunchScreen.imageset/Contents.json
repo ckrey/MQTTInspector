@@ -2,11 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "mqtt-inspector-1024x1024.png"
+      "filename" : "MQTTInspector-1024.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "MQTTInspector-2048.png",
       "scale" : "2x"
     },
     {

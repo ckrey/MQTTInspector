@@ -3,15 +3,15 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 09.11.13.
-//  Copyright (c) 2013 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorDetailViewController.h"
-#import "Message+Create.h"
-#import "Topic+Create.h"
-#import "Command+Create.h"
-#import "Subscription+Create.h"
-#import "Publication+Create.h"
+#import <MQTTClient/MQTTWebsocketTransport.h>
+#import <MQTTClient/MQTTInMemoryPersistence.h>
+
+#import "Model.h"
+
 #import "MQTTInspectorLogsTableViewController.h"
 #import "MQTTInspectorTopicsTableViewController.h"
 #import "MQTTInspectorCommandsTableViewController.h"
@@ -21,10 +21,6 @@
 #import "MQTTInspectorSetupPubsTableViewController.h"
 #import "MQTTInspectorSetupSubsTableViewController.h"
 #import "MQTTInspectorAppDelegate.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
-
-static Session *theSession;
-static MQTTSession *theMQTTSession;
 
 @interface MQTTInspectorDetailViewController ()
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *versionButton;
@@ -39,7 +35,6 @@ static MQTTSession *theMQTTSession;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *level;
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 @property (weak, nonatomic) IBOutlet UISwitch *runningSwitch;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *filterButton;
 
 @property (strong, nonatomic) MQTTInspectorLogsTableViewController *logsTVC;
 @property (strong, nonatomic) MQTTInspectorTopicsTableViewController *topicsTVC;
@@ -48,25 +43,34 @@ static MQTTSession *theMQTTSession;
 @property (strong, nonatomic) MQTTInspectorPubsTableViewController *pubsTVC;
 @property (weak, nonatomic) IBOutlet UITextField *countText;
 
-@property (strong, nonatomic) NSError *lastError;
-@property (nonatomic) int errorCount;
 @property (strong, nonatomic) NSManagedObjectContext *queueManagedObjectContext;
+@property (strong, nonatomic) NSTimer *connectTimer;
 @property (nonatomic) float queueIn;
 @property (nonatomic) float queueOut;
-
-@property (nonatomic) CGRect mrect;
-@property (nonatomic) CGRect srect;
-@property (nonatomic) CGRect prect;
 
 @end
 
 @implementation MQTTInspectorDetailViewController
-static const DDLogLevel ddLogLevel = DDLogLevelError;
 
-- (void)viewDidLoad
-{
+static BOOL staticInit;
+static BOOL portrait;
+static CGPoint offset;
+
+- (void)viewDidLoad {
+    DDLogVerbose(@"viewDidLoad");
+    
     [super viewDidLoad];
     
+    if (!staticInit) {
+        staticInit = true;
+        portrait = true;
+        offset = CGPointMake(0, 0);
+    }
+    
+    [[NSNotificationCenter defaultCenter ]addObserver:self
+                                             selector:@selector(orientationChanged:)
+                                                 name:UIApplicationDidChangeStatusBarOrientationNotification
+                                               object:nil];
     [[NSNotificationCenter defaultCenter ]addObserver:self
                                              selector:@selector(willResign:)
                                                  name:UIApplicationWillResignActiveNotification
@@ -77,45 +81,51 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
                                                object:nil];
 }
 
-- (void)willResign:(NSNotification *)notification
-{
+- (void)orientationChanged:(NSNotification *)notification {
+    DDLogVerbose(@"orientationChanged");
+    [self setSubViews];
+}
+
+- (void)willResign:(NSNotification *)notification {
+    DDLogVerbose(@"willResign");
     [self disconnect:nil];
 }
 
-- (void)willEnter:(NSNotification *)notification
-{
+- (void)willEnter:(NSNotification *)notification {
+    DDLogVerbose(@"willEnter");
     if ([self.session.autoconnect boolValue]) {
         [self connect:nil];
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
+    DDLogVerbose(@"viewWillAppear");
     [super viewWillAppear:animated];
     [self viewChanged:nil];
     self.versionButton.title =  [NSBundle mainBundle].infoDictionary[@"CFBundleVersion"];
-    
-}
+    self.navigationItem.leftBarButtonItem = self.splitViewController.displayModeButtonItem;
+    self.navigationItem.leftItemsSupplementBackButton = YES;
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
     [self enableButtons];
     
-    /* start with organizer if no session selected */
-    if (!self.session) {
-        [self.masterPopoverController presentPopoverFromBarButtonItem:self.navigationController.navigationItem.backBarButtonItem
-                                             permittedArrowDirections:(UIPopoverArrowDirectionAny) animated:TRUE];
+    if (!self.subsTVC) {
+        self.subsTVC = [[MQTTInspectorSubsTableViewController alloc] init];
+        self.subsTVC.mother = self;
+        self.subsTVC.tableView = self.subs;
     }
-    self.subsTVC = [[MQTTInspectorSubsTableViewController alloc] init];
-    self.subsTVC.mother = self;
-    self.subsTVC.tableView = self.subs;
     
-    self.pubsTVC = [[MQTTInspectorPubsTableViewController alloc] init];
-    self.pubsTVC.mother = self;
-    self.pubsTVC.tableView = self.pubs;
+    if (!self.pubsTVC) {
+        self.pubsTVC = [[MQTTInspectorPubsTableViewController alloc] init];
+        self.pubsTVC.mother = self;
+        self.pubsTVC.tableView = self.pubs;
+    }
     
     [self showCount];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    DDLogVerbose(@"viewWillDisappear");
+    [super viewWillDisappear:animated];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -212,36 +222,96 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     return clientId;
 }
 
-- (IBAction)pan:(UIPanGestureRecognizer *)sender {
-    if (sender.state == UIGestureRecognizerStateBegan) {
-        [sender setTranslation:CGPointMake(self.subs.frame.size.width, self.subs.frame.size.height) inView:sender.view];
+- (void)viewDidLayoutSubviews {
+    DDLogVerbose(@"viewDidLayoutSubviews");
+    [self setSubViews];
+}
+
+- (void)setSubViews {
+    DDLogVerbose(@"setSubViews");
+
+    CGRect vrect = self.messages.superview.frame;
+    CGRect mrect = self.messages.frame;
+    CGRect srect = self.subs.frame;
+    CGRect prect = self.pubs.frame;
+    
+    if (fabs(offset.x) > vrect.size.width / 2 - 4) offset.x = 0;
+    if (fabs(offset.y) > vrect.size.height / 2 - 4) offset.y = 0;
+    
+    srect = CGRectMake(0,
+                       0,
+                       vrect.size.width / 2 - 4 + offset.x,
+                       vrect.size.height / 2 - 4 + offset.y);
+    
+    if (portrait) {
+        mrect = CGRectMake(vrect.size.width / 2 + 4 + offset.x,
+                           0,
+                           vrect.size.width - (vrect.size.width / 2 - 4 + offset.x),
+                           vrect.size.height);
+        prect = CGRectMake(0,
+                           vrect.size.height / 2 + 4 + offset.y,
+                           vrect.size.width / 2 - 4 + offset.x,
+                           vrect.size.height - (vrect.size.height / 2 - 4 + offset.y + 8));
+    } else {
+        mrect = CGRectMake(0,
+                           vrect.size.height / 2 + 4 + offset.y,
+                           vrect.size.width,
+                           vrect.size.height - (vrect.size.height / 2 - 4 + offset.y + 8));
+        prect = CGRectMake(vrect.size.width / 2 + 4 + offset.x,
+                           0,
+                           vrect.size.width - (vrect.size.width / 2 - 4 + offset.x),
+                           vrect.size.height / 2 - 4 + offset.y);
     }
     
-    if (sender.state == UIGestureRecognizerStateChanged) {
-        CGPoint point = [sender translationInView:sender.view];
-        DDLogVerbose(@"Pan: x=%f y=%f", point.x, point.y);
-        CGRect mrect = self.messages.frame;
-        CGRect srect = self.subs.frame;
-        CGRect prect = self.pubs.frame;
+    self.messages.frame = mrect;
+    self.subs.frame = srect;
+    self.pubs.frame = prect;
+}
 
-        if (point.x > 8 && point.x < mrect.origin.x + mrect.size.width - 8 &&
-            point.y > 8 && point.y < mrect.size.height - 8) {
+- (IBAction)rotate:(UILongPressGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        portrait = !portrait;
+        [self setSubViews];
+    }
+}
+
+- (IBAction)pan:(UIPanGestureRecognizer *)sender {
+    DDLogVerbose(@"pan %ld", (long)sender.state);
+    switch (sender.state) {
+        case UIGestureRecognizerStateBegan:
+            [sender setTranslation:CGPointMake(self.subs.frame.size.width, self.subs.frame.size.height)
+                            inView:sender.view];
+            sender.view.backgroundColor = [UIColor yellowColor];
+            break;
             
-            mrect.origin.x = point.x + 8;
-            mrect.size.width = sender.view.frame.size.width - point.x - 8;
+        case UIGestureRecognizerStateChanged: {
+            CGPoint point = [sender translationInView:sender.view];
+            DDLogVerbose(@"translationInView %f,%f", point.x, point.y);
+            CGRect vrect = self.subs.superview.frame;
             
-            srect.size.width = point.x;
-            srect.size.height = point.y;
-            
-            prect.origin.y = point.y + 8 + srect.origin.y;
-            prect.size.width = point.x;
-            prect.size.height = mrect.size.height - point.y - 8;
-            
-            self.messages.frame = mrect;
-            self.subs.frame = srect;
-            self.pubs.frame = prect;
-        } else {
+            if (point.x > 8 &&
+                point.x < vrect.size.width - 8 &&
+                point.y > 8 &&
+                point.y < vrect.size.height - 8) {
+                
+                offset = CGPointMake(point.x - vrect.size.width / 2,
+                                     point.y - vrect.size.height / 2);
+                [self setSubViews];
+                sender.view.backgroundColor = [UIColor orangeColor];
+            } else {
+                sender.view.backgroundColor = [UIColor redColor];
+            }
+            break;
         }
+        case UIGestureRecognizerStateEnded:
+            sender.view.backgroundColor = [UIColor blueColor];
+            break;
+        case UIGestureRecognizerStateCancelled:
+        case UIGestureRecognizerStateFailed:
+        case UIGestureRecognizerStatePossible:
+        default:
+            sender.view.backgroundColor = [UIColor grayColor];
+            break;
     }
 }
 - (IBAction)editSubs:(UILongPressGestureRecognizer *)sender {
@@ -263,33 +333,22 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
  * MQTTSession is managed here in the setSession, connect and disconnect
  */
 
-- (void)setMqttSession:(MQTTSession *)mqttSession
-{
+- (void)setMqttSession:(MQTTSession *)mqttSession {
+    DDLogVerbose(@"setMqttSession");
     _mqttSession = mqttSession;
-    theMQTTSession = _mqttSession;
 }
 
 #pragma mark - Managing the detail item
-- (void)setSession:(Session *)session
-{
-    if (theSession) {
-        if (theMQTTSession) {
-            [theMQTTSession close];
-            theMQTTSession.delegate = nil;
-        }
+- (void)setSession:(Session *)session {
+    DDLogVerbose(@"setSession");
+    if (self.session) {
+        [self disconnect:nil];
     }
     
     _session = session;
-    theSession = _session;
-    
-    _session.state = @(-1);
     
     if ([session.autoconnect boolValue]) {
         [self connect:nil];
-    }
-    
-    if (self.masterPopoverController != nil) {
-        [self.masterPopoverController dismissPopoverAnimated:YES];
     }
     
     [self viewChanged:nil];
@@ -308,21 +367,56 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
             [self.mqttSession close];
             self.mqttSession.delegate = nil;
         }
-
-        self.mqttSession = [[MQTTSession alloc] initWithClientId:[self effectiveClientId]
-                                                        userName:[self.session.auth boolValue] ? self.session.user : nil
-                                                        password:[self.session.auth boolValue] ? self.session.passwd : nil
-                                                       keepAlive:[self.session.keepalive intValue]
-                                                    cleanSession:[self.session.cleansession boolValue]
-                                                            will:NO
-                                                       willTopic:nil
-                                                         willMsg:nil
-                                                         willQoS:0
-                                                  willRetainFlag:NO
-                                                   protocolLevel:[self.session.protocolLevel intValue]
-                                                         runLoop:[NSRunLoop currentRunLoop]
-                                                         forMode:NSRunLoopCommonModes];
-        self.mqttSession.delegate = self;
+        
+        self.mqttSession = [[MQTTSession alloc] init];
+        
+        //        MQTTInMemoryPersistence *persistence = [[MQTTInMemoryPersistence alloc] init];
+        //        persistence.maxMessages = 1024;
+        //        persistence.maxWindowSize = 16;
+        //        self.mqttSession.persistence = persistence;
+        
+        if ([self.session.websocket boolValue]) {
+            MQTTWebsocketTransport *websocketTransport = [[MQTTWebsocketTransport alloc] init];
+            websocketTransport.host = self.session.host;
+            websocketTransport.port = [self.session.port unsignedIntegerValue];
+            websocketTransport.tls = [self.session.tls boolValue];
+            if ([self.session.tls boolValue]) {
+                websocketTransport.allowUntrustedCertificates = [self.session.allowUntrustedCertificates boolValue];
+            }
+            self.mqttSession.transport = websocketTransport;
+        } else {
+            if ([self.session.tls boolValue]) {
+                MQTTSSLSecurityPolicyTransport *sslSecurityPolicyTransport = [[MQTTSSLSecurityPolicyTransport alloc] init];
+                sslSecurityPolicyTransport.host = self.session.host;
+                sslSecurityPolicyTransport.port = [self.session.port unsignedIntegerValue];
+                sslSecurityPolicyTransport.tls = [self.session.tls boolValue];
+                
+                MQTTSSLSecurityPolicy *sslSecurityPolicy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeNone];
+                
+                sslSecurityPolicy.allowInvalidCertificates = [self.session.allowUntrustedCertificates boolValue];
+                sslSecurityPolicy.validatesCertificateChain = ![self.session.allowUntrustedCertificates boolValue];
+                sslSecurityPolicy.validatesDomainName = ![self.session.allowUntrustedCertificates boolValue];
+                
+                sslSecurityPolicyTransport.securityPolicy = sslSecurityPolicy;
+                
+                self.mqttSession.transport = sslSecurityPolicyTransport;
+            } else {
+                MQTTCFSocketTransport *cfSocketTransport = [[MQTTCFSocketTransport alloc] init];
+                cfSocketTransport.host = self.session.host;
+                
+                cfSocketTransport.port = [self.session.port unsignedIntegerValue];
+                cfSocketTransport.tls = [self.session.tls boolValue];
+                self.mqttSession.transport = cfSocketTransport;
+            }
+        }
+        
+        
+        self.mqttSession.clientId = [self effectiveClientId];
+        self.mqttSession.userName = [self.session.auth boolValue] ? self.session.user : nil;
+        self.mqttSession.password = [self.session.auth boolValue] ? self.session.passwd : nil;
+        self.mqttSession.keepAliveInterval = [self.session.keepalive intValue];
+        self.mqttSession.cleanSessionFlag = [self.session.cleansession boolValue];
+        self.mqttSession.protocolLevel = [self.session.protocolLevel intValue];
         
         if ([self.session.cleansession boolValue]) {
             for (Subscription *sub in self.session.hasSubs) {
@@ -330,15 +424,28 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
             }
         }
         
-        [self.mqttSession connectToHost:self.session.host port:[self.session.port intValue] usingSSL:[self.session.tls boolValue]];
-        
+        self.connectTimer = [NSTimer scheduledTimerWithTimeInterval:[self.session.keepalive intValue]
+                                                             target:self
+                                                           selector:@selector(connectTimeout:)
+                                                           userInfo:nil
+                                                            repeats:NO];
         self.title = [NSString stringWithFormat:@"%@-%@", self.session.name, [self url]];
+        self.mqttSession.delegate = self;
+        [self.mqttSession connect];
+        [self enableButtons];
     }
+}
+                             
+- (void)connectTimeout:(NSTimer *)timer {
+    DDLogError(@"connect timed out");
+    [self message:@"connect timed out"];
+    [self disconnect:nil];
 }
 
 - (IBAction)disconnect:(UIBarButtonItem *)sender {
     if (self.session) {
         [self.mqttSession close];
+        self.mqttSession = nil;
         self.title = self.session.name;
     }
 }
@@ -393,63 +500,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     [self showCount];
 }
 
-#pragma mark - MQTTSessionDelegate
-- (void)connected:(MQTTSession *)session sessionPresent:(BOOL)sessionPresent {
-    if (!sessionPresent) {
-        for (Subscription *sub in self.session.hasSubs) {
-            sub.state = @(false);
-        }
-    }
-}
-
-- (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error
-{
-    NSArray *events = @[
-                        @"MQTTSessionEventConnected",
-                        @"MQTTSessionEventConnectionRefused",
-                        @"MQTTSessionEventConnectionClosed",
-                        @"MQTTSessionEventConnectionError",
-                        @"MQTTSessionEventProtocolError",
-                        @"MQTTSessionEventConnectionClosedByBroker"
-                        ];
-    
-    DDLogVerbose(@"handleEvent: %@ (%ld) %@", events[eventCode % [events count]], (long)eventCode, [error description]);
-    DDLogVerbose(@"session/self.mqttSession: %@/%@", session, self.mqttSession);
-
-    if (session != self.mqttSession) {
-        DDLogVerbose(@"handleEvent: old Session");
-        return;
-    }
-    
-    self.session.state = @(eventCode);
-
-    if ([self.session.state intValue] == MQTTSessionEventConnected) {
-        [self.subsTVC.tableView reloadData];
-        [self.pubsTVC.tableView reloadData];
-    }
-    
-    if ([self.session.state intValue] == MQTTSessionEventConnectionClosed) {
-        MQTTInspectorAppDelegate *delegate = [UIApplication sharedApplication].delegate;
-        [delegate connectionClosed];
-    }
-    
-    if (error) {
-        if ((self.lastError.domain == error.domain) && (self.lastError.code == error.code)) {
-            self.errorCount++;
-        } else {
-            self.errorCount = 1;
-        }
-        if (self.errorCount == 1 && [error.domain isEqualToString:NSOSStatusErrorDomain] && error.code == errSSLClosedAbort) {
-            [self performSelector:@selector(connect:) withObject:nil afterDelay:.25];
-        } else {
-            [MQTTInspectorDetailViewController alert:[error description]];
-        }
-    }
-    self.lastError = error;
-
-    [self enableButtons];
-}
-
 #define MAX_LOG 512
 #define MAX_TOPIC 256
 #define MAX_COMMAND 1024
@@ -462,10 +512,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     }
     return _queueManagedObjectContext;
 }
+
 - (void)startQueue
 {
     self.queueIn += 1;
-    [self.progress setProgress:self.queueOut/self.queueIn animated:YES];
+    [self showQueue];
 }
 
 - (void)finishQueue
@@ -473,17 +524,17 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     while (!self.runningSwitch.on) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
     }
-    [self performSelectorOnMainThread:@selector(showQueue) withObject:nil waitUntilDone:NO];
+    self.queueOut += 1;
+    [self performSelectorOnMainThread:@selector(showQueue) withObject:nil waitUntilDone:FALSE];
 }
 
 - (void)showQueue
 {
-    self.queueOut += 1;
     if (self.queueIn == self.queueOut) {
         self.queueIn = 1;
         self.queueOut = 1;
     }
-    [self.progress setProgress:self.queueOut/self.queueIn animated:YES];
+    [self.progress setProgress:self.queueOut/self.queueIn animated:NO];
     [self showCount];
 }
 
@@ -521,13 +572,71 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     }
 }
 
-- (void)newMessage:(MQTTSession *)session
-              data:(NSData *)data
-           onTopic:(NSString *)topic
-               qos:(MQTTQosLevel)qos
-          retained:(BOOL)retained
-               mid:(unsigned int)mid
-{
+#pragma mark - MQTTSessionDelegate
+- (void)connected:(MQTTSession *)session sessionPresent:(BOOL)sessionPresent {
+    if (!sessionPresent) {
+        for (Subscription *sub in self.session.hasSubs) {
+            sub.state = @(false);
+        }
+    }
+}
+
+- (void)connectionClosed:(MQTTSession *)session {
+    //
+}
+
+- (void)connectionError:(MQTTSession *)session error:(NSError *)error {
+    //
+}
+
+- (void)connectionRefused:(MQTTSession *)session error:(NSError *)error {
+    //
+}
+
+- (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error {
+    NSArray *events = @[
+                        @"MQTTSessionEventConnected",
+                        @"MQTTSessionEventConnectionRefused",
+                        @"MQTTSessionEventConnectionClosed",
+                        @"MQTTSessionEventConnectionError",
+                        @"MQTTSessionEventProtocolError",
+                        @"MQTTSessionEventConnectionClosedByBroker"
+                        ];
+    
+    DDLogVerbose(@"handleEvent: %@ (%ld) %@",
+                 events[eventCode % [events count]],
+                 (long)eventCode,
+                 [error description]);
+    
+    if (eventCode == MQTTSessionEventConnected) {
+        [self.subsTVC.tableView reloadData];
+        [self.pubsTVC.tableView reloadData];
+    }
+    
+    if (eventCode == MQTTSessionEventConnectionClosed ||
+        eventCode == MQTTSessionEventConnectionClosedByBroker) {
+        MQTTInspectorAppDelegate *delegate = [UIApplication sharedApplication].delegate;
+        [delegate connectionClosed];
+    }
+    
+    if (error) {
+        [MQTTInspectorDetailViewController alert:[NSString stringWithFormat: @"Error %@ (%ld) %@",
+                                                  events[eventCode % [events count]],
+                                                  (long)eventCode,
+                                                  [error description]]];
+    } else {
+        if (eventCode == MQTTSessionEventConnectionClosedByBroker) {
+            [self message:@"Session closed by broker"];
+        }
+    }
+    
+    if (self.connectTimer && self.connectTimer.isValid) {
+        [self.connectTimer invalidate];
+    }
+    [self enableButtons];
+}
+
+- (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
     NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
     NSString *name = self.session.name;
     NSString *attributefilter = self.session.attributefilter;
@@ -536,7 +645,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     BOOL includefilter = [self.session.includefilter boolValue];
     
     BOOL filter = TRUE;
-    data = [self limitedData:data];
+    NSData *limitedData = [self limitedData:data];
     
     NSError *error;
     
@@ -545,8 +654,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     [NSRegularExpression regularExpressionWithPattern:attributefilter ? attributefilter : @"" options:0 error:&error];
     if (attributeRegex) {
         NSUInteger attributeMatches = [attributeRegex numberOfMatchesInString:attributes
-                                                             options:0
-                                                               range:NSMakeRange(0, [attributes length])];
+                                                                      options:0
+                                                                        range:NSMakeRange(0, [attributes length])];
         if ((attributeMatches == 0) == includefilter) {
             DDLogVerbose(@"filter regexp %@ does not match attributes %@ %@",
                          attributefilter, attributes, @(includefilter));
@@ -554,21 +663,21 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
         }
     }
     
-
-    DDLogVerbose(@"data %@", data ? data : @"nil");
+    
+    DDLogVerbose(@"limitedData %@", limitedData ? limitedData : @"nil");
     NSString *dataString;
-    dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    dataString = [[NSString alloc] initWithData:limitedData encoding:NSUTF8StringEncoding];
     DDLogVerbose(@"dataString NSUTF8StringEncoding %@", dataString ? dataString : @"nil");
     if (!dataString) {
-        dataString = [[NSString alloc] initWithData:data encoding:NSUnicodeStringEncoding];
+        dataString = [[NSString alloc] initWithData:limitedData encoding:NSUnicodeStringEncoding];
         DDLogVerbose(@"dataString NSUnicodeStringEncoding %@", dataString ? dataString : @"nil");
     }
     if (!dataString) {
-        dataString = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
+        dataString = [[NSString alloc] initWithData:limitedData encoding:NSISOLatin1StringEncoding];
         DDLogVerbose(@"dataString NSISOLatin1StringEncoding %@", dataString ? dataString : @"nil");
     }
     NSRegularExpression *dataRegex;
-
+    
     if (dataString) {
         dataRegex =
         [NSRegularExpression regularExpressionWithPattern:datafilter ? datafilter : @"" options:0 error:&error];
@@ -584,70 +693,114 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
         }
     }
     
-    NSRegularExpression *topicRegex =
-    [NSRegularExpression regularExpressionWithPattern:topicfilter ? topicfilter : @"" options:0 error:&error];
-    if (topicRegex) {
-        NSUInteger topicMatches = [topicRegex numberOfMatchesInString:topic
-                                                              options:0
-                                                                range:NSMakeRange(0, [topic length])];
-        if ((topicMatches == 0) == includefilter) {
-            DDLogVerbose(@"filter regexp %@ does not match topic %@ %@",
-                         topicfilter, topic, @(includefilter));
-            filter = FALSE;
+    NSRegularExpression *topicRegex;
+    DDLogVerbose(@"topic %@", topic ? topic : @"nil");
+    if (topic) {
+        topicRegex =
+        [NSRegularExpression regularExpressionWithPattern:topicfilter ? topicfilter : @"" options:0 error:&error];
+        if (topicRegex) {
+            NSUInteger topicMatches = [topicRegex numberOfMatchesInString:topic
+                                                                  options:0
+                                                                    range:NSMakeRange(0, [topic length])];
+            if ((topicMatches == 0) == includefilter) {
+                DDLogVerbose(@"filter regexp %@ does not match topic %@ %@",
+                             topicfilter, topic, @(includefilter));
+                filter = FALSE;
+            }
         }
-    }
-    
-    if (!attributeRegex || !dataRegex || !topicRegex) {
-        self.filterButton.tintColor = [UIColor blueColor];
     } else {
-        self.filterButton.tintColor = filter ? [UIColor greenColor] : [UIColor redColor];
+        DDLogVerbose(@"no topic");
+        filter = false;
     }
     
     if (filter) {
         [self startQueue];
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^(void){
+            [self.queueManagedObjectContext performBlock:^{
+                Session *mySession = [Session existSessionWithName:name
+                                            inManagedObjectContext:self.queueManagedObjectContext];
+                
+                DDLogVerbose(@"newLog");
+                [Message messageAt:timestamp
+                             topic:topic
+                              data:limitedData
+                               qos:qos
+                          retained:retained
+                               mid:mid
+                           session:mySession
+            inManagedObjectContext:self.queueManagedObjectContext];
+                
+                [self limit:[Message allMessagesOfSession:mySession
+                                   inManagedObjectContext:self.queueManagedObjectContext]
+                        max:MAX_LOG];
+                
+                DDLogVerbose(@"newTopic");
+                Topic *theTopic = [Topic existsTopicNamed:topic
+                                                  session:mySession
+                                   inManagedObjectContext:self.queueManagedObjectContext];
+                if (theTopic) {
+                    theTopic.count = @([theTopic.count intValue] + 1);
+                    theTopic.data = limitedData;
+                    theTopic.qos = @(qos);
+                    theTopic.mid = @(mid);
+                    theTopic.retained = @(retained);
+                    theTopic.timestamp = timestamp;
+                    theTopic.justupdated = theTopic.count;
+                } else {
+                    [Topic topicNamed:topic
+                            timestamp:timestamp
+                                 data:limitedData
+                                  qos:qos
+                             retained:retained
+                                  mid:mid
+                              session:mySession
+               inManagedObjectContext:self.queueManagedObjectContext];
+                    [self limit:[Topic allTopicsOfSession:mySession
+                                   inManagedObjectContext:self.queueManagedObjectContext]
+                            max:MAX_TOPIC];
+                }
+                
+                NSError *error;
+                
+                if (![self.queueManagedObjectContext save:NULL]) {
+                    DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
+                    abort();
+                }
+                
+                [self finishQueue];
+            }];
+        });
+    }
+}
+
+- (void)received:(MQTTSession *)session type:(MQTTCommandType)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data {
+    
+    NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
+    NSString *name = self.session.name;
+    
+    NSData *limitedData = [self limitedData:data];
+    
+    [self startQueue];
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^(void){
+        
         [self.queueManagedObjectContext performBlock:^{
+            DDLogVerbose(@"newCommand in");
             Session *mySession = [Session existSessionWithName:name
                                         inManagedObjectContext:self.queueManagedObjectContext];
-
-            DDLogVerbose(@"newLog");
-            [Message messageAt:timestamp
-                         topic:topic
-                          data:data
+            [Command commandAt:timestamp
+                       inbound:YES
+                          type:type
+                         duped:duped
                            qos:qos
                       retained:retained
                            mid:mid
+                          data:limitedData
                        session:mySession
         inManagedObjectContext:self.queueManagedObjectContext];
             
-            [self limit:[Message allMessagesOfSession:mySession
+            [self limit:[Command allCommandsOfSession:mySession
                                inManagedObjectContext:self.queueManagedObjectContext]
-                    max:MAX_LOG];
-            
-            DDLogVerbose(@"newTopic");
-            Topic *theTopic = [Topic existsTopicNamed:topic
-                                              session:mySession
-                               inManagedObjectContext:self.queueManagedObjectContext];
-            if (theTopic) {
-                theTopic.count = @([theTopic.count intValue] + 1);
-                theTopic.data = data;
-                theTopic.qos = @(qos);
-                theTopic.mid = @(mid);
-                theTopic.retained = @(retained);
-                theTopic.timestamp = timestamp;
-                theTopic.justupdated = theTopic.count;
-            } else {
-                [Topic topicNamed:topic
-                        timestamp:timestamp
-                             data:data
-                              qos:qos
-                         retained:retained
-                              mid:mid
-                          session:mySession
-           inManagedObjectContext:self.queueManagedObjectContext];
-                [self limit:[Topic allTopicsOfSession:mySession
-                               inManagedObjectContext:self.queueManagedObjectContext]
-                        max:MAX_TOPIC];
-            }
+                    max:MAX_COMMAND];
             
             NSError *error;
             
@@ -655,88 +808,52 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
                 DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
                 abort();
             }
-
+            
             [self finishQueue];
         }];
-    }
+    });
 }
 
-- (void)received:(MQTTSession *)session type:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
-{
+- (void)sending:(MQTTSession *)session type:(MQTTCommandType)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data {
+    
     NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
     NSString *name = self.session.name;
     
-    data = [self limitedData:data];
-
-    [self startQueue];
-    [self.queueManagedObjectContext performBlock:^{
-        DDLogVerbose(@"newCommand in");
-        Session *mySession = [Session existSessionWithName:name
-                                    inManagedObjectContext:self.queueManagedObjectContext];
-        [Command commandAt:timestamp
-                   inbound:YES
-                      type:type
-                     duped:duped
-                       qos:qos
-                  retained:retained
-                       mid:mid
-                      data:data
-                   session:mySession
-    inManagedObjectContext:self.queueManagedObjectContext];
-        
-        [self limit:[Command allCommandsOfSession:mySession
-                           inManagedObjectContext:self.queueManagedObjectContext]
-                max:MAX_COMMAND];
-        
-        NSError *error;
-        
-        if (![self.queueManagedObjectContext save:NULL]) {
-            DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }
-
-        [self finishQueue];
-    }];
-}
-
--(void)sending:(MQTTSession *)session type:(int)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data
-{
-    NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
-    NSString *name = self.session.name;
-    
-    data = [self limitedData:data];
+    NSData *limitedData = [self limitedData:data];
     
     [self startQueue];
-    [self.queueManagedObjectContext performBlock:^{
-        DDLogVerbose(@"newCommand out");
-        Session *mySession = [Session existSessionWithName:name
-                                    inManagedObjectContext:self.queueManagedObjectContext];
-
-        
-        [Command commandAt:timestamp
-                   inbound:NO
-                      type:type
-                     duped:duped
-                       qos:qos
-                  retained:retained
-                       mid:mid
-                      data:data
-                   session:mySession
-    inManagedObjectContext:self.queueManagedObjectContext];
-        
-        [self limit:[Command allCommandsOfSession:mySession
-                           inManagedObjectContext:self.queueManagedObjectContext]
-                max:MAX_COMMAND];
-        
-        NSError *error;
-        
-        if (![self.queueManagedObjectContext save:NULL]) {
-            DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }
-
-        [self finishQueue];
-    }];
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^(void){
+        [self.queueManagedObjectContext performBlock:^{
+            DDLogVerbose(@"newCommand out");
+            Session *mySession = [Session existSessionWithName:name
+                                        inManagedObjectContext:self.queueManagedObjectContext];
+            
+            
+            [Command commandAt:timestamp
+                       inbound:NO
+                          type:type
+                         duped:duped
+                           qos:qos
+                      retained:retained
+                           mid:mid
+                          data:limitedData
+                       session:mySession
+        inManagedObjectContext:self.queueManagedObjectContext];
+            
+            [self limit:[Command allCommandsOfSession:mySession
+                               inManagedObjectContext:self.queueManagedObjectContext]
+                    max:MAX_COMMAND];
+            
+            NSError *error;
+            
+            if (![self.queueManagedObjectContext save:NULL]) {
+                DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
+                abort();
+            }
+            
+            [self finishQueue];
+        }];
+    });
 }
 
 - (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID
@@ -754,27 +871,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     }
 }
 
-#pragma mark - Split view
-
-- (void)splitViewController:(UISplitViewController *)splitController willHideViewController:(UIViewController *)viewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)popoverController
-{
-    barButtonItem.title = @"Sessions";
-    [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
-    self.masterPopoverController = popoverController;
-}
-
-- (void)splitViewController:(UISplitViewController *)splitController willShowViewController:(UIViewController *)viewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
-{
-    // Called when the view is shown again in the split view, invalidating the button and popover controller.
-    [self.navigationItem setLeftBarButtonItem:nil animated:YES];
-    self.masterPopoverController = nil;
-}
-
-- (BOOL)splitViewController:(UISplitViewController *)svc shouldHideViewController:(UIViewController *)vc inOrientation:(UIInterfaceOrientation)orientation
-{
-    return YES;
-}
-
 #pragma mark - Alerts
 
 + (void)alert:(NSString *)message
@@ -785,6 +881,22 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
     [alertView show];
+}
+
+
+- (void)message:(NSString *)message
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSBundle mainBundle].infoDictionary[@"CFBundleName"]
+                                                        message:message
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:nil];
+    [alertView show];
+    [self performSelector:@selector(messageDismiss:) withObject:alertView afterDelay:0.5];
+}
+
+- (void)messageDismiss:(UIAlertView *)alertView {
+    [alertView dismissWithClickedButtonIndex:0 animated:true];
 }
 
 
@@ -810,32 +922,33 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     }
 }
 
-- (void)enableButtons
-{
-    DDLogVerbose(@"self.session.state: %@", self.session.state);
-
+- (void)enableButtons {
     if (self.session) {
         self.level.enabled = TRUE;
         self.clearButton.enabled = TRUE;
-        self.filterButton.enabled = TRUE;
-
-        switch ([self.session.state intValue]) {
-        case MQTTSessionEventConnected:
-            self.connectButton.enabled = FALSE;
-            self.disconnectButton.enabled = TRUE;
-            self.pubButton.enabled = TRUE;
-            break;
-            
-        default:
-            self.connectButton.enabled = TRUE;
-            self.disconnectButton.enabled = FALSE;
-            self.pubButton.enabled = FALSE;
-            break;
+        
+        switch (self.mqttSession.status) {
+            case MQTTSessionStatusConnected:
+                self.connectButton.enabled = FALSE;
+                self.disconnectButton.enabled = TRUE;
+                self.pubButton.enabled = TRUE;
+                break;
+                
+            case MQTTSessionStatusConnecting:
+                self.connectButton.enabled = FALSE;
+                self.disconnectButton.enabled = FALSE;
+                self.pubButton.enabled = FALSE;
+                break;
+                
+            default:
+                self.connectButton.enabled = TRUE;
+                self.disconnectButton.enabled = FALSE;
+                self.pubButton.enabled = FALSE;
+                break;
         }
     } else {
         self.level.enabled = FALSE;
         self.clearButton.enabled = FALSE;
-        self.filterButton.enabled = FALSE;
     }
 }
 

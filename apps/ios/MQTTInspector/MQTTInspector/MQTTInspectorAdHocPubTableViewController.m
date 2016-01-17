@@ -3,11 +3,13 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 15.11.13.
-//  Copyright (c) 2013 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorAdHocPubTableViewController.h"
-#import "Publication+Create.h"
+
+#import "Model.h"
+
 #import "MQTTInspectorDataViewController.h"
 
 @interface MQTTInspectorAdHocPubTableViewController ()
@@ -45,20 +47,14 @@
     [textField resignFirstResponder];
     return YES;
 }
-
-- (IBAction)pubNow:(UIButton *)sender {
+- (IBAction)pubNow:(UIBarButtonItem *)sender {
     self.pub.topic = self.topicText.text;
     self.pub.data = [self.dataText.text dataUsingEncoding:NSUTF8StringEncoding];
     self.pub.retained = @(self.retainSwitch.on);
     self.pub.qos = @(self.qosSegment.selectedSegmentIndex);
     
     [self.mother publish:self.pub];
-    NSArray *vcs = self.navigationController.viewControllers;
-    if (vcs[vcs.count - 1] == self) {
-        [self.navigationController popViewControllerAnimated:TRUE];
-    } else {
-        [self dismissViewControllerAnimated:TRUE completion:nil];
-    }
+    [self.navigationController popViewControllerAnimated:TRUE];
 }
 
 @end

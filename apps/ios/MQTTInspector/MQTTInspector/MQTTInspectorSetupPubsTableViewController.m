@@ -3,19 +3,18 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 14.11.13.
-//  Copyright (c) 2013 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorSetupPubsTableViewController.h"
 #import "MQTTInspectorSetupPubTableViewController.h"
-#import "Publication+Create.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+
+#import "Model.h"
 
 @interface MQTTInspectorSetupPubsTableViewController ()
 @end
 
 @implementation MQTTInspectorSetupPubsTableViewController
-static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"setPub:"]) {

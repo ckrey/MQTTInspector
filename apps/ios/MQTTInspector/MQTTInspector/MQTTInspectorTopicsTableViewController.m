@@ -3,21 +3,20 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 11.11.13.
-//  Copyright (c) 2013 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorTopicsTableViewController.h"
-#import "Topic+Create.h"
-#import "Subscription+Create.h"
+
+#import "Model.h"
+
 #import "MQTTInspectorDataViewController.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface MQTTInspectorTopicsTableViewController ()
 
 @end
 
 @implementation MQTTInspectorTopicsTableViewController
-static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (NSFetchRequest *)fetchRequestForTableView
 {

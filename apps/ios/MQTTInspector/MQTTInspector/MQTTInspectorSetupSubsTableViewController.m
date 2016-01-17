@@ -3,19 +3,18 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 14.11.13.
-//  Copyright (c) 2013 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorSetupSubsTableViewController.h"
 #import "MQTTInspectorSetupSubTableViewController.h"
-#import "Subscription+Create.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+
+#import "Model.h"
 
 @interface MQTTInspectorSetupSubsTableViewController ()
 @end
 
 @implementation MQTTInspectorSetupSubsTableViewController
-static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {

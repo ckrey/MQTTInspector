@@ -3,31 +3,35 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 09.11.13.
-//  Copyright (c) 2013 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorMasterViewController.h"
 #import "MQTTInspectorDetailViewController.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "MQTTInspectorAppDelegate.h"
 
-#import "Session+Create.h"
-#import "Subscription+Create.h"
-#import "Publication+Create.h"
+#import "Model.h"
 
 @interface MQTTInspectorMasterViewController ()
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @implementation MQTTInspectorMasterViewController
-static const DDLogLevel ddLogLevel = DDLogLevelError;
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
-
-    if ([[Session allSessions:self.managedObjectContext] count] == 0) {
-        
+    
+    self.splitViewController.delegate = self;
+    self.splitViewController.preferredDisplayMode = UISplitViewControllerDisplayModePrimaryHidden;
+    
+    MQTTInspectorAppDelegate *appDelegate = (MQTTInspectorAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    NSArray<Session *> *sessions = [Session allSessions:appDelegate.managedObjectContext];
+    
+    if (sessions.count) {
+        //
+    } else {
         /* DEMO DB SETUP only if DB is empty */
         Session *session;
         
@@ -51,29 +55,29 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
                                 datafilter:@".*"
                              includefilter:YES
                                  sizelimit:0
-                    inManagedObjectContext:self.managedObjectContext];
+                    inManagedObjectContext:appDelegate.managedObjectContext];
         [Subscription subscriptionWithTopic:@"MQTTInspector/#"
                                         qos:1
                                     session:session
-                     inManagedObjectContext:self.managedObjectContext];
+                     inManagedObjectContext:appDelegate.managedObjectContext];
         [Subscription subscriptionWithTopic:@"test/+"
                                         qos:2
                                     session:session
-                     inManagedObjectContext:self.managedObjectContext];
+                     inManagedObjectContext:appDelegate.managedObjectContext];
         [Subscription subscriptionWithTopic:@"system/+/chronos/#"
                                         qos:0 session:session
-                     inManagedObjectContext:self.managedObjectContext];
+                     inManagedObjectContext:appDelegate.managedObjectContext];
         [Subscription subscriptionWithTopic:@"loc/#"
                                         qos:2
                                     session:session
-                     inManagedObjectContext:self.managedObjectContext];
+                     inManagedObjectContext:appDelegate.managedObjectContext];
         
         [Publication publicationWithName:@"ping"
                                    topic:@"MQTTInspector"
                                      qos:0
                                 retained:NO
                                     data:[@"ping %t %c" dataUsingEncoding:NSUTF8StringEncoding]
-                                 session:session inManagedObjectContext:self.managedObjectContext];
+                                 session:session inManagedObjectContext:appDelegate.managedObjectContext];
         
         /* eclipse.org */
         session = [Session sessionWithName:@"eclipse.org"
@@ -95,34 +99,36 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
                                 datafilter:@".*"
                              includefilter:YES
                                  sizelimit:0
-                    inManagedObjectContext:self.managedObjectContext];
+                    inManagedObjectContext:appDelegate.managedObjectContext];
         [Subscription subscriptionWithTopic:@"MQTTInspector/#"
                                         qos:1
                                     session:session
-                     inManagedObjectContext:self.managedObjectContext];
+                     inManagedObjectContext:appDelegate.managedObjectContext];
         
         [Subscription subscriptionWithTopic:@"test/+"
                                         qos:2
                                     session:session
-                     inManagedObjectContext:self.managedObjectContext];
+                     inManagedObjectContext:appDelegate.managedObjectContext];
         [Publication publicationWithName:@"ping"
                                    topic:@"MQTTInspector"
                                      qos:0
                                 retained:NO
                                     data:[@"ping %t %c" dataUsingEncoding:NSUTF8StringEncoding]
-                                 session:session inManagedObjectContext:self.managedObjectContext];
+                                 session:session inManagedObjectContext:appDelegate.managedObjectContext];
     }
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+#pragma mark - Segues
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"newSession"]) {
         int i = 1;
         NSString *newName;
+        MQTTInspectorAppDelegate *appDelegate = (MQTTInspectorAppDelegate *)[UIApplication sharedApplication].delegate;
 
         do {
             newName = [NSString stringWithFormat:@"new-session-%d", i++];
-        } while ([Session existSessionWithName:newName inManagedObjectContext:self.managedObjectContext]);
+        } while ([Session existSessionWithName:newName inManagedObjectContext:appDelegate.managedObjectContext]);
         
         Session *session = [Session sessionWithName:newName
                                                host:@"host"
@@ -143,7 +149,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
                                          datafilter:@".*"
                                       includefilter:YES
                                           sizelimit:0
-                             inManagedObjectContext:self.managedObjectContext];
+                             inManagedObjectContext:appDelegate.managedObjectContext];
         if ([segue.destinationViewController respondsToSelector:@selector(setSession:)]) {
             [segue.destinationViewController performSelector:@selector(setSession:)
                                                   withObject:session];
@@ -166,43 +172,38 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
             }
         }
     }
+    
+    if ([[segue identifier] isEqualToString:@"showDetail"]) {
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+        MQTTInspectorDetailViewController *controller = (MQTTInspectorDetailViewController *)[[segue destinationViewController] topViewController];
+        [controller setSession:(Session *)object];
+    }
 }
 
 #pragma mark - Table View
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return [[self.fetchedResultsController sections] count];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
     return [sectionInfo numberOfObjects];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"session" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    Session *session = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-    self.detailViewController.session = session;
-}
-
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
         [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
@@ -217,8 +218,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     }   
 }
 
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     // The table view should not be re-orderable.
     return NO;
 }
@@ -231,9 +231,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
         return _fetchedResultsController;
     }
     
+    MQTTInspectorAppDelegate *appDelegate = (MQTTInspectorAppDelegate *)[UIApplication sharedApplication].delegate;
+
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Session" inManagedObjectContext:self.managedObjectContext];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Session" inManagedObjectContext:appDelegate.managedObjectContext];
     [fetchRequest setEntity:entity];
     
     // Set the batch size to a suitable number.
@@ -247,7 +249,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                                                managedObjectContext:appDelegate.managedObjectContext
+                                                                                                  sectionNameKeyPath:nil
+                                                                                                           cacheName:nil];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     
@@ -260,16 +265,14 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     return _fetchedResultsController;
 }    
 
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
-{
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     [self.tableView beginUpdates];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller
   didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex
-     forChangeType:(NSFetchedResultsChangeType)type
-{
+     forChangeType:(NSFetchedResultsChangeType)type {
     switch(type) {
         case NSFetchedResultsChangeInsert:
             [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]
@@ -289,8 +292,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
    didChangeObject:(id)anObject
        atIndexPath:(NSIndexPath *)indexPath
      forChangeType:(NSFetchedResultsChangeType)type
-      newIndexPath:(NSIndexPath *)newIndexPath
-{
+      newIndexPath:(NSIndexPath *)newIndexPath {
     UITableView *tableView = self.tableView;
     
     switch(type) {
@@ -318,15 +320,32 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     }
 }
 
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
     [self.tableView endUpdates];
 }
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Session *session = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = session.name;
+}
+
+#pragma mark - UISplitViewControllerDelegate
+- (BOOL)splitViewController:(UISplitViewController *)splitViewController
+collapseSecondaryViewController:(UIViewController *)secondaryViewController
+  ontoPrimaryViewController:(UIViewController *)primaryViewController {
+    
+    if ([secondaryViewController isKindOfClass:[UINavigationController class]]
+        && [[(UINavigationController *)secondaryViewController topViewController] isKindOfClass:[MQTTInspectorDetailViewController class]]
+        && ([(MQTTInspectorDetailViewController *)[(UINavigationController *)secondaryViewController topViewController] session] == nil)) {
+        
+        // Return YES to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
+        return YES;
+        
+    } else {
+        
+        return NO;
+        
+    }
 }
 
 @end

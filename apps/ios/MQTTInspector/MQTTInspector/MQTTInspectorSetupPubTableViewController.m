@@ -3,12 +3,14 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 14.11.13.
-//  Copyright (c) 2013 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorSetupPubTableViewController.h"
 #import "MQTTInspectorDetailViewController.h"
 #import "MQTTInspectorDataViewController.h"
+
+#import "Model.h"
 
 @interface MQTTInspectorSetupPubTableViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *nameText;

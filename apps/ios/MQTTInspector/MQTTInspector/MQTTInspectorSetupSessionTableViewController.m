@@ -3,13 +3,11 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 14.11.13.
-//  Copyright (c) 2013 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorSetupSessionTableViewController.h"
-#import "Session+Create.h"
-#import "Publication.h"
-#import "Subscription.h"
+#import "Model.h"
 #import "MQTTInspectorDetailViewController.h"
 
 
@@ -24,25 +22,23 @@
 @property (weak, nonatomic) IBOutlet UITextField *clientIdText;
 @property (weak, nonatomic) IBOutlet UISwitch *cleansessionSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *keepaliveText;
-@property (weak, nonatomic) IBOutlet UITextField *domainText;
-@property (weak, nonatomic) IBOutlet UISwitch *domainSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *autoConnectSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *protocolLevelText;
 @property (weak, nonatomic) IBOutlet UITextField *sizeLimitText;
+@property (weak, nonatomic) IBOutlet UISwitch *useWebsocketsSwitch;
 
+@property (weak, nonatomic) IBOutlet UISwitch *allowUntrustedCertificatesSwitch;
 @property (strong, nonatomic) UIDocumentInteractionController *dic;
 
 @end
 
 @implementation MQTTInspectorSetupSessionTableViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     self.title = self.session.name;
@@ -51,14 +47,17 @@
     self.hostText.text = self.session.host;
     self.portText.text = [NSString stringWithFormat:@"%@", self.session.port];
     self.tlsSwitch.on = [self.session.tls boolValue];
+    self.allowUntrustedCertificatesSwitch.enabled = self.tlsSwitch.on;
+    self.allowUntrustedCertificatesSwitch.on = [self.session.allowUntrustedCertificates boolValue];
+    self.useWebsocketsSwitch.on = [self.session.websocket boolValue];
     self.authSwitch.on = [self.session.auth boolValue];
     self.userText.text = self.session.user;
     self.passwdText.text = self.session.passwd;
     self.clientIdText.text = self.session.clientid;
     self.cleansessionSwitch.on = [self.session.cleansession boolValue];
     self.keepaliveText.text = [NSString stringWithFormat:@"%@", self.session.keepalive];
-    self.domainSwitch.on = [self.session.dnssrv boolValue];
-    self.domainText.text = self.session.dnsdomain;
+    self.allowUntrustedCertificatesSwitch.on = [self.session.allowUntrustedCertificates boolValue];
+    self.useWebsocketsSwitch.on = [self.session.websocket boolValue];
     self.autoConnectSwitch.on = [self.session.autoconnect boolValue];
     self.protocolLevelText.text = [NSString stringWithFormat:@"%@", self.session.protocolLevel];
     self.sizeLimitText.text = [NSString stringWithFormat:@"%@", self.session.sizelimit];
@@ -70,7 +69,6 @@
     self.passwdText.delegate = self;
     self.clientIdText.delegate = self;
     self.keepaliveText.delegate = self;
-    self.domainText.delegate = self;
     self.protocolLevelText.delegate = self;
     self.sizeLimitText.delegate = self;
 }
@@ -80,9 +78,10 @@
     return YES;
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:@"setSessionForDNS:"] || [segue.identifier isEqualToString:@"setSessionForSubs:"] || [segue.identifier isEqualToString:@"setSessionForPubs:"]) {
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"setSessionForFilters:"] ||
+        [segue.identifier isEqualToString:@"setSessionForSubs:"] ||
+        [segue.identifier isEqualToString:@"setSessionForPubs:"]) {
         if ([segue.destinationViewController respondsToSelector:@selector(setSession:)]) {
             [segue.destinationViewController performSelector:@selector(setSession:)
                                                   withObject:self.session];
@@ -90,8 +89,7 @@
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
+- (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 }
 
@@ -121,31 +119,41 @@
         self.session.port = @(1883);
     }
     self.portText.text = [NSString stringWithFormat:@"%@", self.session.port];
+    self.allowUntrustedCertificatesSwitch.enabled = self.tlsSwitch.on;
 }
-- (IBAction)domainSwitchChanged:(UISwitch *)sender {
-    self.session.dnssrv = @(sender.on);
+
+- (IBAction)allowUntrustedCertificatesChanged:(UISwitch *)sender {
+    self.session.allowUntrustedCertificates = @(sender.on);
 }
-- (IBAction)domainChanged:(UITextField *)sender {
-    self.session.dnsdomain = sender.text;
+
+- (IBAction)useWebsocketsChanged:(UISwitch *)sender {
+    self.session.websocket = @(sender.on);
 }
+
 - (IBAction)authChanged:(UISwitch *)sender {
     self.session.auth = @(sender.on);
 }
+
 - (IBAction)userChanged:(UITextField *)sender {
     self.session.user = sender.text;
 }
+
 - (IBAction)passwdChanged:(UITextField *)sender {
     self.session.passwd = sender.text;
 }
+
 - (IBAction)clientIdChanged:(UITextField *)sender {
     self.session.clientid = sender.text;
 }
+
 - (IBAction)cleansessionChanged:(UISwitch *)sender {
     self.session.cleansession = @(sender.on);
 }
+
 - (IBAction)keepalvieChanged:(UITextField *)sender {
     self.session.keepalive = @([sender.text intValue]);
 }
+
 - (IBAction)autoConnectChanged:(UISwitch *)sender {
     self.session.autoconnect = @(sender.on);
 }
@@ -191,8 +199,8 @@
                            @"clientid": self.session.clientid ? self.session.clientid : @"",
                            @"cleansession": [NSString stringWithFormat:@"%@", self.session.cleansession ? self.session.cleansession : @(0)],
                            @"keepalive": [NSString stringWithFormat:@"%@", self.session.keepalive ? self.session.keepalive : @(60)],
-                           @"dnssrv": [NSString stringWithFormat:@"%@", self.session.dnssrv ? self.session.dnssrv : @(0)],
-                           @"dnsdomain": self.session.dnsdomain ? self.session.dnsdomain : @"",
+                           @"websocket": [NSString stringWithFormat:@"%@", self.session.websocket ? self.session.websocket : @(0)],
+                           @"allowUntrustedCertificates": [NSString stringWithFormat:@"%@", self.session.allowUntrustedCertificates ? self.session.allowUntrustedCertificates : @(0)],
                            @"autoconnect": [NSString stringWithFormat:@"%@", self.session.autoconnect ? self.session.autoconnect : @(0)],
                            @"protocollevel": [NSString stringWithFormat:@"%@", self.session.protocolLevel ? self.session.protocolLevel : @(0)],
                            @"sizeLimit": [NSString stringWithFormat:@"%@", self.session.sizelimit ? self.session.sizelimit : @(0)],
