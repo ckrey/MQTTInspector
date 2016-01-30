@@ -24,24 +24,24 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [Fabric with:@[CrashlyticsKit]];
     [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:ddLogLevel];
     DDLogVerbose(@"didFinishLaunchingWithOptions");
     
+    [[UIApplication sharedApplication] setIdleTimerDisabled:TRUE];
+    
     return YES;
 }
 							
-- (void)applicationWillResignActive:(UIApplication *)application
-{
+- (void)applicationWillResignActive:(UIApplication *)application {
     DDLogVerbose(@"applicationWillResignActive");
 
     [self saveContext];
+    [[UIApplication sharedApplication] setIdleTimerDisabled:FALSE];
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
+- (void)applicationDidEnterBackground:(UIApplication *)application {
     DDLogVerbose(@"applicationDidEnterBackground");
 
     self.bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^
@@ -51,8 +51,7 @@
                            }];
 }
 
-- (void)connectionClosed
-{
+- (void)connectionClosed {
     DDLogVerbose(@"connectionClosed");
     
     if (self.bgTask != UIBackgroundTaskInvalid) {
@@ -61,14 +60,12 @@
     }
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application
-{
+- (void)applicationWillTerminate:(UIApplication *)application {
     DDLogVerbose(@"applicationWillTerminate");
     [self saveContext];
 }
 
-- (void)saveContext
-{
+- (void)saveContext {
     DDLogVerbose(@"saveContext");
 
     NSError *error = nil;
@@ -83,8 +80,7 @@
 
 #pragma mark - Core Data stack
 
-- (NSManagedObjectContext *)managedObjectContext
-{
+- (NSManagedObjectContext *)managedObjectContext {
     if (_managedObjectContext != nil) {
         return _managedObjectContext;
     }
@@ -98,8 +94,7 @@
     return _managedObjectContext;
 }
 
-- (NSManagedObjectModel *)managedObjectModel
-{
+- (NSManagedObjectModel *)managedObjectModel {
     if (_managedObjectModel != nil) {
         return _managedObjectModel;
     }
@@ -108,8 +103,7 @@
     return _managedObjectModel;
 }
 
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
-{
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
     if (_persistentStoreCoordinator != nil) {
         return _persistentStoreCoordinator;
     }
@@ -132,13 +126,11 @@
 
 #pragma mark - Application's Documents directory
 
-- (NSURL *)applicationDocumentsDirectory
-{
+- (NSURL *)applicationDocumentsDirectory {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-{
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     DDLogVerbose(@"UIApplication openURL:%@ sourceApplication:%@ annotation:%@",
                  url, sourceApplication, annotation);
     
