@@ -445,6 +445,7 @@ static CGPoint offset;
 - (IBAction)disconnect:(UIBarButtonItem *)sender {
     if (self.session) {
         [self.mqttSession close];
+        self.mqttSession.delegate = nil;
         self.mqttSession = nil;
         self.title = self.session.name;
     }
@@ -715,7 +716,11 @@ static CGPoint offset;
     
     if (filter) {
         [self startQueue];
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^(void){
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^(void) {
+            if (![name isEqualToString:self.session.name]) {
+                return;
+            }
+
             [self.queueManagedObjectContext performBlock:^{
                 Session *mySession = [Session existSessionWithName:name
                                             inManagedObjectContext:self.queueManagedObjectContext];
@@ -773,7 +778,13 @@ static CGPoint offset;
     }
 }
 
-- (void)received:(MQTTSession *)session type:(MQTTCommandType)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data {
+- (void)received:(MQTTSession *)session
+            type:(MQTTCommandType)type
+             qos:(MQTTQosLevel)qos
+        retained:(BOOL)retained
+           duped:(BOOL)duped
+             mid:(UInt16)mid
+            data:(NSData *)data {
     
     NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
     NSString *name = self.session.name;
@@ -781,7 +792,10 @@ static CGPoint offset;
     NSData *limitedData = [self limitedData:data];
     
     [self startQueue];
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^(void){
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^(void) {
+        if (![name isEqualToString:self.session.name]) {
+            return;
+        }
         
         [self.queueManagedObjectContext performBlock:^{
             DDLogVerbose(@"newCommand in");
@@ -822,7 +836,11 @@ static CGPoint offset;
     NSData *limitedData = [self limitedData:data];
     
     [self startQueue];
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^(void){
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^(void) {
+        if (![name isEqualToString:self.session.name]) {
+            return;
+        }
+        
         [self.queueManagedObjectContext performBlock:^{
             DDLogVerbose(@"newCommand out");
             Session *mySession = [Session existSessionWithName:name

@@ -16,6 +16,7 @@ A general MQTT testing app for iOS (iPhone and iPad)
 * Panels can be frozen (halts all display activity) for, say, taking screenshots
 
 # New features in 2.0
+* [NEW] use Testflight crash reporting, drop Fabric/Crashlytics
 * [NEW] Disable idle timeout while active / "monitor" mode
 * [NEW] MQTT over WebSocket support
 * [NEW] Self-signed Certs support

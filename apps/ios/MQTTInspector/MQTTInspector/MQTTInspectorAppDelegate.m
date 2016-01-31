@@ -11,9 +11,6 @@
 
 #import "Model.h"
 
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
-
 @interface MQTTInspectorAppDelegate ()
 @property (nonatomic) UIBackgroundTaskIdentifier bgTask;
 @end
@@ -25,7 +22,6 @@
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [Fabric with:@[CrashlyticsKit]];
     [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:ddLogLevel];
     DDLogVerbose(@"didFinishLaunchingWithOptions");
     

@@ -26,7 +26,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *protocolLevelText;
 @property (weak, nonatomic) IBOutlet UITextField *sizeLimitText;
 @property (weak, nonatomic) IBOutlet UISwitch *useWebsocketsSwitch;
-
 @property (weak, nonatomic) IBOutlet UISwitch *allowUntrustedCertificatesSwitch;
 @property (strong, nonatomic) UIDocumentInteractionController *dic;
 
