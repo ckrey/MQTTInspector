@@ -29,10 +29,15 @@
     
     return YES;
 }
-							
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    DDLogVerbose(@"applicationDidBecomeActive");
+    [[UIApplication sharedApplication] setIdleTimerDisabled:TRUE];
+
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application {
     DDLogVerbose(@"applicationWillResignActive");
-
     [self saveContext];
     [[UIApplication sharedApplication] setIdleTimerDisabled:FALSE];
 }

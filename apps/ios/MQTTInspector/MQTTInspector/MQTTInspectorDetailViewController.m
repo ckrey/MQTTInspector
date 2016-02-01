@@ -445,7 +445,6 @@ static CGPoint offset;
 - (IBAction)disconnect:(UIBarButtonItem *)sender {
     if (self.session) {
         [self.mqttSession close];
-        self.mqttSession.delegate = nil;
         self.mqttSession = nil;
         self.title = self.session.name;
     }
