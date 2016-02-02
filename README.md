@@ -15,7 +15,7 @@ A general MQTT testing app for iOS (iPhone and iPad)
 * Panel showing low-level communication with broker
 * Panels can be frozen (halts all display activity) for, say, taking screenshots
 
-# New features in 2.0
+# New features in 2.0.3
 * [NEW] use Testflight crash reporting, drop Fabric/Crashlytics
 * [NEW] Disable idle timeout while active / "monitor" mode
 * [NEW] MQTT over WebSocket support
@@ -25,6 +25,7 @@ A general MQTT testing app for iOS (iPhone and iPad)
 * [NEW] flip layout from horizontal to vertical divides by long pressing on message view
 * [NEW] use UISplitviewcontroller for all devices, adds split view to iPhone 6+
 
+* [FIX] distorted split screen on iPad when changing orientation closes #72
 * [FIX] crashes when dragging view divider far to the left on iPads closes #66, closes #65, closes #64
 * [FIX] timeout on connect, closes #68
 * [FIX] ignore non-UTF8 topics, avoiding crash

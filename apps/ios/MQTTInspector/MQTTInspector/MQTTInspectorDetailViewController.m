@@ -83,7 +83,6 @@ static CGPoint offset;
 
 - (void)orientationChanged:(NSNotification *)notification {
     DDLogVerbose(@"orientationChanged");
-    [self setSubViews];
 }
 
 - (void)willResign:(NSNotification *)notification {
