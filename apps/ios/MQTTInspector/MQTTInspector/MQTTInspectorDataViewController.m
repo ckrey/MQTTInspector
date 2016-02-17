@@ -10,7 +10,95 @@
 
 #import "Model.h"
 
-#import <SBJson/SBJson4.h>
+@interface NSJSONSerialization (sorted)
++ (NSString *)sortedJson:(id)json indent:(unsigned int)indent final:(BOOL)final;
+@end
+
+@implementation NSJSONSerialization (sorted)
++ (NSString *)sortedJson:(id)json indent:(unsigned int)indent final:(BOOL) final {
+    DDLogVerbose(@"json %lu (%@) %@", (unsigned long)indent, [json class], json);
+    
+    NSString *finalString = @"";
+    if (!final) {
+        finalString = @",";
+    }
+    
+    NSString *insetString = @"";
+    for (NSUInteger i = 0; i < indent; i++) {
+        insetString = [insetString stringByAppendingString:@"    "];
+    }
+    
+    if ([json isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *dictionary = json;
+        NSString *dictionaryString = @"{\n";
+        NSArray *keyArray = [dictionary.allKeys sortedArrayUsingSelector:@selector(compare:)];
+        for (int i = 0; i < keyArray.count; i++) {
+            NSString *dictionaryKey = keyArray[i];
+            dictionaryString = [dictionaryString stringByAppendingString:
+                                [NSString stringWithFormat:@"%@    \"%@\": %@",
+                                 insetString,
+                                 dictionaryKey,
+                                 [NSJSONSerialization sortedJson:dictionary[dictionaryKey]
+                                                          indent:indent + 1
+                                                           final:(i == keyArray.count - 1)
+                                  ]
+                                 ]
+                                ];
+        }
+        dictionaryString = [dictionaryString stringByAppendingString:[NSString stringWithFormat:@"%@}%@\n",
+                                                                      insetString,
+                                                                      finalString
+                                                                      ]
+                            ];
+        return dictionaryString;
+    } else if ([json isKindOfClass:[NSArray class]]) {
+        NSArray *array = json;
+        NSString *arrayString = @"[\n";
+        for (int i = 0; i < array.count; i++) {
+            id arrayComponent = array[i];
+            arrayString = [arrayString stringByAppendingString:
+                           [NSString stringWithFormat:@"%@    %@",
+                            insetString,
+                            [NSJSONSerialization sortedJson:arrayComponent
+                                                     indent:indent + 1
+                                                      final:(i == array.count - 1)
+                             ]
+                            ]
+                           ];
+        }
+        arrayString = [arrayString stringByAppendingString:[NSString stringWithFormat:@"%@]%@\n",
+                                                            insetString,
+                                                            finalString
+                                                            ]
+                       ];
+        return arrayString;
+    } else {
+        return [[NSJSONSerialization leafJson:json] stringByAppendingString:[NSString stringWithFormat:@"%@\n",
+                                                                             finalString
+                                                                             ]];
+    }
+}
+
++ (NSString *)leafJson:(id)json {
+    if ([json isKindOfClass:[NSNumber class]]) {
+        NSNumber *number = json;
+        NSString *numberString = @"";
+        if (number == [NSNumber numberWithBool:true]) {
+            numberString = @"true";
+        } else if (number == [NSNumber numberWithBool:false]) {
+            numberString = @"false";
+        } else {
+            numberString = number.description;
+        }
+        return numberString;
+    } else if ([json isKindOfClass:[NSString class]]) {
+        NSString *string = json;
+        return string;
+    }
+    return @"illegal JSON leaf";
+}
+
+@end
 
 @interface MQTTInspectorDataViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *dataTextView;
@@ -126,34 +214,29 @@
     [self show];
 }
 
-- (NSString *)dataToPrettyString:(NSData *)data
-{
-    if (self.formatSwitch.isOn) {
-        __block id json;
-        SBJson4Parser *parser = [SBJson4Parser parserWithBlock:^(id item, BOOL *stop) {
-            DDLogVerbose(@"parser value %@", item);
-            json = item;
-        }
-                                                allowMultiRoot:NO
-                                               unwrapRootArray:NO
-                                                  errorHandler:^(NSError *error) {
-                                                      DDLogVerbose(@"parser error %@", error);
-                                                  }];
-        SBJson4ParserStatus status = [parser parse:data];
-        if (status == SBJson4ParserComplete) {
-            SBJson4Writer *writer = [[SBJson4Writer alloc] init];
-            writer.humanReadable = YES;
-            writer.sortKeys = YES;
-            self.formatSwitch.enabled = TRUE;
-            return [writer stringWithObject:json];
-        } else {
-            self.formatSwitch.enabled = FALSE;
-            return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        }
-        
-    } else {
-        return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+- (NSString *)dataToPrettyString:(NSData *)data {
+    NSString *formatted = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+    NSString *utf8 = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    if (utf8) {
+        formatted = utf8;
     }
+    if (self.formatSwitch.isOn) {
+        id json = [NSJSONSerialization JSONObjectWithData:data
+                                                  options:0
+                                                    error:nil];
+        if (json) {
+            self.formatSwitch.enabled = TRUE;
+            NSString *pretty = [NSJSONSerialization sortedJson:json indent:0 final:true];
+            // NSJSONSerialization does not sort!!!
+            //            NSString *pretty = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:json
+            //                                                                                              options:NSJSONWritingPrettyPrinted
+            //                                                                                                error:nil] encoding:NSUTF8StringEncoding];
+            if (pretty) {
+                formatted = pretty;
+            }
+        }
+    }
+    return formatted;
 }
 
 @end
