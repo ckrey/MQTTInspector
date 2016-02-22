@@ -12,6 +12,6 @@
 
 #import <CoreData/CoreData.h>
 
-@interface MQTTInspectorMasterViewController : UITableViewController <NSFetchedResultsControllerDelegate, UISplitViewControllerDelegate>
+@interface MQTTInspectorMasterViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 
 @end

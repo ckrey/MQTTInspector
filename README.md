@@ -4,16 +4,24 @@ MQTTInspector
 A general MQTT testing app for iOS (iPhone and iPad)
 
 # Features 
-* Multiple sessions
-* Pre-configured Subscriptions and Publications (stored for later use)
-* Ad-hoc PUB
+* Supports all MQTT features 3.1, 3.1.1, cleansession, TLS, Websockets, etc.
+* Pre-configured Subscriptions, Publications, and Filters (stored for later use)
+* Ad-hoc and pre-configured PUBs
 * PUB payload can contain `%t` and `%c`, replaced by timestamp and clientID respectively
-* Support for viewing UTF-8 printable payloads as well as very long payloads
-* Supports hex-dump of payloads when not printable
+* Support for viewing UTF-8 printable, binary and JSON payloads
 * Panel scrolling incoming sub's, latest on top, color-coded topics according to SUBs
 * Panel toggable to 'Topic'-mode. In this, incoming msgs do NOT scroll. Instead, last msg overwrites prev on a per/topic basis. Think: temp/outdoors and webserv/status where I see last value without panel scrolling moving: just values on topics change.
 * Panel showing low-level communication with broker
 * Panels can be frozen (halts all display activity) for, say, taking screenshots
+* Screen does not time-out
+
+# New features in 2.1.0
+* [NEW] Add additional MQTT brokers closes #79
+* [FIX] Command display closes #78
+* [FIX] JSON display precision #75
+* [FIX] incorrect screen redraw #72, closes #74
+* [FIX] Session setup screen layout
+* [FIX] Message detail display modes
 
 # New features in 2.0.3
 * [NEW] use Testflight crash reporting, drop Fabric/Crashlytics
@@ -59,16 +67,7 @@ A general MQTT testing app for iOS (iPhone and iPad)
 
 # Future enhancements
 * View traps
-* automatically repeating PUBs
-
-# Screenshots
-
-![alt 1](apps/ios/MQTTInspector/dist/App Store/ipad-1.png "1")
-![alt 2](apps/ios/MQTTInspector/dist/App Store/ipad-2.png "2")
-![alt 3](apps/ios/MQTTInspector/dist/App Store/ipad-3.png "3")
-![alt 4](apps/ios/MQTTInspector/dist/App Store/ipad-4.png "4")
-![alt 5](apps/ios/MQTTInspector/dist/App Store/ipad-5.png "5")
-![alt 6](apps/ios/MQTTInspector/dist/App Store/ipad-6.png "6")
-![alt 7](apps/ios/MQTTInspector/dist/App Store/ipad-7.png "7")
-
+* Automatically repeating PUBs (and other scripting)
+* Formatted message display
+* Edit subscriptions, publishes and filters directly from session screen
 

@@ -22,6 +22,65 @@
 #import "MQTTInspectorSetupSubsTableViewController.h"
 #import "MQTTInspectorAppDelegate.h"
 
+@interface MasterView: UIView
+@property (nonatomic) BOOL portrait;
+@property (nonatomic) CGPoint offset;
+@property (weak, nonatomic) IBOutlet UITableView *messages;
+@property (weak, nonatomic) IBOutlet UITableView *subs;
+@property (weak, nonatomic) IBOutlet UITableView *pubs;
+
+@end
+
+@implementation MasterView
+
+-(void)layoutSubviews {
+    [super layoutSubviews];
+    CGRect vrect = self.frame;
+    CGRect mrect = self.messages.frame;
+    CGRect srect = self.subs.frame;
+    CGRect prect = self.pubs.frame;
+    
+    if (fabs(self.offset.x) > vrect.size.width / 2 - 4) self.offset = CGPointMake(0, self.offset.y);
+    if (fabs(self.offset.y) > vrect.size.height / 2 - 4) self.offset = CGPointMake(self.offset.x, 0);
+    
+    srect = CGRectMake(0,
+                       0,
+                       vrect.size.width / 2 - 4 + self.offset.x,
+                       vrect.size.height / 2 - 4 + self.offset.y);
+    
+    if (self.portrait) {
+        mrect = CGRectMake(vrect.size.width / 2 + 4 + self.offset.x,
+                           0,
+                           vrect.size.width - (vrect.size.width / 2 - 4 + self.offset.x),
+                           vrect.size.height);
+        prect = CGRectMake(0,
+                           vrect.size.height / 2 + 4 + self.offset.y,
+                           vrect.size.width / 2 - 4 + self.offset.x,
+                           vrect.size.height - (vrect.size.height / 2 - 4 + self.offset.y + 8));
+    } else {
+        mrect = CGRectMake(0,
+                           vrect.size.height / 2 + 4 + self.offset.y,
+                           vrect.size.width,
+                           vrect.size.height - (vrect.size.height / 2 - 4 + self.offset.y + 8));
+        prect = CGRectMake(vrect.size.width / 2 + 4 + self.offset.x,
+                           0,
+                           vrect.size.width - (vrect.size.width / 2 - 4 + self.offset.x),
+                           vrect.size.height / 2 - 4 + self.offset.y);
+    }
+    
+    DDLogVerbose(@"v=%f/%f/%f/%f, s=%f/%f/%f/%f, p=%f/%f/%f/%f, m=%f/%f/%f/%f",
+                 vrect.origin.x, vrect.origin.y, vrect.size.width, vrect.size.height,
+                 srect.origin.x, srect.origin.y, srect.size.width, srect.size.height,
+                 prect.origin.x, prect.origin.y, prect.size.width, prect.size.height,
+                 mrect.origin.x, mrect.origin.y, mrect.size.width, mrect.size.height);
+    
+    self.messages.frame = mrect;
+    self.subs.frame = srect;
+    self.pubs.frame = prect;
+}
+
+@end
+
 @interface MQTTInspectorDetailViewController ()
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *versionButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *disconnectButton;
@@ -35,6 +94,7 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *level;
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 @property (weak, nonatomic) IBOutlet UISwitch *runningSwitch;
+@property (weak, nonatomic) IBOutlet MasterView *masterView;
 
 @property (strong, nonatomic) MQTTInspectorLogsTableViewController *logsTVC;
 @property (strong, nonatomic) MQTTInspectorTopicsTableViewController *topicsTVC;
@@ -52,21 +112,13 @@
 
 @implementation MQTTInspectorDetailViewController
 
-static BOOL staticInit;
-static BOOL portrait;
-static CGPoint offset;
-
 - (void)viewDidLoad {
     DDLogVerbose(@"viewDidLoad");
     
     [super viewDidLoad];
     
-    if (!staticInit) {
-        staticInit = true;
-        portrait = true;
-        offset = CGPointMake(0, 0);
-    }
-    
+    self.splitViewController.delegate = self;
+
     [[NSNotificationCenter defaultCenter ]addObserver:self
                                              selector:@selector(orientationChanged:)
                                                  name:UIApplicationDidChangeStatusBarOrientationNotification
@@ -79,6 +131,8 @@ static CGPoint offset;
                                              selector:@selector(willEnter:)
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
+    self.masterView.portrait = true;
+    self.masterView.offset = CGPointMake(0, 0);
 }
 
 - (void)orientationChanged:(NSNotification *)notification {
@@ -93,6 +147,7 @@ static CGPoint offset;
 - (void)willEnter:(NSNotification *)notification {
     DDLogVerbose(@"willEnter");
     if ([self.session.autoconnect boolValue]) {
+        self.title = [NSString stringWithFormat:@"%@-%@", self.session.name, [self url]];
         [self connect:nil];
     }
 }
@@ -119,7 +174,22 @@ static CGPoint offset;
         self.pubsTVC.tableView = self.pubs;
     }
     
+    self.masterView.subs = self.subs;
+    self.masterView.pubs = self.pubs;
+    self.masterView.messages = self.messages;
+    
     [self showCount];
+    
+    if (!self.session) {
+        [self.splitViewController setPreferredDisplayMode:UISplitViewControllerDisplayModeAllVisible];
+    }
+    [self setSubViews];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    DDLogVerbose(@"viewDidAppear");
+    [self setSubViews];
+    [super viewDidAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -226,10 +296,16 @@ static CGPoint offset;
     [self setSubViews];
 }
 
+- (void)viewWillLayoutSubviews {
+    DDLogVerbose(@"viewWillLayoutSubviews");
+    [self setSubViews];
+}
+
 - (void)setSubViews {
     DDLogVerbose(@"setSubViews");
-
-    CGRect vrect = self.messages.superview.frame;
+    [self.masterView setNeedsLayout];
+/*
+    CGRect vrect = self.masterView.frame;
     CGRect mrect = self.messages.frame;
     CGRect srect = self.subs.frame;
     CGRect prect = self.pubs.frame;
@@ -262,14 +338,22 @@ static CGPoint offset;
                            vrect.size.height / 2 - 4 + offset.y);
     }
     
+    DDLogVerbose(@"v=%f/%f/%f/%f, s=%f/%f/%f/%f, p=%f/%f/%f/%f, m=%f/%f/%f/%f",
+                 vrect.origin.x, vrect.origin.y, vrect.size.width, vrect.size.height,
+                 srect.origin.x, srect.origin.y, srect.size.width, srect.size.height,
+                 prect.origin.x, prect.origin.y, prect.size.width, prect.size.height,
+                 mrect.origin.x, mrect.origin.y, mrect.size.width, mrect.size.height);
+
     self.messages.frame = mrect;
     self.subs.frame = srect;
     self.pubs.frame = prect;
+ */
 }
 
 - (IBAction)rotate:(UILongPressGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateEnded) {
-        portrait = !portrait;
+        DDLogVerbose(@"rotate");
+        self.masterView.portrait = !self.masterView.portrait;
         [self setSubViews];
     }
 }
@@ -293,7 +377,7 @@ static CGPoint offset;
                 point.y > 8 &&
                 point.y < vrect.size.height - 8) {
                 
-                offset = CGPointMake(point.x - vrect.size.width / 2,
+                self.masterView.offset = CGPointMake(point.x - vrect.size.width / 2,
                                      point.y - vrect.size.height / 2);
                 [self setSubViews];
                 sender.view.backgroundColor = [UIColor orangeColor];
@@ -347,6 +431,7 @@ static CGPoint offset;
     _session = session;
     
     if ([session.autoconnect boolValue]) {
+        self.title = [NSString stringWithFormat:@"%@-%@", self.session.name, [self url]];
         [self connect:nil];
     }
     
@@ -623,10 +708,6 @@ static CGPoint offset;
                                                   events[eventCode % [events count]],
                                                   (long)eventCode,
                                                   [error description]]];
-    } else {
-        if (eventCode == MQTTSessionEventConnectionClosedByBroker) {
-            [self message:@"Session closed by broker"];
-        }
     }
     
     if (self.connectTimer && self.connectTimer.isValid) {
@@ -976,6 +1057,13 @@ static CGPoint offset;
         limitedData = [data subdataWithRange:NSMakeRange(0, MIN(data.length, limit))];
     }
     return limitedData;
+}
+
+#pragma mark - UISplitViewControllerDelegate
+
+- (void)splitViewController:(UISplitViewController *)svc willChangeToDisplayMode:(UISplitViewControllerDisplayMode)displayMode {
+    DDLogVerbose(@"splitViewController willChangeToDisplayMode %ld", (long)displayMode);
+    [self setSubViews];
 }
 
 @end

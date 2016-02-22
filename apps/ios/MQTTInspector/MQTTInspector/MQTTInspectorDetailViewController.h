@@ -12,7 +12,7 @@
 #import "Publication.h"
 #import <MQTTClient/MQTTClient.h>
 
-@interface MQTTInspectorDetailViewController : UIViewController <MQTTSessionDelegate>
+@interface MQTTInspectorDetailViewController : UIViewController <MQTTSessionDelegate, UISplitViewControllerDelegate>
 
 @property (strong, nonatomic) Session *session;
 @property (strong, nonatomic) MQTTSession *mqttSession;

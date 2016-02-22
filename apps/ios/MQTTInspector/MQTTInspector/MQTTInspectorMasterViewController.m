@@ -22,7 +22,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.splitViewController.delegate = self;
     self.splitViewController.preferredDisplayMode = UISplitViewControllerDisplayModePrimaryHidden;
     
     MQTTInspectorAppDelegate *appDelegate = (MQTTInspectorAppDelegate *)[UIApplication sharedApplication].delegate;
@@ -81,7 +80,7 @@
         
         /* eclipse.org */
         session = [Session sessionWithName:@"eclipse.org"
-                                      host:@"m2m.eclipse.org"
+                                      host:@"iot.eclipse.org"
                                       port:1883
                                        tls:NO
                                       auth:NO
@@ -92,7 +91,80 @@
                                  keepalive:60
                                autoconnect:NO
                                     dnssrv:NO
-                                 dnsdomain:@"eclipse.org"
+                                 dnsdomain:nil
+                             protocolLevel:4
+                           attributefilter:@".*"
+                               topicfilter:@".*"
+                                datafilter:@".*"
+                             includefilter:YES
+                                 sizelimit:0
+                    inManagedObjectContext:appDelegate.managedObjectContext];
+        [Subscription subscriptionWithTopic:@"MQTTInspector/#"
+                                        qos:1
+                                    session:session
+                     inManagedObjectContext:appDelegate.managedObjectContext];
+        
+        [Subscription subscriptionWithTopic:@"test/+"
+                                        qos:2
+                                    session:session
+                     inManagedObjectContext:appDelegate.managedObjectContext];
+        [Publication publicationWithName:@"ping"
+                                   topic:@"MQTTInspector"
+                                     qos:0
+                                retained:NO
+                                    data:[@"ping %t %c" dataUsingEncoding:NSUTF8StringEncoding]
+                                 session:session inManagedObjectContext:appDelegate.managedObjectContext];
+        /* mosca */
+        session = [Session sessionWithName:@"mosca.io"
+                                      host:@"test.mosca.io"
+                                      port:1883
+                                       tls:NO
+                                      auth:NO
+                                      user:@""
+                                    passwd:@""
+                                  clientid:nil
+                              cleansession:YES
+                                 keepalive:60
+                               autoconnect:NO
+                                    dnssrv:NO
+                                 dnsdomain:nil
+                             protocolLevel:4
+                           attributefilter:@".*"
+                               topicfilter:@".*"
+                                datafilter:@".*"
+                             includefilter:YES
+                                 sizelimit:0
+                    inManagedObjectContext:appDelegate.managedObjectContext];
+        [Subscription subscriptionWithTopic:@"MQTTInspector/#"
+                                        qos:1
+                                    session:session
+                     inManagedObjectContext:appDelegate.managedObjectContext];
+        
+        [Subscription subscriptionWithTopic:@"test/+"
+                                        qos:2
+                                    session:session
+                     inManagedObjectContext:appDelegate.managedObjectContext];
+        [Publication publicationWithName:@"ping"
+                                   topic:@"MQTTInspector"
+                                     qos:0
+                                retained:NO
+                                    data:[@"ping %t %c" dataUsingEncoding:NSUTF8StringEncoding]
+                                 session:session inManagedObjectContext:appDelegate.managedObjectContext];
+        
+        /* HiveMQ */
+        session = [Session sessionWithName:@"hivemq.com"
+                                      host:@"broker.hivemq.com"
+                                      port:1883
+                                       tls:NO
+                                      auth:NO
+                                      user:@""
+                                    passwd:@""
+                                  clientid:nil
+                              cleansession:YES
+                                 keepalive:60
+                               autoconnect:NO
+                                    dnssrv:NO
+                                 dnsdomain:nil
                              protocolLevel:4
                            attributefilter:@".*"
                                topicfilter:@".*"
@@ -327,25 +399,6 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Session *session = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = session.name;
-}
-
-#pragma mark - UISplitViewControllerDelegate
-- (BOOL)splitViewController:(UISplitViewController *)splitViewController
-collapseSecondaryViewController:(UIViewController *)secondaryViewController
-  ontoPrimaryViewController:(UIViewController *)primaryViewController {
-    
-    if ([secondaryViewController isKindOfClass:[UINavigationController class]]
-        && [[(UINavigationController *)secondaryViewController topViewController] isKindOfClass:[MQTTInspectorDetailViewController class]]
-        && ([(MQTTInspectorDetailViewController *)[(UINavigationController *)secondaryViewController topViewController] session] == nil)) {
-        
-        // Return YES to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
-        return YES;
-        
-    } else {
-        
-        return NO;
-        
-    }
 }
 
 @end

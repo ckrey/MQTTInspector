@@ -149,24 +149,29 @@
     if ([self.object isKindOfClass:[Topic class]]) {
         Topic *topic = (Topic *)self.object;
         self.title = [topic attributeTextPart2];
+        self.formatSwitch.enabled = TRUE;
         self.attributesTextView.text = [NSString stringWithFormat:@"%@ %@",
                                         [topic attributeTextPart1],
                                         [topic attributeTextPart3]];
         self.dataTextView.text = [self dataToPrettyString:topic.data];
+        
     } else if ([self.object isKindOfClass:[Message class]]) {
         Message *message = (Message *)self.object;
         self.title = [message attributeTextPart2];
+        self.formatSwitch.enabled = TRUE;
         self.attributesTextView.text = [NSString stringWithFormat:@"%@ %@",
                                         [message attributeTextPart1],
                                         [message attributeTextPart3]];
         self.dataTextView.text = [self dataToPrettyString:message.data];
+        
     } else if ([self.object isKindOfClass:[Command class]]) {
         Command *command = (Command *)self.object;
         self.title = [command attributeTextPart2];
         self.attributesTextView.text = [NSString stringWithFormat:@"%@ %@",
                                         [command attributeTextPart1],
                                         [command attributeTextPart3]];
-        self.dataTextView.text = [self dataToPrettyString:command.data];
+        self.formatSwitch.enabled = FALSE;
+        self.dataTextView.text = command.data.description;
     }
 }
 
@@ -215,25 +220,34 @@
 }
 
 - (NSString *)dataToPrettyString:(NSData *)data {
-    NSString *formatted = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-    NSString *utf8 = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    if (utf8) {
-        formatted = utf8;
-    }
-    if (self.formatSwitch.isOn) {
-        id json = [NSJSONSerialization JSONObjectWithData:data
-                                                  options:0
-                                                    error:nil];
-        if (json) {
-            self.formatSwitch.enabled = TRUE;
-            NSString *pretty = [NSJSONSerialization sortedJson:json indent:0 final:true];
-            // NSJSONSerialization does not sort!!!
-            //            NSString *pretty = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:json
-            //                                                                                              options:NSJSONWritingPrettyPrinted
-            //                                                                                                error:nil] encoding:NSUTF8StringEncoding];
-            if (pretty) {
-                formatted = pretty;
+    NSString *hex = data.description;
+    NSString *formatted = hex;
+    
+    if (self.formatSwitch.isEnabled) {
+        NSString *utf8 = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        if (utf8) {
+            formatted = utf8;
+            if (self.formatSwitch.isOn) {
+                id json = [NSJSONSerialization JSONObjectWithData:data
+                                                          options:0
+                                                            error:nil];
+                if (json) {
+                    NSString *pretty = [NSJSONSerialization sortedJson:json indent:0 final:true];
+                    if (pretty) {
+                        self.formatSwitch.enabled = TRUE;
+                        formatted = pretty;
+                    } else {
+                        self.formatSwitch.enabled = FALSE;
+                        self.formatSwitch.on = FALSE;
+                    }
+                } else {
+                    self.formatSwitch.enabled = FALSE;
+                    self.formatSwitch.on = FALSE;
+                }
             }
+        } else {
+            self.formatSwitch.enabled = FALSE;
+            self.formatSwitch.on = FALSE;
         }
     }
     return formatted;
