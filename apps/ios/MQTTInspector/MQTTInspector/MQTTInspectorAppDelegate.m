@@ -3,7 +3,7 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 09.11.13.
-//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2017 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorAppDelegate.h"
@@ -72,7 +72,7 @@
     NSError *error = nil;
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     if (managedObjectContext != nil) {
-        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
+        if (managedObjectContext.hasChanges && ![managedObjectContext save:&error]) {
             DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         } 
@@ -86,10 +86,10 @@
         return _managedObjectContext;
     }
     
-    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    NSPersistentStoreCoordinator *coordinator = self.persistentStoreCoordinator;
     if (coordinator != nil) {
         _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-        [_managedObjectContext setPersistentStoreCoordinator:coordinator];
+        _managedObjectContext.persistentStoreCoordinator = coordinator;
     }
     
     return _managedObjectContext;
@@ -109,10 +109,10 @@
         return _persistentStoreCoordinator;
     }
     
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"MQTTInspector.sqlite"];
+    NSURL *storeURL = [self.applicationDocumentsDirectory URLByAppendingPathComponent:@"MQTTInspector.sqlite"];
     
     NSError *error = nil;
-    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
     
     NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption: @YES,
                              NSInferMappingModelAutomaticallyOption: @YES};
@@ -128,7 +128,7 @@
 #pragma mark - Application's Documents directory
 
 - (NSURL *)applicationDocumentsDirectory {
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    return [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].lastObject;
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
@@ -138,46 +138,29 @@
     if (url) {
         NSError *error;
         NSInputStream *input = [NSInputStream inputStreamWithURL:url];
-        if ([input streamError]) {
+        if (input.streamError) {
             DDLogError(@"Error inputStreamWithURL %@ %@", [input streamError], url);
             return FALSE;
         }
         [input open];
-        if ([input streamError]) {
+        if (input.streamError) {
             DDLogError(@"Error open %@ %@", [input streamError], url);
             return FALSE;
         }
         
         NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithStream:input options:0 error:&error];
         if (dictionary) {
-            for (NSString *key in [dictionary allKeys]) {
+            for (NSString *key in dictionary.allKeys) {
                 DDLogVerbose(@"Init %@:%@", key, dictionary[key]);
             }
             
-            if ([dictionary[@"_type"] isEqualToString:@"MQTTInspector-Session"]) {
+            if ([dictionary[@"_type"] isEqualToString:@"MQTTInspector-Session"] &&
+                dictionary[@"name"]) {
                 NSString *name = dictionary[@"name"];
                 Session *session = [Session existSessionWithName:name
                                           inManagedObjectContext:_managedObjectContext];
                 if (!session) {
                     session = [Session sessionWithName:name
-                                                  host:@"host"
-                                                  port:1883
-                                                   tls:NO
-                                                  auth:NO
-                                                  user:@""
-                                                passwd:@""
-                                              clientid:@""
-                                          cleansession:YES
-                                             keepalive:60
-                                           autoconnect:NO
-                                                dnssrv:NO
-                                             dnsdomain:@""
-                                         protocolLevel:4
-                                       attributefilter:@""
-                                           topicfilter:@""
-                                            datafilter:@""
-                                         includefilter:YES
-                                             sizelimit:0
                                 inManagedObjectContext:_managedObjectContext];
                 }
                 
@@ -186,13 +169,13 @@
                 if (string) session.host = string;
                 
                 string = dictionary[@"port"];
-                if (string) session.port = @([string integerValue]);
+                if (string) session.port = @(string.integerValue);
                 
                 string = dictionary[@"tls"];
-                if (string) session.tls = @([string boolValue]);
+                if (string) session.tls = @(string.boolValue);
                 
                 string = dictionary[@"auth"];
-                if (string) session.auth = @([string boolValue]);
+                if (string) session.auth = @(string.boolValue);
                 
                 string = dictionary[@"user"];
                 if (string) session.user = string;
@@ -204,28 +187,28 @@
                 if (string) session.clientid = string;
                 
                 string = dictionary[@"cleansession"];
-                if (string) session.cleansession = @([string boolValue]);
+                if (string) session.cleansession = @(string.boolValue);
                 
                 string = dictionary[@"keepalive"];
-                if (string) session.keepalive = @([string integerValue]);
+                if (string) session.keepalive = @(string.integerValue);
                 
                 string = dictionary[@"autoconnect"];
-                if (string) session.autoconnect = @([string boolValue]);
+                if (string) session.autoconnect = @(string.boolValue);
                 
                 string = dictionary[@"websocket"];
-                if (string) session.websocket = @([string boolValue]);
+                if (string) session.websocket = @(string.boolValue);
                 
                 string = dictionary[@"allowUntrustedCertificates"];
-                if (string) session.allowUntrustedCertificates = @([string boolValue]);
+                if (string) session.allowUntrustedCertificates = @(string.boolValue);
                 
                 string = dictionary[@"protocollevel"];
-                if (string) session.protocolLevel = @([string integerValue]);
+                if (string) session.protocolLevel = @(string.integerValue);
                 
                 string = dictionary[@"sizelimit"];
-                if (string) session.sizelimit = @([string integerValue]);
+                if (string) session.sizelimit = @(string.integerValue);
                 
                 string = dictionary[@"includefilter"];
-                if (string) session.includefilter = @([string boolValue]);
+                if (string) session.includefilter = @(string.boolValue);
                 
                 string = dictionary[@"attributefilter"];
                 if (string) session.attributefilter = string;
@@ -236,21 +219,69 @@
                 string = dictionary[@"topicfilter"];
                 if (string) session.topicfilter = string;
 
+                string = dictionary[@"willDelay"];
+                if (string) session.willDelay = @(string.integerValue);
+
+                string = dictionary[@"sessionExpiryInterval"];
+                if (string) session.sessionExpiryInterval = @(string.integerValue);
+
+                string = dictionary[@"receiveMaximum"];
+                if (string) session.receiveMaximum = @(string.integerValue);
+
+                string = dictionary[@"maximumPacketSize"];
+                if (string) session.maximumPacketSize = @(string.integerValue);
+
+                string = dictionary[@"topicAliasMaximum"];
+                if (string) session.topicAliasMaximum = @(string.integerValue);
+
+                string = dictionary[@"authMethod"];
+                if (string) session.authMethod = string;
+
+                string = dictionary[@"authData"];
+                if (string) session.authData = [string dataUsingEncoding:NSUTF8StringEncoding];
+
+                string = dictionary[@"requestProblemInformation"];
+                if (string) session.requestProblemInformation = @(string.boolValue);
+
+                string = dictionary[@"requestReplyInfo"];
+                if (string) session.requestReplyInfo = @(string.boolValue);
+
+
                 NSArray *subs = dictionary[@"subs"];
                 if (subs) for (NSDictionary *subDict in subs) {
-                    NSString *topic = subDict[@"topic"];
-                    Subscription *sub = [Subscription existsSubscriptionWithTopic:topic
-                                                                          session:session
-                                                           inManagedObjectContext:_managedObjectContext];
-                    if (!sub) {
-                        sub = [Subscription subscriptionWithTopic:topic
-                                                              qos:0
-                                                          session:session
-                                           inManagedObjectContext:_managedObjectContext];
+                    NSString *name = subDict[@"name"];
+                    if (name.length == 0) {
+                        name = subDict[@"topic"];
                     }
+
+                    Subscription *sub = [Subscription existsSubscriptionWithName:name
+                                                                         session:session
+                                                          inManagedObjectContext:_managedObjectContext];
+                    if (!sub) {
+                        sub = [Subscription subscriptionWithName:name
+                                                           topic:name
+                                                             qos:0
+                                                         noLocal:false
+                                               retainAsPublished:false
+                                                  retainHandling:MQTTSendRetained
+                                          subscriptionIdentifier:0
+                                                         session:session
+                                          inManagedObjectContext:_managedObjectContext];
+                    }
+                    string = subDict[@"topic"];
+                    if (string) sub.topic = string;
                     string = subDict[@"qos"];
-                    if (string) sub.qos = @([string integerValue]);
+                    if (string) sub.qos = @(string.integerValue);
+                    string = subDict[@"noLocal"];
+                    if (string) sub.noLocal = @(string.boolValue);
+                    string = subDict[@"retainAsPublished"];
+                    if (string) sub.retainAsPublished = @(string.boolValue);
+                    string = subDict[@"retainHandling"];
+                    if (string) sub.retainHandling = @(string.integerValue);
+                    string = subDict[@"subscriptionIdentifier"];
+                    if (string) sub.susbscriptionIdentifier = @(string.integerValue);
                 }
+
                 NSArray *pubs = dictionary[@"pubs"];
                 if (pubs) for (NSDictionary *pubDict in pubs) {
                     NSString *name = pubDict[@"name"];
@@ -270,16 +301,26 @@
                     if (string) pub.topic = string;
 
                     string = pubDict[@"qos"];
-                    if (string) pub.qos = @([string integerValue]);
+                    if (string) pub.qos = @(string.integerValue);
 
                     string = pubDict[@"retained"];
-                    if (string) pub.retained = @([string boolValue]);
+                    if (string) pub.retained = @(string.boolValue);
 
                     NSData *data = pubDict[@"data"];
                     if (string) pub.data = data;
                 }
+
+                NSArray *userProperties = dictionary[@"userProperties"];
+                if (userProperties && [NSJSONSerialization isValidJSONObject:userProperties]) {
+                    session.userProperties = [NSJSONSerialization dataWithJSONObject:userProperties
+                                                                             options:0
+                                                                               error:nil];
+                }
             } else {
-                DDLogError(@"Error invalid init file %@)", dictionary[@"_type"]);
+                DDLogError(@"Error invalid init file %@ name %@)",
+                           dictionary[@"_type"],
+                           dictionary[@"name"]
+                           );
                 return FALSE;
             }
         } else {

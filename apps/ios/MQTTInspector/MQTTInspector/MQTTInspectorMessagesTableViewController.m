@@ -3,7 +3,7 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 17.11.13.
-//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2017 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorMessagesTableViewController.h"
@@ -13,14 +13,14 @@
 @interface MQTTInspectorMessagesTableViewController ()
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
-- (NSFetchRequest *)fetchRequestForTableView;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSFetchRequest *fetchRequestForTableView;
 @end
 
 @implementation MQTTInspectorMessagesTableViewController
 
 - (void)setTableView:(UITableView *)tableView
 {
-    [super setTableView:tableView];
+    super.tableView = tableView;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView reloadData];
@@ -43,20 +43,20 @@
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
     NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
-                                                             initWithFetchRequest:[self fetchRequestForTableView]
+                                                             initWithFetchRequest:self.fetchRequestForTableView
                                                              managedObjectContext:self.mother.session.managedObjectContext
                                                              sectionNameKeyPath:nil cacheName:nil];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     
     
-	NSError *error = nil;
-	if (![self.fetchedResultsController performFetch:&error]) {
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error]) {
         // Replace this implementation with code to handle     the error appropriately.
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-	    DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
-	    abort();
-	}
+        DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
     
     return _fetchedResultsController;
 }
@@ -128,13 +128,13 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [[self.fetchedResultsController sections] count];
+    return (self.fetchedResultsController).sections.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
-    return [sectionInfo numberOfObjects];
+    id <NSFetchedResultsSectionInfo> sectionInfo = (self.fetchedResultsController).sections[section];
+    return sectionInfo.numberOfObjects;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -153,7 +153,7 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
+        NSManagedObjectContext *context = (self.fetchedResultsController).managedObjectContext;
         [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
     }
 }
@@ -184,7 +184,7 @@
         
         int points = [self pointsTopic:topic matchingSub:subscription.topic];
         if (points > best) {
-            color = [subscription getColor];
+            color = subscription.UIcolor;
             best = points;
         }
     }
@@ -195,15 +195,15 @@
 {
     int points = -1;
     
-    NSArray *topicComponents = [topic pathComponents];
-    NSArray *subscriptionComponents = [subscription pathComponents];
+    NSArray *topicComponents = topic.pathComponents;
+    NSArray *subscriptionComponents = subscription.pathComponents;
     
     int i;
     int match = 0;
     
-    for (i = 0; (i < [topicComponents count]) && (i < [subscriptionComponents count]); i++) {
+    for (i = 0; (i < topicComponents.count) && (i < subscriptionComponents.count); i++) {
         if ([subscriptionComponents[i] isEqualToString:topicComponents[i]]) {
-            if ((i == [subscriptionComponents count] - 1) && (i == [topicComponents count] - 1)) {
+            if ((i == subscriptionComponents.count - 1) && (i == topicComponents.count - 1)) {
                 match = 5;
             } else {
                 match = 3;
@@ -228,8 +228,8 @@
     }
     
     if (match) {
-        if (((i == [subscriptionComponents count] - 1) && ([subscriptionComponents[i] isEqualToString:@"#"])) ||
-            ((match > 1) && (i == [subscriptionComponents count]) && (i == [topicComponents count]))) {
+        if (((i == subscriptionComponents.count - 1) && ([subscriptionComponents[i] isEqualToString:@"#"])) ||
+            ((match > 1) && (i == subscriptionComponents.count) && (i == topicComponents.count))) {
             points = i * 10 + match;
         }
     }

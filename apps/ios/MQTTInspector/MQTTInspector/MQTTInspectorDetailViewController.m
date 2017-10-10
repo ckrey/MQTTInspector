@@ -3,7 +3,7 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 09.11.13.
-//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2017 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorDetailViewController.h"
@@ -21,6 +21,7 @@
 #import "MQTTInspectorSetupPubsTableViewController.h"
 #import "MQTTInspectorSetupSubsTableViewController.h"
 #import "MQTTInspectorAppDelegate.h"
+#import "MQTTInspectorSessionInfoTVC.h"
 
 @interface MasterView: UIView
 @property (nonatomic) BOOL portrait;
@@ -82,7 +83,7 @@
 @end
 
 @interface MQTTInspectorDetailViewController ()
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *versionButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *infoButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *disconnectButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *connectButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *clearButton;
@@ -146,7 +147,7 @@
 
 - (void)willEnter:(NSNotification *)notification {
     DDLogVerbose(@"willEnter");
-    if ([self.session.autoconnect boolValue]) {
+    if ((self.session.autoconnect).boolValue) {
         self.title = [NSString stringWithFormat:@"%@-%@", self.session.name, [self url]];
         [self connect:nil];
     }
@@ -156,7 +157,6 @@
     DDLogVerbose(@"viewWillAppear");
     [super viewWillAppear:animated];
     [self viewChanged:nil];
-    self.versionButton.title =  [NSBundle mainBundle].infoDictionary[@"CFBundleVersion"];
     self.navigationItem.leftBarButtonItem = self.splitViewController.displayModeButtonItem;
     self.navigationItem.leftItemsSupplementBackButton = YES;
 
@@ -181,7 +181,7 @@
     [self showCount];
     
     if (!self.session) {
-        [self.splitViewController setPreferredDisplayMode:UISplitViewControllerDisplayModeAllVisible];
+        (self.splitViewController).preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
     }
     [self setSubViews];
 }
@@ -197,15 +197,14 @@
     [super viewWillDisappear:animated];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:@"setSessionForPub:"] || [segue.identifier isEqualToString:@"setSessionForFilter:"]) {
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"setSessionForPub:"] ||
+        [segue.identifier isEqualToString:@"setSessionForFilter:"]) {
         if ([segue.destinationViewController respondsToSelector:@selector(setMother:)]) {
             [segue.destinationViewController performSelector:@selector(setMother:)
                                                   withObject:self];
         }
-    }
-    if ([segue.identifier isEqualToString:@"enlargePubs"] ||
+    } else if ([segue.identifier isEqualToString:@"enlargePubs"] ||
         [segue.identifier isEqualToString:@"enlargeSubs"]) {
         
         if (segue.sourceViewController == self) {
@@ -214,8 +213,18 @@
                                                       withObject:self.session];
             }
         }
+    } else if ([segue.identifier isEqualToString:@"showSessionInfo"]) {
+        if ([segue.destinationViewController respondsToSelector:@selector(setSession:)]) {
+            [segue.destinationViewController performSelector:@selector(setSession:)
+                                                  withObject:self.session];
+        }
+        if ([segue.destinationViewController respondsToSelector:@selector(setMqttSession:)]) {
+            [segue.destinationViewController performSelector:@selector(setMqttSession:)
+                                                  withObject:self.mqttSession];
+        }
     }
-    
+
+
     
     NSIndexPath *indexPath = nil;
     
@@ -236,15 +245,15 @@
             id theObject;
             
             if (self.logsTVC) {
-                Message *message = [[self.logsTVC fetchedResultsController] objectAtIndexPath:indexPath];
+                Message *message = [(self.logsTVC).fetchedResultsController objectAtIndexPath:indexPath];
                 theObject = message;
             }
             if (self.topicsTVC) {
-                Topic *topic = [[self.topicsTVC fetchedResultsController] objectAtIndexPath:indexPath];
+                Topic *topic = [(self.topicsTVC).fetchedResultsController objectAtIndexPath:indexPath];
                 theObject = topic;
             }
             if (self.commandsTVC) {
-                Command *command = [[self.commandsTVC fetchedResultsController] objectAtIndexPath:indexPath];
+                Command *command = [(self.commandsTVC).fetchedResultsController objectAtIndexPath:indexPath];
                 theObject = command;
             }
             
@@ -256,35 +265,41 @@
     }
 }
 
-- (void)publish:(Publication *)pub
-{
+- (void)publish:(Publication *)pub {
     NSString *string = [[NSString alloc] initWithData:pub.data encoding:NSUTF8StringEncoding];
     
     // REPLACE %t with timeIntervalSince1970
-    NSString *nowString = [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970]];
+    NSString *nowString = [NSString stringWithFormat:@"%.0f", [NSDate date].timeIntervalSince1970];
     string = [string stringByReplacingOccurrencesOfString:@"%t" withString:nowString];
     
     // REPLACE %c with effective clientId
     NSString *clientId;
     if ((!pub.belongsTo.clientid) || ([pub.belongsTo.clientid isEqualToString:@""])) {
-        clientId = [NSString stringWithFormat:@"MQTTInspector-%d", getpid()];
+        clientId = [NSString stringWithFormat:@"MQTTInspector%d", getpid()];
     } else {
         clientId = pub.belongsTo.clientid;
     }
     string = [string stringByReplacingOccurrencesOfString:@"%c" withString:clientId];
-    
-    [self.mqttSession publishData:[string dataUsingEncoding:NSUTF8StringEncoding]
-                          onTopic:pub.topic
-                           retain:[pub.retained boolValue]
-                              qos:[pub.qos intValue]];
+
+    [self.mqttSession publishDataV5:[string dataUsingEncoding:NSUTF8StringEncoding]
+                            onTopic:pub.topic
+                             retain:(pub.retained).boolValue
+                                qos:(pub.qos).intValue
+             payloadFormatIndicator:nil
+          publicationExpiryInterval:nil
+                         topicAlias:nil
+                      responseTopic:nil
+                    correlationData:nil
+                     userProperties:nil
+                        contentType:nil
+                     publishHandler:nil];
 }
 
 
-- (NSString *)effectiveClientId
-{
+- (NSString *)effectiveClientId {
     NSString *clientId;
-    if ((!self.session.clientid) || ([self.session.clientid isEqualToString:@""])) {
-        clientId = [NSString stringWithFormat:@"MQTTInspector-%d", getpid()];
+    if (!self.session.clientid) {
+        clientId = [NSString stringWithFormat:@"MQTTInspector%d", getpid()];
     } else {
         clientId = self.session.clientid;
     }
@@ -430,7 +445,7 @@
     
     _session = session;
     
-    if ([session.autoconnect boolValue]) {
+    if ((session.autoconnect).boolValue) {
         self.title = [NSString stringWithFormat:@"%@-%@", self.session.name, [self url]];
         [self connect:nil];
     }
@@ -448,7 +463,11 @@
     if (self.session) {
         
         if (self.mqttSession) {
-            [self.mqttSession close];
+            [self.mqttSession closeWithReturnCode:MQTTSuccess
+                            sessionExpiryInterval:nil
+                                     reasonString:nil
+                                   userProperties:nil
+                                disconnectHandler:nil];
             self.mqttSession.delegate = nil;
         }
         
@@ -459,27 +478,27 @@
         //        persistence.maxWindowSize = 16;
         //        self.mqttSession.persistence = persistence;
         
-        if ([self.session.websocket boolValue]) {
+        if ((self.session.websocket).boolValue) {
             MQTTWebsocketTransport *websocketTransport = [[MQTTWebsocketTransport alloc] init];
             websocketTransport.host = self.session.host;
-            websocketTransport.port = [self.session.port unsignedIntegerValue];
-            websocketTransport.tls = [self.session.tls boolValue];
-            if ([self.session.tls boolValue]) {
-                websocketTransport.allowUntrustedCertificates = [self.session.allowUntrustedCertificates boolValue];
+            websocketTransport.port = (self.session.port).unsignedIntValue;
+            websocketTransport.tls = (self.session.tls).boolValue;
+            if ((self.session.tls).boolValue) {
+                websocketTransport.allowUntrustedCertificates = (self.session.allowUntrustedCertificates).boolValue;
             }
             self.mqttSession.transport = websocketTransport;
         } else {
-            if ([self.session.tls boolValue]) {
+            if ((self.session.tls).boolValue) {
                 MQTTSSLSecurityPolicyTransport *sslSecurityPolicyTransport = [[MQTTSSLSecurityPolicyTransport alloc] init];
                 sslSecurityPolicyTransport.host = self.session.host;
-                sslSecurityPolicyTransport.port = [self.session.port unsignedIntegerValue];
-                sslSecurityPolicyTransport.tls = [self.session.tls boolValue];
+                sslSecurityPolicyTransport.port = (self.session.port).unsignedIntValue;
+                sslSecurityPolicyTransport.tls = (self.session.tls).boolValue;
                 
                 MQTTSSLSecurityPolicy *sslSecurityPolicy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeNone];
                 
-                sslSecurityPolicy.allowInvalidCertificates = [self.session.allowUntrustedCertificates boolValue];
-                sslSecurityPolicy.validatesCertificateChain = ![self.session.allowUntrustedCertificates boolValue];
-                sslSecurityPolicy.validatesDomainName = ![self.session.allowUntrustedCertificates boolValue];
+                sslSecurityPolicy.allowInvalidCertificates = (self.session.allowUntrustedCertificates).boolValue;
+                sslSecurityPolicy.validatesCertificateChain = !(self.session.allowUntrustedCertificates).boolValue;
+                sslSecurityPolicy.validatesDomainName = !(self.session.allowUntrustedCertificates).boolValue;
                 
                 sslSecurityPolicyTransport.securityPolicy = sslSecurityPolicy;
                 
@@ -488,34 +507,52 @@
                 MQTTCFSocketTransport *cfSocketTransport = [[MQTTCFSocketTransport alloc] init];
                 cfSocketTransport.host = self.session.host;
                 
-                cfSocketTransport.port = [self.session.port unsignedIntegerValue];
-                cfSocketTransport.tls = [self.session.tls boolValue];
+                cfSocketTransport.port = (self.session.port).unsignedIntValue;
+                cfSocketTransport.tls = (self.session.tls).boolValue;
                 self.mqttSession.transport = cfSocketTransport;
             }
         }
         
         
         self.mqttSession.clientId = [self effectiveClientId];
-        self.mqttSession.userName = [self.session.auth boolValue] ? self.session.user : nil;
-        self.mqttSession.password = [self.session.auth boolValue] ? self.session.passwd : nil;
-        self.mqttSession.keepAliveInterval = [self.session.keepalive intValue];
-        self.mqttSession.cleanSessionFlag = [self.session.cleansession boolValue];
-        self.mqttSession.protocolLevel = [self.session.protocolLevel intValue];
-        
-        if ([self.session.cleansession boolValue]) {
+        self.mqttSession.userName = (self.session.auth).boolValue ? self.session.user : nil;
+        self.mqttSession.password = (self.session.auth).boolValue ? self.session.passwd : nil;
+        self.mqttSession.keepAliveInterval = (self.session.keepalive).intValue;
+        self.mqttSession.cleanSessionFlag = (self.session.cleansession).boolValue;
+        self.mqttSession.protocolLevel = (self.session.protocolLevel).intValue;
+        self.mqttSession.sessionExpiryInterval = self.session.sessionExpiryInterval;
+        self.mqttSession.receiveMaximum = self.session.receiveMaximum;
+        self.mqttSession.maximumPacketSize = self.session.maximumPacketSize;
+        self.mqttSession.willDelayInterval = self.session.willDelay;
+        self.mqttSession.topicAliasMaximum = self.session.topicAliasMaximum;
+        self.mqttSession.requestProblemInformation = self.session.requestProblemInformation;
+        self.mqttSession.requestResponseInformation = self.session.requestReplyInfo;
+        if (self.session.userProperties) {
+            self.mqttSession.userProperties = [NSJSONSerialization
+                                               JSONObjectWithData:self.session.userProperties
+                                               options:0
+                                               error:nil];
+        } else {
+            self.mqttSession.userProperties = nil;
+        }
+        self.mqttSession.authMethod = self.session.authMethod;
+        self.mqttSession.authData = self.session.authData;
+
+
+        if ((self.session.cleansession).boolValue) {
             for (Subscription *sub in self.session.hasSubs) {
                 sub.state = @(0);
             }
         }
         
-        self.connectTimer = [NSTimer scheduledTimerWithTimeInterval:[self.session.keepalive intValue]
+        self.connectTimer = [NSTimer scheduledTimerWithTimeInterval:(self.session.keepalive).intValue
                                                              target:self
                                                            selector:@selector(connectTimeout:)
                                                            userInfo:nil
                                                             repeats:NO];
         self.title = [NSString stringWithFormat:@"%@-%@", self.session.name, [self url]];
         self.mqttSession.delegate = self;
-        [self.mqttSession connect];
+        [self.mqttSession connectWithConnectHandler:nil];
         [self enableButtons];
     }
 }
@@ -528,7 +565,11 @@
 
 - (IBAction)disconnect:(UIBarButtonItem *)sender {
     if (self.session) {
-        [self.mqttSession close];
+        [self.mqttSession closeWithReturnCode:MQTTSuccess
+                        sessionExpiryInterval:nil
+                                 reasonString:nil
+                               userProperties:nil
+                            disconnectHandler:nil];
         self.mqttSession = nil;
         self.title = self.session.name;
     }
@@ -592,7 +633,7 @@
 {
     if (!_queueManagedObjectContext) {
         _queueManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [_queueManagedObjectContext setParentContext:self.session.managedObjectContext];
+        _queueManagedObjectContext.parentContext = self.session.managedObjectContext;
     }
     return _queueManagedObjectContext;
 }
@@ -628,16 +669,16 @@
         switch (self.level.selectedSegmentIndex) {
             case 2:
                 self.countText.text = [NSString stringWithFormat:@"%lu",
-                                       (unsigned long)[self.session.hasCommands count]];
+                                       (unsigned long)(self.session.hasCommands).count];
                 break;
             case 1:
                 self.countText.text = [NSString stringWithFormat:@"%lu",
-                                       (unsigned long)[self.session.hasMesssages count]];
+                                       (unsigned long)(self.session.hasMesssages).count];
                 break;
             case 0:
             default:
                 self.countText.text = [NSString stringWithFormat:@"%lu",
-                                       (unsigned long)[self.session.hasTopics count]];
+                                       (unsigned long)(self.session.hasTopics).count];
                 break;
         }
     } else {
@@ -649,7 +690,7 @@
 {
     DDLogVerbose(@"#count %lu/%d", (unsigned long)[array count], max);
     
-    for (NSInteger i = [array count]; i > max; i--) {
+    for (NSInteger i = array.count; i > max; i--) {
         NSManagedObject *object = array[i - 1];
         DDLogVerbose(@"delete %@", object);
         [object.managedObjectContext deleteObject:object];
@@ -699,15 +740,15 @@
     
     if (eventCode == MQTTSessionEventConnectionClosed ||
         eventCode == MQTTSessionEventConnectionClosedByBroker) {
-        MQTTInspectorAppDelegate *delegate = [UIApplication sharedApplication].delegate;
+        MQTTInspectorAppDelegate *delegate = (MQTTInspectorAppDelegate *)[UIApplication sharedApplication].delegate;
         [delegate connectionClosed];
     }
     
     if (error) {
         [MQTTInspectorDetailViewController alert:[NSString stringWithFormat: @"Error %@ (%ld) %@",
-                                                  events[eventCode % [events count]],
+                                                  events[eventCode % events.count],
                                                   (long)eventCode,
-                                                  [error description]]];
+                                                  error.description]];
     }
     
     if (self.connectTimer && self.connectTimer.isValid) {
@@ -716,13 +757,40 @@
     [self enableButtons];
 }
 
-- (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
+- (void)subAckReceivedV5:(MQTTSession *)session
+                   msgID:(UInt16)msgID
+            reasonString:(NSString *)reasonString
+          userProperties:(NSDictionary<NSString *,NSString *> *)userProperties
+             reasonCodes:(NSArray<NSNumber *> *)reasonCodes {
+    DDLogVerbose(@"subAckReceived m%d r%@ u%@ c%@",
+                 msgID, reasonString, userProperties, reasonCodes);
+
+}
+
+- (void)unsubAckReceivedV5:(MQTTSession *)session msgID:(UInt16)msgID reasonString:(NSString *)reasonString userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties reasonCodes:(NSArray<NSNumber *> *)reasonCodes {
+    //
+}
+
+-(void)newMessageV5:(MQTTSession *)session
+               data:(NSData *)data
+            onTopic:(NSString *)topic
+                qos:(MQTTQosLevel)qos
+           retained:(BOOL)retained
+                mid:(unsigned int)mid
+payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
+publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+         topicAlias:(NSNumber *)topicAlias
+      responseTopic:(NSString *)responseTopic
+    correlationData:(NSData *)correlationData
+     userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties
+        contentType:(NSString *)contentType
+subscriptionIdentifiers:(NSArray<NSNumber *> *)subscriptionIdentifiers {
     NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
     NSString *name = self.session.name;
     NSString *attributefilter = self.session.attributefilter;
     NSString *datafilter = self.session.datafilter;
     NSString *topicfilter = self.session.topicfilter;
-    BOOL includefilter = [self.session.includefilter boolValue];
+    BOOL includefilter = (self.session.includefilter).boolValue;
     
     BOOL filter = TRUE;
     NSData *limitedData = [self limitedData:data];
@@ -735,7 +803,7 @@
     if (attributeRegex) {
         NSUInteger attributeMatches = [attributeRegex numberOfMatchesInString:attributes
                                                                       options:0
-                                                                        range:NSMakeRange(0, [attributes length])];
+                                                                        range:NSMakeRange(0, attributes.length)];
         if ((attributeMatches == 0) == includefilter) {
             DDLogVerbose(@"filter regexp %@ does not match attributes %@ %@",
                          attributefilter, attributes, @(includefilter));
@@ -764,7 +832,7 @@
         if (dataRegex){
             NSUInteger dataMatches = [dataRegex numberOfMatchesInString:dataString
                                                                 options:0
-                                                                  range:NSMakeRange(0, [dataString length])];
+                                                                  range:NSMakeRange(0, dataString.length)];
             if ((dataMatches == 0) == includefilter) {
                 DDLogVerbose(@"filter regexp %@ does not match data %@ %@",
                              datafilter, dataString, @(includefilter));
@@ -781,7 +849,7 @@
         if (topicRegex) {
             NSUInteger topicMatches = [topicRegex numberOfMatchesInString:topic
                                                                   options:0
-                                                                    range:NSMakeRange(0, [topic length])];
+                                                                    range:NSMakeRange(0, topic.length)];
             if ((topicMatches == 0) == includefilter) {
                 DDLogVerbose(@"filter regexp %@ does not match topic %@ %@",
                              topicfilter, topic, @(includefilter));
@@ -805,45 +873,79 @@
                                             inManagedObjectContext:self.queueManagedObjectContext];
                 
                 DDLogVerbose(@"newLog");
-                [Message messageAt:timestamp
-                             topic:topic
-                              data:limitedData
-                               qos:qos
-                          retained:retained
-                               mid:mid
-                           session:mySession
-            inManagedObjectContext:self.queueManagedObjectContext];
+                Message *theMessage = [Message messageAt:timestamp
+                                                 session:mySession
+                                  inManagedObjectContext:self.queueManagedObjectContext];
+
+                theMessage.topic = topic;
+                theMessage.data = limitedData;
+                theMessage.qos = @(qos);
+                theMessage.retained = @(retained);
+                theMessage.mid = @(mid);
+                theMessage.payloadFormatIndicator = payloadFormatIndicator;
+                theMessage.publicationExpiryInterval = publicationExpiryInterval;
+                theMessage.topicAlias = topicAlias;
+                theMessage.responstTopic = responseTopic;
+                theMessage.correlationData = correlationData;
+                if (userProperties && [NSJSONSerialization isValidJSONObject:userProperties]) {
+                    theMessage.userProperties = [NSJSONSerialization dataWithJSONObject:userProperties
+                                                                              options:0
+                                                                                error:nil];
+                } else {
+                    theMessage.userProperties = nil;
+                }
+                theMessage.contentType = contentType;
+                if (subscriptionIdentifiers && [NSJSONSerialization isValidJSONObject:subscriptionIdentifiers]) {
+                    theMessage.subscriptionIdentifiers = [NSJSONSerialization
+                                                        dataWithJSONObject:subscriptionIdentifiers
+                                                        options:0
+                                                        error:nil];
+                } else {
+                    theMessage.subscriptionIdentifiers = nil;
+                }
+
                 
                 [self limit:[Message allMessagesOfSession:mySession
                                    inManagedObjectContext:self.queueManagedObjectContext]
                         max:MAX_LOG];
                 
                 DDLogVerbose(@"newTopic");
-                Topic *theTopic = [Topic existsTopicNamed:topic
-                                                  session:mySession
-                                   inManagedObjectContext:self.queueManagedObjectContext];
-                if (theTopic) {
-                    theTopic.count = @([theTopic.count intValue] + 1);
-                    theTopic.data = limitedData;
-                    theTopic.qos = @(qos);
-                    theTopic.mid = @(mid);
-                    theTopic.retained = @(retained);
-                    theTopic.timestamp = timestamp;
-                    theTopic.justupdated = theTopic.count;
+                Topic *theTopic = [Topic topicNamed:topic
+                                            session:mySession
+                             inManagedObjectContext:self.queueManagedObjectContext];
+                theTopic.count = @((theTopic.count).intValue + 1);
+                theTopic.data = limitedData;
+                theTopic.qos = @(qos);
+                theTopic.mid = @(mid);
+                theTopic.retained = @(retained);
+                theTopic.timestamp = timestamp;
+                theTopic.justupdated = theTopic.count;
+                theTopic.payloadFormatIndicator = payloadFormatIndicator;
+                theTopic.publicationExpiryInterval = publicationExpiryInterval;
+                theTopic.topicAlias = topicAlias;
+                theTopic.responseTopic = responseTopic;
+                theTopic.correlationData = correlationData;
+                if (userProperties && [NSJSONSerialization isValidJSONObject:userProperties]) {
+                    theTopic.userProperties = [NSJSONSerialization dataWithJSONObject:userProperties
+                                                                              options:0
+                                                                                error:nil];
                 } else {
-                    [Topic topicNamed:topic
-                            timestamp:timestamp
-                                 data:limitedData
-                                  qos:qos
-                             retained:retained
-                                  mid:mid
-                              session:mySession
-               inManagedObjectContext:self.queueManagedObjectContext];
-                    [self limit:[Topic allTopicsOfSession:mySession
-                                   inManagedObjectContext:self.queueManagedObjectContext]
-                            max:MAX_TOPIC];
+                    theTopic.userProperties = nil;
                 }
-                
+                theTopic.contentType = contentType;
+                if (subscriptionIdentifiers && [NSJSONSerialization isValidJSONObject:subscriptionIdentifiers]) {
+                    theTopic.subscriptionIdentifiers = [NSJSONSerialization
+                                                        dataWithJSONObject:subscriptionIdentifiers
+                                                        options:0
+                                                        error:nil];
+                } else {
+                    theTopic.subscriptionIdentifiers = nil;
+                }
+
+                [self limit:[Topic allTopicsOfSession:mySession
+                               inManagedObjectContext:self.queueManagedObjectContext]
+                        max:MAX_TOPIC];
+
                 NSError *error;
                 
                 if (![self.queueManagedObjectContext save:NULL]) {
@@ -907,7 +1009,13 @@
     });
 }
 
-- (void)sending:(MQTTSession *)session type:(MQTTCommandType)type qos:(MQTTQosLevel)qos retained:(BOOL)retained duped:(BOOL)duped mid:(UInt16)mid data:(NSData *)data {
+- (void)sending:(MQTTSession *)session
+           type:(MQTTCommandType)type
+            qos:(MQTTQosLevel)qos
+       retained:(BOOL)retained
+          duped:(BOOL)duped
+            mid:(UInt16)mid
+           data:(NSData *)data {
     
     NSDate *timestamp = [NSDate dateWithTimeIntervalSinceNow:0];
     NSString *name = self.session.name;
@@ -953,8 +1061,7 @@
     });
 }
 
-- (void)messageDelivered:(MQTTSession *)session msgID:(UInt16)msgID
-{
+- (void)messageDeliveredV5:(MQTTSession *)session msgID:(UInt16)msgID topic:(NSString *)topic data:(NSData *)data qos:(MQTTQosLevel)qos retainFlag:(BOOL)retainFlag payloadFormatIndicator:(NSNumber *)payloadFormatIndicator publicationExpiryInterval:(NSNumber *)publicationExpiryInterval topicAlias:(NSNumber *)topicAlias responseTopic:(NSString *)responseTopic correlationData:(NSData *)correlationData userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties contentType:(NSString *)contentType {
     //
 }
 
@@ -997,17 +1104,17 @@
 }
 
 
-- (NSString *)url
-{
+- (NSString *)url {
     return [NSString stringWithFormat:@"%@%@%@:%@",
-            ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) ? @"" :
-            [NSString stringWithFormat:@"%@://", [self.session.tls boolValue] ? @"mqtts" : @"mqtt"],
-            [self.session.auth boolValue] ? [NSString stringWithFormat:@"%@@",
+            ([UIDevice currentDevice].userInterfaceIdiom != UIUserInterfaceIdiomPad) ? @"" :
+            [NSString stringWithFormat:@"%@://", (self.session.tls).boolValue ? @"mqtts" : @"mqtt"],
+            (self.session.auth).boolValue ? [NSString stringWithFormat:@"%@@",
                                              self.session.user] : @"",
             self.session.host,
             self.session.port];
     
 }
+
 - (IBAction)longSub:(UILongPressGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateEnded) {
         [self performSegueWithIdentifier:@"enlargeSubs" sender:sender];
@@ -1023,36 +1130,40 @@
     if (self.session) {
         self.level.enabled = TRUE;
         self.clearButton.enabled = TRUE;
-        
+
         switch (self.mqttSession.status) {
             case MQTTSessionStatusConnected:
                 self.connectButton.enabled = FALSE;
                 self.disconnectButton.enabled = TRUE;
                 self.pubButton.enabled = TRUE;
+                self.infoButton.enabled = TRUE;
                 break;
                 
             case MQTTSessionStatusConnecting:
                 self.connectButton.enabled = FALSE;
                 self.disconnectButton.enabled = FALSE;
                 self.pubButton.enabled = FALSE;
+                self.infoButton.enabled = TRUE;
                 break;
                 
             default:
                 self.connectButton.enabled = TRUE;
                 self.disconnectButton.enabled = FALSE;
                 self.pubButton.enabled = FALSE;
+                self.infoButton.enabled = FALSE;
                 break;
         }
     } else {
         self.level.enabled = FALSE;
         self.clearButton.enabled = FALSE;
+        self.infoButton.enabled = FALSE;
     }
 }
 
 - (NSData *)limitedData:(NSData *)data
 {
     NSData *limitedData = data;
-    int limit = [self.session.sizelimit intValue];
+    int limit = (self.session.sizelimit).intValue;
     if (limit) {
         limitedData = [data subdataWithRange:NSMakeRange(0, MIN(data.length, limit))];
     }

@@ -1,1 +1,1 @@
-../../../MQTTClient/MQTTClient/MQTTClient/MQTTSessionLegacy.h
+../../../../../../../../MQTT-Client-Framework/MQTTClient/MQTTClient/MQTTSessionLegacy.h

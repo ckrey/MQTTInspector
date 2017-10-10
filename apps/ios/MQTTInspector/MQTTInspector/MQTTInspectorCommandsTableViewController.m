@@ -3,7 +3,7 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 12.11.13.
-//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2017 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorCommandsTableViewController.h"
@@ -18,7 +18,7 @@
 
 - (void)setTableView:(UITableView *)tableView
 {
-    [super setTableView:tableView];
+    super.tableView = tableView;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView reloadData];
@@ -30,26 +30,26 @@
     // Edit the entity name as appropriate.
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Command"
                                               inManagedObjectContext:self.mother.session.managedObjectContext];
-    [fetchRequest setEntity:entity];
+    fetchRequest.entity = entity;
     
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"belongsTo = %@", self.mother.session];
     
     
     // Set the batch size to a suitable number.
-    [fetchRequest setFetchBatchSize:20];
+    fetchRequest.fetchBatchSize = 20;
     
     // Edit the sort key as appropriate.
     NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO];
     NSArray *sortDescriptors = @[sortDescriptor1];
     
-    [fetchRequest setSortDescriptors:sortDescriptors];
+    fetchRequest.sortDescriptors = sortDescriptors;
     
     return fetchRequest;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         return [NSString stringWithFormat:@"Commands"];
     } else {
         return nil;
@@ -67,31 +67,31 @@
     NSDictionary *attributesLight = @{NSFontAttributeName: fontLight};
     
     NSMutableAttributedString *as = [[NSMutableAttributedString alloc]
-                                     initWithString:[command attributeTextPart1] attributes:attributesLight];
+                                     initWithString:command.attributeTextPart1 attributes:attributesLight];
     
     [as appendAttributedString:[[NSAttributedString alloc]
-                                initWithString:[command attributeTextPart2] attributes:attributesBold]];
+                                initWithString:command.attributeTextPart2 attributes:attributesBold]];
 
     
     [as appendAttributedString:[[NSAttributedString alloc]
-                                initWithString:[command attributeTextPart3]
+                                initWithString:command.attributeTextPart3
                                      attributes:attributesLight]];
     
     cell.detailTextLabel.attributedText = as;
 
-    cell.textLabel.text = [command dataText];
+    cell.textLabel.text = command.dataText;
     
-    if ([command.inbound boolValue]) {
+    if ((command.inbound).boolValue) {
         cell.backgroundColor = [UIColor colorWithHue:.666 saturation:0.333 brightness:1.0 alpha:1.0];
     } else {
         cell.backgroundColor = [UIColor colorWithHue:.333 saturation:0.333 brightness:1.0 alpha:1.0];
     }
     
-    [cell setAccessoryType:UITableViewCellAccessoryDetailButton];
+    cell.accessoryType = UITableViewCellAccessoryDetailButton;
     
-    [cell setAccessoryType:UITableViewCellAccessoryDetailButton];
+    cell.accessoryType = UITableViewCellAccessoryDetailButton;
     
-    if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
+    if ([UIDevice currentDevice].userInterfaceIdiom != UIUserInterfaceIdiomPad) {
         cell.textLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
     }
 

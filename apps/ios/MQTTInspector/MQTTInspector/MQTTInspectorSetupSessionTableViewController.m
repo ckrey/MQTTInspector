@@ -3,13 +3,13 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 14.11.13.
-//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2017 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorSetupSessionTableViewController.h"
 #import "Model.h"
 #import "MQTTInspectorDetailViewController.h"
-
+#import "MQTTInspectorUserPropertyTVC.h"
 
 @interface MQTTInspectorSetupSessionTableViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *nameText;
@@ -19,14 +19,24 @@
 @property (weak, nonatomic) IBOutlet UISwitch *authSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *userText;
 @property (weak, nonatomic) IBOutlet UITextField *passwdText;
+@property (weak, nonatomic) IBOutlet UISwitch *clientIdSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *clientIdText;
 @property (weak, nonatomic) IBOutlet UISwitch *cleansessionSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *keepaliveText;
 @property (weak, nonatomic) IBOutlet UISwitch *autoConnectSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *protocolLevelText;
 @property (weak, nonatomic) IBOutlet UITextField *sizeLimitText;
+@property (weak, nonatomic) IBOutlet UITextField *sessionExpiryIntervalText;
 @property (weak, nonatomic) IBOutlet UISwitch *useWebsocketsSwitch;
+@property (weak, nonatomic) IBOutlet UITextField *receiveMaximumText;
+@property (weak, nonatomic) IBOutlet UITextField *willDelayIntervalText;
 @property (weak, nonatomic) IBOutlet UISwitch *allowUntrustedCertificatesSwitch;
+@property (weak, nonatomic) IBOutlet UITextField *maximumPacketSizeText;
+@property (weak, nonatomic) IBOutlet UISwitch *requestProblemInformationSwitch;
+@property (weak, nonatomic) IBOutlet UITextField *topicAliasMaximumText;
+@property (weak, nonatomic) IBOutlet UISwitch *requestReplyInfoSwitch;
+@property (weak, nonatomic) IBOutlet UITextField *authMethodText;
+@property (weak, nonatomic) IBOutlet UITextField *authDataText;
 @property (strong, nonatomic) UIDocumentInteractionController *dic;
 
 @end
@@ -39,28 +49,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    self.title = self.session.name;
-    
-    self.nameText.text = self.session.name;
-    self.hostText.text = self.session.host;
-    self.portText.text = [NSString stringWithFormat:@"%@", self.session.port];
-    self.tlsSwitch.on = [self.session.tls boolValue];
-    self.allowUntrustedCertificatesSwitch.enabled = self.tlsSwitch.on;
-    self.allowUntrustedCertificatesSwitch.on = [self.session.allowUntrustedCertificates boolValue];
-    self.useWebsocketsSwitch.on = [self.session.websocket boolValue];
-    self.authSwitch.on = [self.session.auth boolValue];
-    self.userText.text = self.session.user;
-    self.passwdText.text = self.session.passwd;
-    self.clientIdText.text = self.session.clientid;
-    self.cleansessionSwitch.on = [self.session.cleansession boolValue];
-    self.keepaliveText.text = [NSString stringWithFormat:@"%@", self.session.keepalive];
-    self.allowUntrustedCertificatesSwitch.on = [self.session.allowUntrustedCertificates boolValue];
-    self.useWebsocketsSwitch.on = [self.session.websocket boolValue];
-    self.autoConnectSwitch.on = [self.session.autoconnect boolValue];
-    self.protocolLevelText.text = [NSString stringWithFormat:@"%@", self.session.protocolLevel];
-    self.sizeLimitText.text = [NSString stringWithFormat:@"%@", self.session.sizelimit];
-    
+
     self.nameText.delegate = self;
     self.hostText.delegate = self;
     self.portText.delegate = self;
@@ -70,6 +59,50 @@
     self.keepaliveText.delegate = self;
     self.protocolLevelText.delegate = self;
     self.sizeLimitText.delegate = self;
+    self.receiveMaximumText.delegate = self;
+    self.maximumPacketSizeText.delegate = self;
+    self.willDelayIntervalText.delegate = self;
+    self.topicAliasMaximumText.delegate = self;
+    self.authMethodText.delegate = self;
+    self.authDataText.delegate = self;
+
+    self.title = self.session.name;
+    
+    self.nameText.text = self.session.name;
+    self.hostText.text = self.session.host;
+    self.portText.text = [NSString stringWithFormat:@"%@", self.session.port];
+    self.tlsSwitch.on = (self.session.tls).boolValue;
+    self.allowUntrustedCertificatesSwitch.enabled = self.tlsSwitch.on;
+    self.allowUntrustedCertificatesSwitch.on = (self.session.allowUntrustedCertificates).boolValue;
+    self.useWebsocketsSwitch.on = (self.session.websocket).boolValue;
+    self.authSwitch.on = (self.session.auth).boolValue;
+    if ((self.session.auth).boolValue) {
+        self.userText.enabled = TRUE;
+        self.passwdText.enabled = TRUE;
+    } else {
+        self.userText.enabled = FALSE;
+        self.passwdText.enabled = FALSE;
+    }
+
+    self.userText.text = self.session.user;
+    self.passwdText.text = self.session.passwd;
+    if (self.session.clientid) {
+        self.clientIdText.text = self.session.clientid;
+        self.clientIdText.enabled = TRUE;
+        self.clientIdSwitch.on = TRUE;
+    } else {
+        self.clientIdText.text = nil;
+        self.clientIdText.enabled = FALSE;
+        self.clientIdSwitch.on = FALSE;
+    }
+
+    self.cleansessionSwitch.on = (self.session.cleansession).boolValue;
+    self.keepaliveText.text = [NSString stringWithFormat:@"%@", self.session.keepalive];
+    self.allowUntrustedCertificatesSwitch.on = (self.session.allowUntrustedCertificates).boolValue;
+    self.useWebsocketsSwitch.on = (self.session.websocket).boolValue;
+    self.autoConnectSwitch.on = (self.session.autoconnect).boolValue;
+    self.protocolLevelText.text = [NSString stringWithFormat:@"%@", self.session.protocolLevel];
+    self.sizeLimitText.text = [NSString stringWithFormat:@"%@", self.session.sizelimit];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -84,6 +117,11 @@
         if ([segue.destinationViewController respondsToSelector:@selector(setSession:)]) {
             [segue.destinationViewController performSelector:@selector(setSession:)
                                                   withObject:self.session];
+        }
+    } else if ([segue.identifier isEqualToString:@"SessionUserProperties"]) {
+        if ([segue.destinationViewController respondsToSelector:@selector(setUserProperties:)]) {
+            [segue.destinationViewController performSelector:@selector(setUserProperties:)
+                                                  withObject:nil];
         }
     }
 }
@@ -108,7 +146,7 @@
     self.session.host = sender.text;
 }
 - (IBAction)portChanged:(UITextField *)sender {
-    self.session.port = @([sender.text intValue]);
+    self.session.port = @((sender.text).intValue);
 }
 - (IBAction)tlsChanged:(UISwitch *)sender {
     self.session.tls = @(sender.on);
@@ -131,6 +169,13 @@
 
 - (IBAction)authChanged:(UISwitch *)sender {
     self.session.auth = @(sender.on);
+    if ((self.session.auth).boolValue) {
+        self.userText.enabled = TRUE;
+        self.passwdText.enabled = TRUE;
+    } else {
+        self.userText.enabled = FALSE;
+        self.passwdText.enabled = FALSE;
+    }
 }
 
 - (IBAction)userChanged:(UITextField *)sender {
@@ -139,6 +184,18 @@
 
 - (IBAction)passwdChanged:(UITextField *)sender {
     self.session.passwd = sender.text;
+}
+
+- (IBAction)clientIdSwitched:(UISwitch *)sender {
+    if (sender.on) {
+        self.clientIdText.text = @"";
+        self.session.clientid = self.clientIdText.text;
+        self.clientIdText.enabled = TRUE;
+    } else {
+        self.clientIdText.text = nil;
+        self.session.clientid = nil;
+        self.clientIdText.enabled = FALSE;
+    }
 }
 
 - (IBAction)clientIdChanged:(UITextField *)sender {
@@ -150,7 +207,7 @@
 }
 
 - (IBAction)keepalvieChanged:(UITextField *)sender {
-    self.session.keepalive = @([sender.text intValue]);
+    self.session.keepalive = @((sender.text).intValue);
 }
 
 - (IBAction)autoConnectChanged:(UISwitch *)sender {
@@ -163,54 +220,76 @@
     self.portText.text = [NSString stringWithFormat:@"%@", self.session.port];
 }
 - (IBAction)protocolLevelChanged:(UITextField *)sender {
-    self.session.protocolLevel = @([sender.text intValue]);
+    self.session.protocolLevel = @((sender.text).intValue);
 }
 
 - (IBAction)sizeLimitChanged:(UITextField *)sender {
-    self.session.sizelimit = @([sender.text intValue]);
+    self.session.sizelimit = @((sender.text).intValue);
 }
 
 - (IBAction)send:(UIBarButtonItem *)sender {
     NSMutableArray *subs = [[NSMutableArray alloc] init];
     for (Subscription *sub in self.session.hasSubs) {
-        [subs addObject:@{@"topic": [sub.topic description],
-                          @"qos": [sub.qos description]
+        [subs addObject:@{@"topic": (sub.topic).description,
+                          @"qos": (sub.qos).description
                           }];
     }
     
     NSMutableArray *pubs = [[NSMutableArray alloc] init];
     for (Publication *pub in self.session.hasPubs) {
-        [pubs addObject:@{@"name": [pub.name description],
-                          @"topic": [pub.topic description],
-                          @"qos": [pub.qos description],
-                          @"retained": [pub.retained description]
+        [pubs addObject:@{@"name": (pub.name).description,
+                          @"topic": (pub.topic).description,
+                          @"qos": (pub.qos).description,
+                          @"retained": (pub.retained).description
                           }];
     }
     
-    NSDictionary *dict = @{@"_type": @"MQTTInspector-Session",
-                           @"name": self.session.name ? self.session.name : @"",
-                           @"host": self.session.host ? self.session.host : @"",
-                           @"port": [NSString stringWithFormat:@"%@", self.session.port ? self.session.port : @(0)],
-                           @"tls": [NSString stringWithFormat:@"%@", self.session.tls ? self.session.tls : @(0)],
-                           @"auth": [NSString stringWithFormat:@"%@", self.session.auth ? self.session.auth : @(0)],
-                           @"user": self.session.user ? self.session.user : @"",
-                           @"passwd": self.session.passwd ? self.session.passwd : @"",
-                           @"clientid": self.session.clientid ? self.session.clientid : @"",
-                           @"cleansession": [NSString stringWithFormat:@"%@", self.session.cleansession ? self.session.cleansession : @(0)],
-                           @"keepalive": [NSString stringWithFormat:@"%@", self.session.keepalive ? self.session.keepalive : @(60)],
-                           @"websocket": [NSString stringWithFormat:@"%@", self.session.websocket ? self.session.websocket : @(0)],
-                           @"allowUntrustedCertificates": [NSString stringWithFormat:@"%@", self.session.allowUntrustedCertificates ? self.session.allowUntrustedCertificates : @(0)],
-                           @"autoconnect": [NSString stringWithFormat:@"%@", self.session.autoconnect ? self.session.autoconnect : @(0)],
-                           @"protocollevel": [NSString stringWithFormat:@"%@", self.session.protocolLevel ? self.session.protocolLevel : @(0)],
-                           @"sizeLimit": [NSString stringWithFormat:@"%@", self.session.sizelimit ? self.session.sizelimit : @(0)],
-                           @"includefilter": [NSString stringWithFormat:@"%@", self.session.includefilter ? self.session.includefilter : @(1)],
-                           @"attributefilter": self.session.attributefilter ? self.session.attributefilter : @"",
-                           @"datafilter": self.session.datafilter ? self.session.datafilter : @"",
-                           @"topicfilter": self.session.topicfilter ? self.session.topicfilter : @"",
-                           @"subs": subs,
-                           @"pubs": pubs
-                           };
-    
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    dict[@"_type"] = @"MQTTInspector-Session";
+    dict[@"name"] = self.session.name;
+    dict[@"host"] = self.session.host;
+    dict[@"port"] = self.session.port;
+    dict[@"tls"] = self.session.tls;
+    dict[@"auth"] = self.session.auth;
+    dict[@"user"] = self.session.user;
+    dict[@"passwd"] = self.session.passwd;
+    dict[@"clientid"] = self.session.clientid;
+    dict[@"cleansession"] = self.session.cleansession;
+    dict[@"keepalive"] = self.session.keepalive;
+    dict[@"websocket"] = self.session.websocket;
+    dict[@"allowUntrustedCertificates"] = self.session.allowUntrustedCertificates;
+    dict[@"autoconnect"] = self.session.autoconnect;
+    dict[@"protocollevel"] = self.session.protocolLevel;
+    dict[@"sizeLimit"] = self.session.sizelimit;
+    dict[@"includefilter"] = self.session.includefilter;
+    dict[@"attributefilter"] = self.session.attributefilter;
+    dict[@"datafilter"] = self.session.datafilter;
+    dict[@"topicfilter"] = self.session.topicfilter;
+    dict[@"sessionExpiryInterval"] = self.session.sessionExpiryInterval;
+    dict[@"receiveMaximum"] = self.session.receiveMaximum;
+    dict[@"maximumPacketSize"] = self.session.maximumPacketSize;
+    dict[@"willDelay"] = self.session.willDelay;
+    dict[@"topicAliasMaximum"] = self.session.topicAliasMaximum;
+    dict[@"requestProblemInformation"] = self.session.requestProblemInformation;
+    dict[@"requestReplyInfo"] = self.session.requestReplyInfo;
+    if (self.session.userProperties) {
+        dict[@"userProperties"] = [NSJSONSerialization JSONObjectWithData:self.session.userProperties
+                                                                  options:0
+                                                                    error:nil];
+    } else {
+        dict[@"userProperties"] = nil;
+    }
+
+    dict[@"authMethod"] = self.session.authMethod;
+    if (self.session.authData) {
+        dict[@"authData"] = [[NSString alloc] initWithData:self.session.authData
+                                                  encoding:NSUTF8StringEncoding];
+    } else {
+        dict[@"authData"] = nil;
+    }
+    dict[@"subs"] = subs;
+    dict[@"pubs"] = pubs;
+
     NSError *error;
     NSData *myData = [NSJSONSerialization dataWithJSONObject:dict
                                                      options:NSJSONWritingPrettyPrinted
@@ -221,7 +300,7 @@
     NSURL *fileURL = [directoryURL URLByAppendingPathComponent:fileName];
     
 
-    [[NSFileManager defaultManager] createFileAtPath:[fileURL path]
+    [[NSFileManager defaultManager] createFileAtPath:fileURL.path
                                             contents:myData
                                           attributes:nil];
     

@@ -3,12 +3,13 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 14.11.13.
-//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2017 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorSetupPubTableViewController.h"
 #import "MQTTInspectorDetailViewController.h"
 #import "MQTTInspectorDataViewController.h"
+#import "MQTTInspectorUserPropertyTVC.h"
 
 #import "Model.h"
 
@@ -18,6 +19,13 @@
 @property (weak, nonatomic) IBOutlet UITextField *dataText;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *qosSegment;
 @property (weak, nonatomic) IBOutlet UISwitch *retainSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *payloadFormatIndicatorSwitch;
+@property (weak, nonatomic) IBOutlet UITextField *publicationExpiryIntervalText;
+@property (weak, nonatomic) IBOutlet UITextField *topicAliasText;
+@property (weak, nonatomic) IBOutlet UITextField *responseTopicText;
+@property (weak, nonatomic) IBOutlet UITextField *correlationDataText;
+@property (weak, nonatomic) IBOutlet UITextField *contentTypeText;
+@property (weak, nonatomic) IBOutlet UILabel *userPropertiesLabel;
 
 @end
 
@@ -32,11 +40,20 @@
     self.nameText.text = self.pub.name;
     self.topicText.text = self.pub.topic;
     self.dataText.text = [[NSString alloc] initWithData:self.pub.data encoding:NSUTF8StringEncoding];
-    self.qosSegment.selectedSegmentIndex = [self.pub.qos intValue];
-    self.retainSwitch.on = [self.pub.retained boolValue];
+    self.qosSegment.selectedSegmentIndex = (self.pub.qos).intValue;
+    self.retainSwitch.on = (self.pub.retained).boolValue;
     self.nameText.delegate = self;
     self.topicText.delegate = self;
     self.dataText.delegate = self;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"EditUserProperties"]) {
+        if ([segue.destinationViewController respondsToSelector:@selector(setUserProperties:)]) {
+            [segue.destinationViewController performSelector:@selector(setUserProperties:)
+                                                  withObject:nil];
+        }
+    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

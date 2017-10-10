@@ -3,7 +3,7 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 11.11.13.
-//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2017 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorTopicsTableViewController.h"
@@ -24,26 +24,26 @@
     // Edit the entity name as appropriate.
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Topic"
                                               inManagedObjectContext:self.mother.session.managedObjectContext];
-    [fetchRequest setEntity:entity];
+    fetchRequest.entity = entity;
     
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"belongsTo = %@", self.mother.session];
     
     
     // Set the batch size to a suitable number.
-    [fetchRequest setFetchBatchSize:20];
+    fetchRequest.fetchBatchSize = 20;
     
     // Edit the sort key as appropriate.
     NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"topic" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor1];
     
-    [fetchRequest setSortDescriptors:sortDescriptors];
+    fetchRequest.sortDescriptors = sortDescriptors;
     
     return fetchRequest;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         return [NSString stringWithFormat:@"Topics"];
     } else {
         return nil;
@@ -62,25 +62,25 @@
     
 
     NSMutableAttributedString *as = [[NSMutableAttributedString alloc]
-                                     initWithString:[topic attributeTextPart1] attributes:attributesLight];
+                                     initWithString:topic.attributeTextPart1 attributes:attributesLight];
     
     [as appendAttributedString:[[NSAttributedString alloc]
-                                initWithString:[topic attributeTextPart2]
+                                initWithString:topic.attributeTextPart2
                                 attributes:attributesBold]];
     
     
     [as appendAttributedString:[[NSAttributedString alloc]
-                                initWithString:[topic attributeTextPart3]
+                                initWithString:topic.attributeTextPart3
                                 attributes:attributesLight]];
     
     cell.detailTextLabel.attributedText = as;
     
-    cell.textLabel.text = [topic dataText];
+    cell.textLabel.text = topic.dataText;
     
     cell.backgroundColor = [self matchingTopicColor:topic.topic inSession:self.mother.session];
     
-    [cell setAccessoryType:UITableViewCellAccessoryDetailButton];
-       if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
+    cell.accessoryType = UITableViewCellAccessoryDetailButton;
+       if ([UIDevice currentDevice].userInterfaceIdiom != UIUserInterfaceIdiomPad) {
         cell.textLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
     }
     
@@ -90,7 +90,7 @@
     [cell.imageView stopAnimating];
     
     DDLogVerbose(@"topic %@ is %d", topic.topic, [topic.justupdated boolValue]);
-    if ([topic isJustupdated]) {
+    if (topic.justupdated.boolValue) {
         cell.imageView.image = [UIImage imageNamed:@"new.png"];
         cell.imageView.animationImages = @[[UIImage imageNamed:@"new.png"],
                                            [UIImage imageNamed:@"old.png"]];

@@ -3,7 +3,7 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 14.11.13.
-//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2017 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorSetupSubsTableViewController.h"
@@ -27,7 +27,7 @@
         }
         
         if (indexPath) {
-            Subscription *sub = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+            Subscription *sub = [self.fetchedResultsController objectAtIndexPath:indexPath];
             if ([segue.destinationViewController respondsToSelector:@selector(setSub:)]) {
                 [segue.destinationViewController performSelector:@selector(setSub:)
                                                       withObject:sub];
@@ -36,10 +36,15 @@
     }
     
     if ([segue.identifier isEqualToString:@"newSub"]) {
-        Subscription *sub = [Subscription subscriptionWithTopic:@"new-sub"
-                                                            qos:0
-                                                        session:self.session
-                                         inManagedObjectContext:self.session.managedObjectContext];
+        Subscription *sub = [Subscription subscriptionWithName:@"new-sub"
+                                                         topic:@"new-sub"
+                                                           qos:0
+                                                       noLocal:false
+                                             retainAsPublished:false
+                                                retainHandling:MQTTSendRetained
+                                        subscriptionIdentifier:0
+                                                       session:self.session
+                                        inManagedObjectContext:self.session.managedObjectContext];
         if ([segue.destinationViewController respondsToSelector:@selector(setSub:)]) {
             [segue.destinationViewController performSelector:@selector(setSub:)
                                                   withObject:sub];
@@ -65,8 +70,11 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Subscription *sub = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = sub.topic;
-    cell.backgroundColor = [sub getColor];
+    if (!sub.name || sub.name.length == 0) {
+        sub.name = sub.topic;
+    }
+    cell.textLabel.text = sub.name;
+    cell.backgroundColor = sub.UIcolor;
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
@@ -78,7 +86,7 @@
     
     for (NSUInteger i = 0; i < MIN(destinationIndexPath.row, sourceIndexPath.row); i++) {
         Subscription *sub = [self.fetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        if (!sub.position || [sub.position unsignedIntegerValue] != i) {
+        if (!sub.position || (sub.position).unsignedIntegerValue != i) {
             sub.position = @(i);
         }
     }
@@ -97,10 +105,10 @@
     Subscription *sub = [self.fetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:sourceIndexPath.row inSection:0]];
     sub.position = @(destinationIndexPath.row);
     
-    id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][0];
-    for (NSUInteger i = MAX(destinationIndexPath.row, sourceIndexPath.row) + 1; i < [sectionInfo numberOfObjects]; i++) {
+    id <NSFetchedResultsSectionInfo> sectionInfo = (self.fetchedResultsController).sections[0];
+    for (NSUInteger i = MAX(destinationIndexPath.row, sourceIndexPath.row) + 1; i < sectionInfo.numberOfObjects; i++) {
         Subscription *sub = [self.fetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        if (!sub.position || [sub.position unsignedIntegerValue] != i) {
+        if (!sub.position || (sub.position).unsignedIntegerValue != i) {
             sub.position = @(i);
         }
     }
@@ -115,32 +123,32 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Subscription" inManagedObjectContext:self.session.managedObjectContext];
-    [fetchRequest setEntity:entity];
+    fetchRequest.entity = entity;
     
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"belongsTo = %@", self.session];
     
     // Set the batch size to a suitable number.
-    [fetchRequest setFetchBatchSize:20];
+    fetchRequest.fetchBatchSize = 20;
     
     // Edit the sort key as appropriate.
     NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"position" ascending:YES];
     NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"topic" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor1, sortDescriptor2];
     
-    [fetchRequest setSortDescriptors:sortDescriptors];
+    fetchRequest.sortDescriptors = sortDescriptors;
     
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
     NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.session.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
     aFetchedResultsController.delegate = self;
     
-	NSError *error = nil;
-	if (![aFetchedResultsController performFetch:&error]) {
+    NSError *error = nil;
+    if (![aFetchedResultsController performFetch:&error]) {
         // Replace this implementation with code to handle     the error appropriately.
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-	    DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
-	    abort();
-	}
+        DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
     
     return aFetchedResultsController;
 }

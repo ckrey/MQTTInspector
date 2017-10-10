@@ -3,7 +3,7 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 27.01.14.
-//  Copyright © 2014-2016 Christoph Krey. All rights reserved.
+//  Copyright © 2014-2017 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorFilterTVC.h"
@@ -27,7 +27,7 @@
     self.topicFilter.text = self.session.topicfilter ? self.session.topicfilter : @".*";
     self.dataFilter.text = self.session.datafilter ? self.session.datafilter : @".*";
     self.attributeFilter.text = self.session.attributefilter ? self.session.attributefilter : @".*";
-    self.filterInclude.on = self.session.includefilter ? [self.session.includefilter boolValue] : TRUE;
+    self.filterInclude.on = self.session.includefilter ? (self.session.includefilter).boolValue : TRUE;
     self.topicFilter.delegate = self;
     self.dataFilter.delegate = self;
     self.attributeFilter.delegate = self;

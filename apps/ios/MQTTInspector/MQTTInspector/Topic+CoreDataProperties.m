@@ -2,16 +2,18 @@
 //  Topic+CoreDataProperties.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 22.12.15.
-//  Copyright © 2015-2016 Christoph Krey. All rights reserved.
+//  Created by Christoph Krey on 10.10.17.
+//  Copyright © 2017 Christoph Krey. All rights reserved.
 //
-//  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
-//  to delete and recreate this implementation file for your updated model.
 //
 
 #import "Topic+CoreDataProperties.h"
 
 @implementation Topic (CoreDataProperties)
+
++ (NSFetchRequest<Topic *> *)fetchRequest {
+	return [[NSFetchRequest alloc] initWithEntityName:@"Topic"];
+}
 
 @dynamic count;
 @dynamic data;
@@ -21,6 +23,14 @@
 @dynamic retained;
 @dynamic timestamp;
 @dynamic topic;
+@dynamic payloadFormatIndicator;
+@dynamic publicationExpiryInterval;
+@dynamic topicAlias;
+@dynamic responseTopic;
+@dynamic correlationData;
+@dynamic userProperties;
+@dynamic contentType;
+@dynamic subscriptionIdentifiers;
 @dynamic belongsTo;
 
 @end

@@ -3,7 +3,7 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 14.11.13.
-//  Copyright © 2013-2016 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2017 Christoph Krey. All rights reserved.
 //
 
 #import "MQTTInspectorDataViewController.h"
@@ -148,28 +148,28 @@
 {
     if ([self.object isKindOfClass:[Topic class]]) {
         Topic *topic = (Topic *)self.object;
-        self.title = [topic attributeTextPart2];
+        self.title = topic.attributeTextPart2;
         self.formatSwitch.enabled = TRUE;
         self.attributesTextView.text = [NSString stringWithFormat:@"%@ %@",
-                                        [topic attributeTextPart1],
-                                        [topic attributeTextPart3]];
+                                        topic.attributeTextPart1,
+                                        topic.attributeTextPart3];
         self.dataTextView.text = [self dataToPrettyString:topic.data];
         
     } else if ([self.object isKindOfClass:[Message class]]) {
         Message *message = (Message *)self.object;
-        self.title = [message attributeTextPart2];
+        self.title = message.attributeTextPart2;
         self.formatSwitch.enabled = TRUE;
         self.attributesTextView.text = [NSString stringWithFormat:@"%@ %@",
-                                        [message attributeTextPart1],
-                                        [message attributeTextPart3]];
+                                        message.attributeTextPart1,
+                                        message.attributeTextPart3];
         self.dataTextView.text = [self dataToPrettyString:message.data];
         
     } else if ([self.object isKindOfClass:[Command class]]) {
         Command *command = (Command *)self.object;
-        self.title = [command attributeTextPart2];
+        self.title = command.attributeTextPart2;
         self.attributesTextView.text = [NSString stringWithFormat:@"%@ %@",
-                                        [command attributeTextPart1],
-                                        [command attributeTextPart3]];
+                                        command.attributeTextPart1,
+                                        command.attributeTextPart3];
         self.formatSwitch.enabled = FALSE;
         self.dataTextView.text = command.data.description;
     }
@@ -204,7 +204,7 @@
         self.justupdatedImageView.animationImages = nil;
         [self.justupdatedImageView stopAnimating];
         
-        if ([topic isJustupdated]) {
+        if (topic.justupdated.boolValue) {
             self.justupdatedImageView.image = [UIImage imageNamed:@"new.png"];
             self.justupdatedImageView.animationImages = @[[UIImage imageNamed:@"new.png"],
                                                           [UIImage imageNamed:@"old.png"]];
