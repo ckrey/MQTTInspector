@@ -27,12 +27,14 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
+    self.topicText.delegate = self;
+    self.subscriptionIdentiferText.delegate = self;
+
     self.title = self.sub.topic;
 
     self.nameText.text = self.sub.name;
     self.topicText.text = self.sub.topic;
-    self.topicText.delegate = self;
 
     self.qosSegment.selectedSegmentIndex = (self.sub.qos).intValue;
     self.noLocalSwitch.on = (self.sub.noLocal).boolValue;
@@ -40,7 +42,6 @@
     self.retainHandlingSegment.selectedSegmentIndex = self.sub.retainHandling.intValue;
 
     self.subscriptionIdentiferText.text = self.sub.susbscriptionIdentifier.stringValue;
-    self.subscriptionIdentiferText.delegate = self;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -81,7 +82,11 @@
 }
 
 - (IBAction)subscriptionIdentifierChanged:(UITextField *)sender {
-    self.sub.susbscriptionIdentifier = @(sender.text.integerValue);
+    if (sender.text.length > 0) {
+        self.sub.susbscriptionIdentifier = @(sender.text.integerValue);
+    } else {
+        self.sub.susbscriptionIdentifier = nil;
+    }
 }
 
 @end

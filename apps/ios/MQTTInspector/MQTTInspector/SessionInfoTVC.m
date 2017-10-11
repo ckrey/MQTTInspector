@@ -28,6 +28,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *authenticationMethod;
 @property (weak, nonatomic) IBOutlet UILabel *authenticationData;
 @property (weak, nonatomic) IBOutlet UILabel *userProperties;
+@property (weak, nonatomic) IBOutlet UILabel *clientTopicAliasMaximum;
 
 @end
 
@@ -71,7 +72,12 @@
         self.serverReference.text = self.mqttSession.serverReference;
         self.reasonString.text = self.mqttSession.reasonString;
         self.receiveMaximum.text = self.mqttSession.brokerReceiveMaximum.description;
-        self.topicAliasMaximum.text = self.mqttSession.brokerTopicAliasMaximum.description;
+        self.topicAliasMaximum.text = [NSString stringWithFormat:@"%lu/%@",
+                                       (unsigned long)self.mqttSession.brokerTopicAliases.count,
+                                       self.mqttSession.brokerTopicAliasMaximum.description];
+        self.clientTopicAliasMaximum.text = [NSString stringWithFormat:@"%lu/%@",
+                                             (unsigned long)self.mqttSession.topicAliases.count,
+                                             self.mqttSession.topicAliasMaximum.description];
         self.maximumQos.text = self.mqttSession.maximumQoS.description;
         self.retainAvailable.text = self.mqttSession.retainAvailable.description;
         self.userProperties.text = [NSString stringWithFormat:@"%lu",

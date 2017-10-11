@@ -120,9 +120,10 @@
     self.requestProblemInformationSwitch.on = self.session.requestProblemInformation ? self.session.requestProblemInformation : false;
 
     if (self.session.userProperties) {
-        NSArray <NSDictionary <NSString *, NSString *> *> *p = [NSJSONSerialization JSONObjectWithData:self.session.userProperties
-                                                                                               options:0
-                                                                                                 error:nil];
+        NSArray <NSDictionary <NSString *, NSString *> *> *p =
+        [NSJSONSerialization JSONObjectWithData:self.session.userProperties
+                                        options:0
+                                          error:nil];
         if (p) {
             self.userProperties.text = [NSString stringWithFormat:@"%lu",
                                         (unsigned long)p.count];

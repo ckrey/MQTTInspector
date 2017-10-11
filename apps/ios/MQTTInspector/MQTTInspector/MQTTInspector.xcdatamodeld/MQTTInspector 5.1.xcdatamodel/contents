@@ -36,6 +36,7 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="payloadFormatIndicator" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="position" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="publicationExpiryInterval" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="qos" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="responseTopic" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="retained" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
@@ -116,7 +117,7 @@
     <elements>
         <element name="Command" positionX="0" positionY="0" width="128" height="180"/>
         <element name="Message" positionX="0" positionY="0" width="128" height="285"/>
-        <element name="Publication" positionX="0" positionY="0" width="128" height="240"/>
+        <element name="Publication" positionX="0" positionY="0" width="128" height="255"/>
         <element name="Session" positionX="0" positionY="0" width="128" height="570"/>
         <element name="Subscription" positionX="0" positionY="0" width="128" height="210"/>
         <element name="Topic" positionX="0" positionY="0" width="128" height="300"/>
