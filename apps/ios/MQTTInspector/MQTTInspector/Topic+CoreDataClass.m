@@ -8,7 +8,7 @@
 //
 
 #import "Topic+CoreDataClass.h"
-#import "MQTTInspectorDataViewController.h"
+#import "DataVC.h"
 
 @implementation Topic
 
