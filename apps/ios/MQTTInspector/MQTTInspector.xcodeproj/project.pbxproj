@@ -29,6 +29,9 @@
 		847355E51897032E0028FE7A /* CoreDataTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 847355E41897032E0028FE7A /* CoreDataTVC.m */; };
 		8474D0C31F56F70000FE9BFA /* SessionInfoTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474D0C21F56F70000FE9BFA /* SessionInfoTVC.m */; };
 		8474D0C61F58122B00FE9BFA /* UserPropertiesTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8474D0C51F58122B00FE9BFA /* UserPropertiesTVC.m */; };
+		847A30D21F8F3A69002F90C3 /* MessageInfoTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 847A30D11F8F3A69002F90C3 /* MessageInfoTVC.m */; };
+		847A30D51F8F3A8B002F90C3 /* SubscriptionIdentifiersTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 847A30D41F8F3A8B002F90C3 /* SubscriptionIdentifiersTVC.m */; };
+		847A30D81F8FAE7A002F90C3 /* SplitVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 847A30D71F8FAE7A002F90C3 /* SplitVC.m */; };
 		848DAB751F8B866C00D97927 /* Topic+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 848DAB6C1F8B866C00D97927 /* Topic+CoreDataClass.m */; };
 		848DAB761F8B866C00D97927 /* Session+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 848DAB6E1F8B866C00D97927 /* Session+CoreDataClass.m */; };
 		848DAB771F8B866C00D97927 /* Command+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 848DAB701F8B866C00D97927 /* Command+CoreDataClass.m */; };
@@ -114,6 +117,12 @@
 		8474D0C21F56F70000FE9BFA /* SessionInfoTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionInfoTVC.m; sourceTree = "<group>"; };
 		8474D0C41F58122B00FE9BFA /* UserPropertiesTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserPropertiesTVC.h; sourceTree = "<group>"; };
 		8474D0C51F58122B00FE9BFA /* UserPropertiesTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserPropertiesTVC.m; sourceTree = "<group>"; };
+		847A30D01F8F3A69002F90C3 /* MessageInfoTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageInfoTVC.h; sourceTree = "<group>"; };
+		847A30D11F8F3A69002F90C3 /* MessageInfoTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageInfoTVC.m; sourceTree = "<group>"; };
+		847A30D31F8F3A8B002F90C3 /* SubscriptionIdentifiersTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SubscriptionIdentifiersTVC.h; sourceTree = "<group>"; };
+		847A30D41F8F3A8B002F90C3 /* SubscriptionIdentifiersTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SubscriptionIdentifiersTVC.m; sourceTree = "<group>"; };
+		847A30D61F8FAE7A002F90C3 /* SplitVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SplitVC.h; sourceTree = "<group>"; };
+		847A30D71F8FAE7A002F90C3 /* SplitVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SplitVC.m; sourceTree = "<group>"; };
 		848794AA19A612DC00DF56EB /* MQTTInspector 1.5.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 1.5.2.xcdatamodel"; sourceTree = "<group>"; };
 		848DAB691F8A653800D97927 /* MQTTInspector 5.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 5.1.xcdatamodel"; sourceTree = "<group>"; };
 		848DAB6B1F8B866C00D97927 /* Topic+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Topic+CoreDataClass.h"; sourceTree = "<group>"; };
@@ -264,6 +273,8 @@
 				8492C963182E63D300A40D8B /* AppDelegate.h */,
 				8492C964182E63D300A40D8B /* AppDelegate.m */,
 				8492C969182E63D300A40D8B /* Main.storyboard */,
+				847A30D61F8FAE7A002F90C3 /* SplitVC.h */,
+				847A30D71F8FAE7A002F90C3 /* SplitVC.m */,
 				84CF335E1918C0BA00E433A1 /* Setup */,
 				84CF335D1918C08E00E433A1 /* Monitor */,
 				8492C975182E63D400A40D8B /* Images.xcassets */,
@@ -304,6 +315,10 @@
 				8492705B1F8D344000FC2EDE /* UserPropertyTVC.m */,
 				84147CFF1834E06A0018E601 /* DataVC.h */,
 				84147D001834E06A0018E601 /* DataVC.m */,
+				847A30D01F8F3A69002F90C3 /* MessageInfoTVC.h */,
+				847A30D11F8F3A69002F90C3 /* MessageInfoTVC.m */,
+				847A30D31F8F3A8B002F90C3 /* SubscriptionIdentifiersTVC.h */,
+				847A30D41F8F3A8B002F90C3 /* SubscriptionIdentifiersTVC.m */,
 				84147D141838CB720018E601 /* MessagesTVC.h */,
 				84147D151838CB720018E601 /* MessagesTVC.m */,
 				84B435641C4C08CF00D7FBD3 /* LogsTVC.h */,
@@ -494,6 +509,7 @@
 				84147D011834E06A0018E601 /* DataVC.m in Sources */,
 				8492C971182E63D300A40D8B /* MasterVC.m in Sources */,
 				8474D0C31F56F70000FE9BFA /* SessionInfoTVC.m in Sources */,
+				847A30D51F8F3A8B002F90C3 /* SubscriptionIdentifiersTVC.m in Sources */,
 				8492705C1F8D344000FC2EDE /* UserPropertyTVC.m in Sources */,
 				84147D041835203D0018E601 /* SubsTVC.m in Sources */,
 				84147CFA1834CDE70018E601 /* PubTVC.m in Sources */,
@@ -501,7 +517,9 @@
 				847355E51897032E0028FE7A /* CoreDataTVC.m in Sources */,
 				8403B85A1C284D8C007D266F /* Command+CoreDataProperties.m in Sources */,
 				8403B85E1C284D8C007D266F /* Topic+CoreDataProperties.m in Sources */,
+				847A30D81F8FAE7A002F90C3 /* SplitVC.m in Sources */,
 				8403B85D1C284D8C007D266F /* Subscription+CoreDataProperties.m in Sources */,
+				847A30D21F8F3A69002F90C3 /* MessageInfoTVC.m in Sources */,
 				8403B85F1C284D8C007D266F /* Session+CoreDataProperties.m in Sources */,
 				84147CDE183269D50018E601 /* CommandsTVC.m in Sources */,
 			);

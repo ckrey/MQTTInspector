@@ -106,6 +106,7 @@
     NSString *name = entry.allKeys[0];
     cell.textLabel.text = entry[name];
     cell.detailTextLabel.text = name;
+    cell.accessoryType = self.edit.boolValue ? UITableViewCellAccessoryDetailDisclosureButton : UITableViewCellAccessoryNone;
     
     return cell;
 }

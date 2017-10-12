@@ -285,13 +285,13 @@
                             onTopic:pub.topic
                              retain:(pub.retained).boolValue
                                 qos:(pub.qos).intValue
-             payloadFormatIndicator:nil
-          publicationExpiryInterval:nil
-                         topicAlias:nil
-                      responseTopic:nil
-                    correlationData:nil
-                     userProperties:nil
-                        contentType:nil
+             payloadFormatIndicator:pub.payloadFormatIndicator
+          publicationExpiryInterval:pub.publicationExpiryInterval
+                         topicAlias:pub.topicAlias
+                      responseTopic:pub.responseTopic
+                    correlationData:pub.correlationData
+                     userProperties:pub.userProperties ? [NSJSONSerialization JSONObjectWithData:pub.userProperties options:0 error:nil] : nil
+                        contentType:pub.contentType
                      publishHandler:nil];
 }
 

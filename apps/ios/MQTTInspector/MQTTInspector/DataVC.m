@@ -7,6 +7,7 @@
 //
 
 #import "DataVC.h"
+#import "MessageInfoTVC.h"
 
 #import "Model.h"
 
@@ -105,13 +106,13 @@
 @property (weak, nonatomic) IBOutlet UITextField *attributesTextView;
 @property (weak, nonatomic) IBOutlet UIImageView *justupdatedImageView;
 @property (weak, nonatomic) IBOutlet UISwitch *formatSwitch;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *infoButton;
 
 @end
 
 @implementation DataVC
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     self.formatSwitch.on = TRUE;
@@ -144,12 +145,12 @@
     [self show];
 }
 
-- (void)show
-{
+- (void)show {
     if ([self.object isKindOfClass:[Topic class]]) {
         Topic *topic = (Topic *)self.object;
         self.title = topic.attributeTextPart2;
         self.formatSwitch.enabled = TRUE;
+        self.infoButton.enabled = TRUE;
         self.attributesTextView.text = [NSString stringWithFormat:@"%@ %@",
                                         topic.attributeTextPart1,
                                         topic.attributeTextPart3];
@@ -159,6 +160,7 @@
         Message *message = (Message *)self.object;
         self.title = message.attributeTextPart2;
         self.formatSwitch.enabled = TRUE;
+        self.infoButton.enabled = TRUE;
         self.attributesTextView.text = [NSString stringWithFormat:@"%@ %@",
                                         message.attributeTextPart1,
                                         message.attributeTextPart3];
@@ -167,11 +169,12 @@
     } else if ([self.object isKindOfClass:[Command class]]) {
         Command *command = (Command *)self.object;
         self.title = command.attributeTextPart2;
+        self.formatSwitch.enabled = TRUE;
+        self.infoButton.enabled = FALSE;
         self.attributesTextView.text = [NSString stringWithFormat:@"%@ %@",
                                         command.attributeTextPart1,
                                         command.attributeTextPart3];
-        self.formatSwitch.enabled = FALSE;
-        self.dataTextView.text = command.data.description;
+        self.dataTextView.text = [self dissect:command];
     }
 }
 
@@ -187,6 +190,78 @@
         [topic removeObserver:self forKeyPath:@"qos"];
         [topic removeObserver:self forKeyPath:@"timestamp"];
         [topic removeObserver:self forKeyPath:@"justupdated"];
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([self.object isKindOfClass:[Topic class]]) {
+        Topic *topic = (Topic *)self.object;
+        if ([segue.destinationViewController respondsToSelector:@selector(setPayloadFormatIndicator:)]) {
+            [segue.destinationViewController performSelector:@selector(setPayloadFormatIndicator:)
+                                                  withObject:topic.payloadFormatIndicator];
+        }
+        if ([segue.destinationViewController respondsToSelector:@selector(setPublicationExpiryInterval:)]) {
+            [segue.destinationViewController performSelector:@selector(setPublicationExpiryInterval:)
+                                                  withObject:topic.publicationExpiryInterval];
+        }
+        if ([segue.destinationViewController respondsToSelector:@selector(setTopicAlias:)]) {
+            [segue.destinationViewController performSelector:@selector(setTopicAlias:)
+                                                  withObject:topic.topicAlias];
+        }
+        if ([segue.destinationViewController respondsToSelector:@selector(setResponseTopic:)]) {
+            [segue.destinationViewController performSelector:@selector(setResponseTopic:)
+                                                  withObject:topic.responseTopic];
+        }
+        if ([segue.destinationViewController respondsToSelector:@selector(setCorrelationData:)]) {
+            [segue.destinationViewController performSelector:@selector(setCorrelationData:)
+                                                  withObject:topic.correlationData];
+        }
+        if ([segue.destinationViewController respondsToSelector:@selector(setContentType:)]) {
+            [segue.destinationViewController performSelector:@selector(setContentType:)
+                                                  withObject:topic.contentType];
+        }
+        if ([segue.destinationViewController respondsToSelector:@selector(setSubscriptionIdentifiers:)]) {
+            [segue.destinationViewController performSelector:@selector(setSubscriptionIdentifiers:)
+                                                  withObject:topic.subscriptionIdentifiers];
+        }
+        if ([segue.destinationViewController respondsToSelector:@selector(setUserProperties:)]) {
+            [segue.destinationViewController performSelector:@selector(setUserProperties:)
+                                                  withObject:topic.userProperties];
+        }
+    } else if ([self.object isKindOfClass:[Message class]]) {
+        Message *message = (Message *)self.object;
+        if ([segue.destinationViewController respondsToSelector:@selector(setPayloadFormatIndicator:)]) {
+            [segue.destinationViewController performSelector:@selector(setPayloadFormatIndicator:)
+                                                  withObject:message.payloadFormatIndicator];
+        }
+        if ([segue.destinationViewController respondsToSelector:@selector(setPublicationExpiryInterval:)]) {
+            [segue.destinationViewController performSelector:@selector(setPublicationExpiryInterval:)
+                                                  withObject:message.publicationExpiryInterval];
+        }
+        if ([segue.destinationViewController respondsToSelector:@selector(setTopicAlias:)]) {
+            [segue.destinationViewController performSelector:@selector(setTopicAlias:)
+                                                  withObject:message.topicAlias];
+        }
+        if ([segue.destinationViewController respondsToSelector:@selector(setResponseTopic:)]) {
+            [segue.destinationViewController performSelector:@selector(setResponseTopic:)
+                                                  withObject:message.responstTopic];
+        }
+        if ([segue.destinationViewController respondsToSelector:@selector(setCorrelationData:)]) {
+            [segue.destinationViewController performSelector:@selector(setCorrelationData:)
+                                                  withObject:message.correlationData];
+        }
+        if ([segue.destinationViewController respondsToSelector:@selector(setContentType:)]) {
+            [segue.destinationViewController performSelector:@selector(setContentType:)
+                                                  withObject:message.contentType];
+        }
+        if ([segue.destinationViewController respondsToSelector:@selector(setSubscriptionIdentifiers:)]) {
+            [segue.destinationViewController performSelector:@selector(setSubscriptionIdentifiers:)
+                                                  withObject:message.subscriptionIdentifiers];
+        }
+        if ([segue.destinationViewController respondsToSelector:@selector(setUserProperties:)]) {
+            [segue.destinationViewController performSelector:@selector(setUserProperties:)
+                                                  withObject:message.userProperties];
+        }
     }
 }
 
@@ -222,7 +297,7 @@
 - (NSString *)dataToPrettyString:(NSData *)data {
     NSString *hex = data.description;
     NSString *formatted = hex;
-    
+
     if (self.formatSwitch.isEnabled) {
         NSString *utf8 = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         if (utf8) {
@@ -249,6 +324,45 @@
             self.formatSwitch.enabled = FALSE;
             self.formatSwitch.on = FALSE;
         }
+    }
+    return formatted;
+}
+
+- (NSString *)dissect:(Command *)command {
+    NSString *formatted = [NSString stringWithFormat:@"%02X",
+                           command.type.intValue << 4 |
+                           command.duped.intValue << 3 |
+                           command.qos.intValue << 1 |
+                           command.retained.intValue];
+
+    for (int i = 0; i < command.data.length; i++) {
+        UInt8 u;
+        [command.data getBytes:&u range:NSMakeRange(i, 1)];
+        formatted = [formatted stringByAppendingString:[NSString stringWithFormat:@"%02X", u]];
+        if ((i + 1) % 16 == 15) {
+            formatted = [formatted stringByAppendingString:@" "];
+        }
+    }
+
+    if (self.formatSwitch.isOn) {
+        NSString *dissected = [NSString stringWithFormat:@
+                               "Fixed Header\n"
+                               "   Byte 1 0x%02X\n"
+                               "      1111 .... = Control Packet type (%d)\n"
+                               "      .... 1... = Dup (%d)\n"
+                               "      .... .11. = QoS (%d)\n"
+                               "      .... ...1 = Retain (%d)\n"
+                               "   Remaining Length .\n",
+                               command.type.intValue << 4 |
+                               command.duped.intValue << 3 |
+                               command.qos.intValue << 1 |
+                               command.retained.intValue,
+                               command.type.intValue,
+                               command.duped.intValue,
+                               command.qos.intValue,
+                               command.retained.intValue];
+
+        formatted = dissected;
     }
     return formatted;
 }
