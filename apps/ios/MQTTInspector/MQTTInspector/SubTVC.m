@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *retainAsPublishedSwitch;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *retainHandlingSegment;
 @property (weak, nonatomic) IBOutlet UITextField *subscriptionIdentiferText;
+@property (weak, nonatomic) IBOutlet UILabel *userPropertiesLabel;
 
 @end
 
@@ -31,6 +32,10 @@
     self.topicText.delegate = self;
     self.subscriptionIdentiferText.delegate = self;
 
+    [self show];
+}
+
+- (void)show {
     self.title = self.sub.topic;
 
     self.nameText.text = self.sub.name;
@@ -42,6 +47,52 @@
     self.retainHandlingSegment.selectedSegmentIndex = self.sub.retainHandling.intValue;
 
     self.subscriptionIdentiferText.text = self.sub.susbscriptionIdentifier.stringValue;
+
+    if (self.sub.userProperties) {
+        NSArray <NSDictionary <NSString *, NSString *> *> *p =
+        [NSJSONSerialization JSONObjectWithData:self.sub.userProperties
+                                        options:0
+                                          error:nil];
+        if (p) {
+            self.userPropertiesLabel.text = [NSString stringWithFormat:@"%lu",
+                                             (unsigned long)p.count];
+        } else {
+            self.userPropertiesLabel.text = @"0";
+        }
+    } else {
+        self.userPropertiesLabel.text = @"0";
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.destinationViewController respondsToSelector:@selector(setUserProperties:)]) {
+        NSArray <NSDictionary <NSString *, NSString *> *> *p;
+        if (self.sub.userProperties) {
+            p = [NSJSONSerialization JSONObjectWithData:self.sub.userProperties
+                                                options:0
+                                                  error:nil];
+        }
+        [segue.destinationViewController performSelector:@selector(setUserProperties:)
+                                              withObject:p];
+    }
+    if ([segue.destinationViewController respondsToSelector:@selector(setEdit:)]) {
+        [segue.destinationViewController performSelector:@selector(setEdit:)
+                                              withObject:@(true)];
+    }
+}
+
+- (IBAction)prepareForUnwind:(UIStoryboardSegue *)segue {
+    if ([segue.sourceViewController respondsToSelector:@selector(userProperties)]) {
+        NSArray <NSDictionary <NSString *, NSString *> *> *p = [segue.sourceViewController
+                                                                performSelector:@selector(userProperties)
+                                                                withObject:nil];
+        if (p) {
+            self.sub.userProperties = [NSJSONSerialization dataWithJSONObject:p
+                                                                      options:0
+                                                                        error:nil];
+        }
+    }
+    [self show];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

@@ -15,8 +15,7 @@
 
 @implementation ShowSubsTVC
 
-- (void)setTableView:(UITableView *)tableView
-{
+- (void)setTableView:(UITableView *)tableView {
     super.tableView = tableView;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -25,8 +24,7 @@
 
 #pragma mark - Fetched results controller
 
-- (NSFetchedResultsController *)setupFRC
-{
+- (NSFetchedResultsController *)setupFRC {
     NSFetchedResultsController *aFetchedResultsController;
     if (self.mother.session) {
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -68,8 +66,8 @@
     return aFetchedResultsController;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
+- (NSString *)tableView:(UITableView *)tableView
+titleForHeaderInSection:(NSInteger)section {
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         return [NSString stringWithFormat:@"SUBs"];
     } else {
@@ -77,16 +75,21 @@
     }
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"subscription" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
+- (void)configureCell:(UITableViewCell *)cell
+          atIndexPath:(NSIndexPath *)indexPath {
     Subscription *subscription = [self.fetchedResultsController objectAtIndexPath:indexPath];
+
+    if (!subscription.name || subscription.name.length == 0) {
+        subscription.name = subscription.topic;
+    }
+
     cell.textLabel.text = [NSString stringWithFormat:@"%@", subscription.name];
     
     cell.detailTextLabel.text = [NSString stringWithFormat:@"q%@ n%d r%d h%d i%u %@",
@@ -110,11 +113,11 @@
         cell.detailTextLabel.font = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
         cell.textLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
     }
-    
 }
 
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
-{
+- (void)tableView:(UITableView *)tableView
+moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
+      toIndexPath:(NSIndexPath *)destinationIndexPath {
     DDLogError(@"SUBs moveRowAtIndexPath %ld > %ld",
                (long)sourceIndexPath.row, (long)destinationIndexPath.row);
     self.noupdate = TRUE;
@@ -151,12 +154,17 @@
 }
 
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Subscription *subscription = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    NSArray <NSDictionary <NSString *, NSString *> *> *p;
+    if (subscription.userProperties) {
+        p = [NSJSONSerialization JSONObjectWithData:subscription.userProperties options:0 error:nil];
+    }
     if (self.mother.mqttSession.status == MQTTSessionStatusConnected) {
         if ((subscription.state).boolValue) {
             [self.mother.mqttSession unsubscribeTopicsV5:@[subscription.topic]
+                                          userProperties:p
                                       unsubscribeHandler:nil
              ];
             subscription.state = @(false);
@@ -167,6 +175,7 @@
                                       retainAsPublished:subscription.retainAsPublished.boolValue
                                          retainHandling:subscription.retainHandling.intValue
                                  subscriptionIdentifier:subscription.susbscriptionIdentifier.unsignedShortValue
+                                         userProperties:p
                                        subscribeHandler:nil
              ];
             subscription.state = @(true); // assuming subscribe works

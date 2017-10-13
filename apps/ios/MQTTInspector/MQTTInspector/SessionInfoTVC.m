@@ -29,6 +29,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *authenticationData;
 @property (weak, nonatomic) IBOutlet UILabel *userProperties;
 @property (weak, nonatomic) IBOutlet UILabel *clientTopicAliasMaximum;
+@property (weak, nonatomic) IBOutlet UILabel *sessionExpiryInterval;
 
 @end
 
@@ -83,6 +84,7 @@
         self.userProperties.text = [NSString stringWithFormat:@"%lu",
                                     (long)self.mqttSession.brokerUserProperties.count
                                     ];
+        self.sessionExpiryInterval.text = self.mqttSession.sessionExpiryInterval.description;
         self.maximumPacketSize.text = self.mqttSession.brokerMaximumPacketSize.description;
         self.wildcardSubscriptionAvailable.text = self.mqttSession.wildcardSubscriptionAvailable.description;
         self.subscriptionIdentifiersAvailable.text = self.mqttSession.subscriptionIdentifiersAvailable.description;

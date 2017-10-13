@@ -2,7 +2,7 @@
 //  Subscription+CoreDataProperties.h
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 09.10.17.
+//  Created by Christoph Krey on 13.10.17.
 //  Copyright © 2017 Christoph Krey. All rights reserved.
 //
 //
@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSFetchRequest<Subscription *> *)fetchRequest;
 
 @property (nullable, nonatomic, copy) NSNumber *color;
+@property (nullable, nonatomic, copy) NSString *name;
 @property (nullable, nonatomic, copy) NSNumber *noLocal;
 @property (nullable, nonatomic, copy) NSNumber *position;
 @property (nullable, nonatomic, copy) NSNumber *qos;
@@ -25,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSNumber *state;
 @property (nullable, nonatomic, copy) NSNumber *susbscriptionIdentifier;
 @property (nullable, nonatomic, copy) NSString *topic;
-@property (nullable, nonatomic, copy) NSString *name;
+@property (nullable, nonatomic, retain) NSData *userProperties;
 @property (nullable, nonatomic, retain) Session *belongsTo;
 
 @end

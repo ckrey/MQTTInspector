@@ -82,21 +82,19 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"EditUserProperties"]) {
-        if ([segue.destinationViewController respondsToSelector:@selector(setUserProperties:)]) {
-            NSArray <NSDictionary <NSString *, NSString *> *> *p;
-            if (self.pub.userProperties) {
-                p = [NSJSONSerialization JSONObjectWithData:self.pub.userProperties
-                                                    options:0
-                                                      error:nil];
-            }
-            [segue.destinationViewController performSelector:@selector(setUserProperties:)
-                                                  withObject:p];
+    if ([segue.destinationViewController respondsToSelector:@selector(setUserProperties:)]) {
+        NSArray <NSDictionary <NSString *, NSString *> *> *p;
+        if (self.pub.userProperties) {
+            p = [NSJSONSerialization JSONObjectWithData:self.pub.userProperties
+                                                options:0
+                                                  error:nil];
         }
-        if ([segue.destinationViewController respondsToSelector:@selector(setEdit:)]) {
-            [segue.destinationViewController performSelector:@selector(setEdit:)
-                                                  withObject:@(true)];
-        }
+        [segue.destinationViewController performSelector:@selector(setUserProperties:)
+                                              withObject:p];
+    }
+    if ([segue.destinationViewController respondsToSelector:@selector(setEdit:)]) {
+        [segue.destinationViewController performSelector:@selector(setEdit:)
+                                              withObject:@(true)];
     }
 }
 

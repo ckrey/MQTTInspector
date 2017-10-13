@@ -2,7 +2,7 @@
 //  Subscription+CoreDataProperties.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 09.10.17.
+//  Created by Christoph Krey on 13.10.17.
 //  Copyright © 2017 Christoph Krey. All rights reserved.
 //
 //
@@ -16,6 +16,7 @@
 }
 
 @dynamic color;
+@dynamic name;
 @dynamic noLocal;
 @dynamic position;
 @dynamic qos;
@@ -24,7 +25,7 @@
 @dynamic state;
 @dynamic susbscriptionIdentifier;
 @dynamic topic;
-@dynamic name;
+@dynamic userProperties;
 @dynamic belongsTo;
 
 @end
