@@ -116,8 +116,8 @@
     self.topicAliasMaximumText.text = self.session.topicAliasMaximum ? self.session.topicAliasMaximum.stringValue : nil;
     self.authMethodText.text = self.session.authMethod ? self.session.authMethod : nil;
     self.authDataText.text = self.session.authData ? [[NSString alloc] initWithData:self.session.authData encoding:NSUTF8StringEncoding] : nil;
-    self.requestResponseInformationSwitch.on = self.session.requestResponseInformatino ? self.session.requestResponseInformatino : false;
-    self.requestProblemInformationSwitch.on = self.session.requestProblemInformation ? self.session.requestProblemInformation : false;
+    self.requestResponseInformationSwitch.on = self.session.requestResponseInformatino ? self.session.requestResponseInformatino.boolValue : false;
+    self.requestProblemInformationSwitch.on = self.session.requestProblemInformation ? self.session.requestProblemInformation.boolValue : false;
 
     if (self.session.userProperties) {
         NSArray <NSDictionary <NSString *, NSString *> *> *p =

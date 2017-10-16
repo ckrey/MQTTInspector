@@ -8,6 +8,7 @@
 
 #import "SubTVC.h"
 #import "DetailVC.h"
+#import "UserPropertiesTVC.h"
 
 #import "Model.h"
 
