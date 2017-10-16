@@ -27,28 +27,34 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    self.payloadFormatIndicatorLabel.text = self.payloadFormatIndicator.stringValue;
-    self.publicationExpiryIntervalLabel.text = self.publicationExpiryInterval.stringValue;
-    self.topicAliasLabel.text = self.topicAlias.stringValue;
+    self.payloadFormatIndicatorLabel.text = self.payloadFormatIndicator ? self.payloadFormatIndicator.stringValue : @"(not specified)";
+
+
+    self.publicationExpiryIntervalLabel.text = self.publicationExpiryInterval ? self.publicationExpiryInterval.stringValue : @"(not specified)";
+
+    self.topicAliasLabel.text = self.topicAlias ? self.topicAlias.stringValue : @"(not specified)";
+
     if (self.subscriptionIdentifiers) {
         NSArray <NSString *> *subscriptionIdentifiersArray = [NSJSONSerialization JSONObjectWithData:self.subscriptionIdentifiers options:0 error:nil];
         self.subscriptionIdentifiersLabel.text = [NSString stringWithFormat:@"%lu",
                                                   (unsigned long)subscriptionIdentifiersArray.count];
     } else {
-        self.subscriptionIdentifiersLabel.text = @"0";
+        self.subscriptionIdentifiersLabel.text = @"(not specified)";
     }
+
     if (self.userProperties) {
         NSArray <NSDictionary <NSString *, NSString *> *> *userPropertiesArray = [NSJSONSerialization JSONObjectWithData:self.userProperties options:0 error:nil];
         self.userPropertiesLabel.text = [NSString stringWithFormat:@"%lu",
                                                   (unsigned long)userPropertiesArray.count];
     } else {
-        self.userPropertiesLabel.text = @"0";
+        self.userPropertiesLabel.text = @"(not specified)";
     }
-    self.responseTopicLabel.text = self.responseTopic;
-    self.correlationDataLabel.text = [[NSString alloc] initWithData:self.correlationData
-                                                           encoding:NSUTF8StringEncoding];
-    self.contentTypeLabel.text = self.contentType;
 
+    self.responseTopicLabel.text = self.responseTopic ? self.responseTopic : @"(not specified)";
+
+    self.correlationDataLabel.text = self.correlationData ? [[NSString alloc] initWithData:self.correlationData
+                                                           encoding:NSUTF8StringEncoding] : @"(not specified)";
+    self.contentTypeLabel.text = self.contentType ? self.contentType : @"(not specified)";
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

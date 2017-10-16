@@ -44,7 +44,7 @@
         session.maximumPacketSize = nil;
         session.topicAliasMaximum = nil;
         session.userProperties = nil;
-        session.requestReplyInfo = nil;
+        session.requestResponseInformatino = nil;
         session.requestProblemInformation = nil;
         session.authMethod = nil;
         session.authData = nil;

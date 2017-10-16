@@ -2,7 +2,7 @@
 //  Session+CoreDataProperties.h
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 09.10.17.
+//  Created by Christoph Krey on 15.10.17.
 //  Copyright © 2017 Christoph Krey. All rights reserved.
 //
 //
@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSNumber *allowUntrustedCertificates;
 @property (nullable, nonatomic, copy) NSString *attributefilter;
 @property (nullable, nonatomic, copy) NSNumber *auth;
+@property (nullable, nonatomic, retain) NSData *authData;
+@property (nullable, nonatomic, copy) NSString *authMethod;
 @property (nullable, nonatomic, copy) NSNumber *autoconnect;
 @property (nullable, nonatomic, copy) NSNumber *cleansession;
 @property (nullable, nonatomic, copy) NSString *clientid;
@@ -26,26 +28,24 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSString *host;
 @property (nullable, nonatomic, copy) NSNumber *includefilter;
 @property (nullable, nonatomic, copy) NSNumber *keepalive;
+@property (nullable, nonatomic, copy) NSNumber *maximumPacketSize;
 @property (nullable, nonatomic, copy) NSString *name;
 @property (nullable, nonatomic, copy) NSString *passwd;
 @property (nullable, nonatomic, copy) NSNumber *port;
 @property (nullable, nonatomic, copy) NSNumber *protocolLevel;
+@property (nullable, nonatomic, copy) NSNumber *receiveMaximum;
+@property (nullable, nonatomic, copy) NSNumber *requestProblemInformation;
+@property (nullable, nonatomic, copy) NSNumber *requestResponseInformatino;
+@property (nullable, nonatomic, copy) NSNumber *sessionExpiryInterval;
 @property (nullable, nonatomic, copy) NSNumber *sizelimit;
 @property (nullable, nonatomic, copy) NSNumber *state;
 @property (nullable, nonatomic, copy) NSNumber *tls;
+@property (nullable, nonatomic, copy) NSNumber *topicAliasMaximum;
 @property (nullable, nonatomic, copy) NSString *topicfilter;
 @property (nullable, nonatomic, copy) NSString *user;
-@property (nullable, nonatomic, copy) NSNumber *websocket;
-@property (nullable, nonatomic, copy) NSNumber *sessionExpiryInterval;
-@property (nullable, nonatomic, copy) NSNumber *receiveMaximum;
-@property (nullable, nonatomic, copy) NSNumber *maximumPacketSize;
-@property (nullable, nonatomic, copy) NSNumber *willDelay;
-@property (nullable, nonatomic, copy) NSNumber *topicAliasMaximum;
-@property (nullable, nonatomic, copy) NSNumber *requestProblemInformation;
-@property (nullable, nonatomic, copy) NSNumber *requestReplyInfo;
 @property (nullable, nonatomic, retain) NSData *userProperties;
-@property (nullable, nonatomic, copy) NSString *authMethod;
-@property (nullable, nonatomic, retain) NSData *authData;
+@property (nullable, nonatomic, copy) NSNumber *websocket;
+@property (nullable, nonatomic, copy) NSNumber *willDelay;
 @property (nullable, nonatomic, retain) NSOrderedSet<Command *> *hasCommands;
 @property (nullable, nonatomic, retain) NSOrderedSet<Message *> *hasMesssages;
 @property (nullable, nonatomic, retain) NSOrderedSet<Publication *> *hasPubs;

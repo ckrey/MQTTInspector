@@ -243,8 +243,8 @@
                 string = dictionary[@"requestProblemInformation"];
                 if (string) session.requestProblemInformation = @(string.boolValue);
 
-                string = dictionary[@"requestReplyInfo"];
-                if (string) session.requestReplyInfo = @(string.boolValue);
+                string = dictionary[@"requestResponseInformation"];
+                if (string) session.requestResponseInformatino = @(string.boolValue);
 
 
                 NSArray *subs = dictionary[@"subs"];

@@ -32,6 +32,7 @@
 		847A30D21F8F3A69002F90C3 /* MessageInfoTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 847A30D11F8F3A69002F90C3 /* MessageInfoTVC.m */; };
 		847A30D51F8F3A8B002F90C3 /* SubscriptionIdentifiersTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 847A30D41F8F3A8B002F90C3 /* SubscriptionIdentifiersTVC.m */; };
 		847A30D81F8FAE7A002F90C3 /* SplitVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 847A30D71F8FAE7A002F90C3 /* SplitVC.m */; };
+		8484BCF61F94D5D3009C821C /* TopicAliasesTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8484BCF51F94D5D3009C821C /* TopicAliasesTVC.m */; };
 		848DAB751F8B866C00D97927 /* Topic+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 848DAB6C1F8B866C00D97927 /* Topic+CoreDataClass.m */; };
 		848DAB761F8B866C00D97927 /* Session+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 848DAB6E1F8B866C00D97927 /* Session+CoreDataClass.m */; };
 		848DAB771F8B866C00D97927 /* Command+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 848DAB701F8B866C00D97927 /* Command+CoreDataClass.m */; };
@@ -124,6 +125,8 @@
 		847A30D61F8FAE7A002F90C3 /* SplitVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SplitVC.h; sourceTree = "<group>"; };
 		847A30D71F8FAE7A002F90C3 /* SplitVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SplitVC.m; sourceTree = "<group>"; };
 		847A30D91F90A611002F90C3 /* MQTTInspector 5.0.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 5.0.2.xcdatamodel"; sourceTree = "<group>"; };
+		8484BCF41F94D5D3009C821C /* TopicAliasesTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TopicAliasesTVC.h; sourceTree = "<group>"; };
+		8484BCF51F94D5D3009C821C /* TopicAliasesTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TopicAliasesTVC.m; sourceTree = "<group>"; };
 		848794AA19A612DC00DF56EB /* MQTTInspector 1.5.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 1.5.2.xcdatamodel"; sourceTree = "<group>"; };
 		848DAB691F8A653800D97927 /* MQTTInspector 5.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 5.1.xcdatamodel"; sourceTree = "<group>"; };
 		848DAB6B1F8B866C00D97927 /* Topic+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Topic+CoreDataClass.h"; sourceTree = "<group>"; };
@@ -310,6 +313,8 @@
 				84684E9018321D1200AE13B5 /* ShowPubsTVC.m */,
 				8474D0C11F56F70000FE9BFA /* SessionInfoTVC.h */,
 				8474D0C21F56F70000FE9BFA /* SessionInfoTVC.m */,
+				8484BCF41F94D5D3009C821C /* TopicAliasesTVC.h */,
+				8484BCF51F94D5D3009C821C /* TopicAliasesTVC.m */,
 				8474D0C41F58122B00FE9BFA /* UserPropertiesTVC.h */,
 				8474D0C51F58122B00FE9BFA /* UserPropertiesTVC.m */,
 				8492705A1F8D344000FC2EDE /* UserPropertyTVC.h */,
@@ -522,6 +527,7 @@
 				8403B85D1C284D8C007D266F /* Subscription+CoreDataProperties.m in Sources */,
 				847A30D21F8F3A69002F90C3 /* MessageInfoTVC.m in Sources */,
 				8403B85F1C284D8C007D266F /* Session+CoreDataProperties.m in Sources */,
+				8484BCF61F94D5D3009C821C /* TopicAliasesTVC.m in Sources */,
 				84147CDE183269D50018E601 /* CommandsTVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

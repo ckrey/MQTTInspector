@@ -927,7 +927,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ClientId / Assigned ClientId" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D92-gg-f0a">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Clean Start / Session Present / ClientId / Assigned ClientId" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D92-gg-f0a">
                                                     <rect key="frame" x="20" y="27" width="335" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="16" id="Txv-H8-HP8"/>
@@ -1215,7 +1215,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Topic Alias Maximum" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NgD-vu-Qx6">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Used Topic Aliases / Maximum" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NgD-vu-Qx6">
                                                     <rect key="frame" x="20" y="27" width="302" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="16" id="oqU-0P-iCe"/>
@@ -1234,6 +1234,9 @@
                                                 <constraint firstAttribute="trailing" secondItem="I3Y-Hn-fYD" secondAttribute="trailing" constant="20" symbolic="YES" id="tig-0D-Hor"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="wS6-fc-UZv" kind="show" identifier="ShowBrokerTopicAliases" id="YfT-mE-Wax"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="uwI-iw-Jsx">
                                         <rect key="frame" x="0.0" y="440" width="375" height="44"/>
@@ -1251,7 +1254,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Client Topic Alias Maximum" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OI0-4n-s9M">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Used Client Topic Aliases / Maximum" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OI0-4n-s9M">
                                                     <rect key="frame" x="20" y="27" width="302" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="16" id="t5m-tW-f2c"/>
@@ -1270,6 +1273,9 @@
                                                 <constraint firstItem="OI0-4n-s9M" firstAttribute="leading" secondItem="tBi-R3-Ryu" secondAttribute="leading" constant="20" symbolic="YES" id="zBc-3B-bCN"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="wS6-fc-UZv" kind="show" identifier="ShowClientTopicAliases" id="iZ0-BY-EWV"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="nsh-Gx-7Ia">
                                         <rect key="frame" x="0.0" y="484" width="375" height="44"/>
@@ -1598,6 +1604,51 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YkB-4Z-pON" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1773.913043478261" y="-262.5"/>
+        </scene>
+        <!--Topic Aliases-->
+        <scene sceneID="IYd-CO-HKY">
+            <objects>
+                <tableViewController id="wS6-fc-UZv" customClass="TopicAliasesTVC" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="RSB-TG-m02">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="topicAliasCell" textLabel="K4E-SH-ljP" detailTextLabel="spG-fI-LkT" style="IBUITableViewCellStyleValue2" id="jUr-KY-mJR">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="jUr-KY-mJR" id="IN7-ng-ZgV">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="K4E-SH-ljP">
+                                            <rect key="frame" x="16" y="14" width="91" height="16"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="spG-fI-LkT">
+                                            <rect key="frame" x="113" y="14" width="35" height="16"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="wS6-fc-UZv" id="opq-FW-2ux"/>
+                            <outlet property="delegate" destination="wS6-fc-UZv" id="N5X-vw-VsN"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Topic Aliases" id="jHN-Uo-drT"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jlM-gK-zWr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2558" y="-259"/>
         </scene>
         <!--Message Info-->
         <scene sceneID="I7K-fh-8ux">
@@ -3019,8 +3070,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Request Reply Info" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tNg-ED-UEz">
-                                                    <rect key="frame" x="20" y="11" width="143" height="21"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Request Response Info" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tNg-ED-UEz">
+                                                    <rect key="frame" x="20" y="11" width="176" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="fYl-Sl-ksS"/>
                                                     </constraints>
@@ -3035,7 +3086,7 @@
                                                         <constraint firstAttribute="width" constant="49" id="UVA-wv-gJb"/>
                                                     </constraints>
                                                     <connections>
-                                                        <action selector="requestReplyInfoChanged:" destination="bJC-yq-4xu" eventType="valueChanged" id="gHl-mZ-NqF"/>
+                                                        <action selector="requestResponseInformationChanged:" destination="bJC-yq-4xu" eventType="valueChanged" id="PxT-CZ-F7E"/>
                                                     </connections>
                                                 </switch>
                                             </subviews>
@@ -3190,7 +3241,7 @@
                         <outlet property="protocolLevelText" destination="7ef-gW-8QL" id="YGQ-wm-SZ9"/>
                         <outlet property="receiveMaximumText" destination="EX3-U4-gL8" id="DWI-JF-0AE"/>
                         <outlet property="requestProblemInformationSwitch" destination="0Ou-2k-xMZ" id="M6W-tz-D4Q"/>
-                        <outlet property="requestReplyInfoSwitch" destination="54F-tb-YbK" id="1nv-Be-qEC"/>
+                        <outlet property="requestResponseInformationSwitch" destination="54F-tb-YbK" id="6WY-mk-EkW"/>
                         <outlet property="sessionExpiryIntervalText" destination="HEK-bQ-v9b" id="lew-jY-zBe"/>
                         <outlet property="sizeLimitText" destination="obn-H8-RLD" id="NX0-bB-BVu"/>
                         <outlet property="tlsSwitch" destination="gio-7J-cc9" id="U2N-z1-mXI"/>
@@ -4228,6 +4279,7 @@
         <segue reference="Tei-Q8-3oK"/>
         <segue reference="s48-nA-yZ0"/>
         <segue reference="W4N-oW-rBT"/>
-        <segue reference="0UM-9N-2of"/>
+        <segue reference="fzX-WM-jiy"/>
+        <segue reference="YfT-mE-Wax"/>
     </inferredMetricsTieBreakers>
 </document>

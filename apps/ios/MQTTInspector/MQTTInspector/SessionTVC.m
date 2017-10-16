@@ -34,7 +34,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *maximumPacketSizeText;
 @property (weak, nonatomic) IBOutlet UISwitch *requestProblemInformationSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *topicAliasMaximumText;
-@property (weak, nonatomic) IBOutlet UISwitch *requestReplyInfoSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *requestResponseInformationSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *authMethodText;
 @property (weak, nonatomic) IBOutlet UITextField *authDataText;
 @property (weak, nonatomic) IBOutlet UILabel *userProperties;
@@ -116,7 +116,7 @@
     self.topicAliasMaximumText.text = self.session.topicAliasMaximum ? self.session.topicAliasMaximum.stringValue : nil;
     self.authMethodText.text = self.session.authMethod ? self.session.authMethod : nil;
     self.authDataText.text = self.session.authData ? [[NSString alloc] initWithData:self.session.authData encoding:NSUTF8StringEncoding] : nil;
-    self.requestReplyInfoSwitch.on = self.session.requestReplyInfo ? self.session.requestReplyInfo : false;
+    self.requestResponseInformationSwitch.on = self.session.requestResponseInformatino ? self.session.requestResponseInformatino : false;
     self.requestProblemInformationSwitch.on = self.session.requestProblemInformation ? self.session.requestProblemInformation : false;
 
     if (self.session.userProperties) {
@@ -321,11 +321,11 @@
     }
 }
 
-- (IBAction)requestReplyInfoChanged:(UISwitch *)sender {
+- (IBAction)requestResponseInformationChanged:(UISwitch *)sender {
     if (sender.on) {
-        self.session.requestReplyInfo = @(1);
+        self.session.requestResponseInformatino = @(1);
     } else {
-        self.session.requestReplyInfo = @(0);
+        self.session.requestResponseInformatino = @(0);
     }
 
 }
@@ -398,7 +398,7 @@
     dict[@"willDelay"] = self.session.willDelay;
     dict[@"topicAliasMaximum"] = self.session.topicAliasMaximum;
     dict[@"requestProblemInformation"] = self.session.requestProblemInformation;
-    dict[@"requestReplyInfo"] = self.session.requestReplyInfo;
+    dict[@"requestResponseInformation"] = self.session.requestResponseInformatino;
     if (self.session.userProperties) {
         dict[@"userProperties"] = [NSJSONSerialization JSONObjectWithData:self.session.userProperties
                                                                   options:0

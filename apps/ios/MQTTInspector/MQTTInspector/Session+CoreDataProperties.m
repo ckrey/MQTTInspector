@@ -2,7 +2,7 @@
 //  Session+CoreDataProperties.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 09.10.17.
+//  Created by Christoph Krey on 15.10.17.
 //  Copyright © 2017 Christoph Krey. All rights reserved.
 //
 //
@@ -18,6 +18,8 @@
 @dynamic allowUntrustedCertificates;
 @dynamic attributefilter;
 @dynamic auth;
+@dynamic authData;
+@dynamic authMethod;
 @dynamic autoconnect;
 @dynamic cleansession;
 @dynamic clientid;
@@ -25,26 +27,24 @@
 @dynamic host;
 @dynamic includefilter;
 @dynamic keepalive;
+@dynamic maximumPacketSize;
 @dynamic name;
 @dynamic passwd;
 @dynamic port;
 @dynamic protocolLevel;
+@dynamic receiveMaximum;
+@dynamic requestProblemInformation;
+@dynamic requestResponseInformatino;
+@dynamic sessionExpiryInterval;
 @dynamic sizelimit;
 @dynamic state;
 @dynamic tls;
+@dynamic topicAliasMaximum;
 @dynamic topicfilter;
 @dynamic user;
-@dynamic websocket;
-@dynamic sessionExpiryInterval;
-@dynamic receiveMaximum;
-@dynamic maximumPacketSize;
-@dynamic willDelay;
-@dynamic topicAliasMaximum;
-@dynamic requestProblemInformation;
-@dynamic requestReplyInfo;
 @dynamic userProperties;
-@dynamic authMethod;
-@dynamic authData;
+@dynamic websocket;
+@dynamic willDelay;
 @dynamic hasCommands;
 @dynamic hasMesssages;
 @dynamic hasPubs;

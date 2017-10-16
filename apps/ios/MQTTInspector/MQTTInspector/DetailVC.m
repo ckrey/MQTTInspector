@@ -526,7 +526,7 @@
         self.mqttSession.willDelayInterval = self.session.willDelay;
         self.mqttSession.topicAliasMaximum = self.session.topicAliasMaximum;
         self.mqttSession.requestProblemInformation = self.session.requestProblemInformation;
-        self.mqttSession.requestResponseInformation = self.session.requestReplyInfo;
+        self.mqttSession.requestResponseInformation = self.session.requestResponseInformatino;
         if (self.session.userProperties) {
             self.mqttSession.userProperties = [NSJSONSerialization
                                                JSONObjectWithData:self.session.userProperties
