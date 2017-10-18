@@ -18,8 +18,7 @@
 
 @implementation ShowPubsTVC
 
-- (void)setTableView:(UITableView *)tableView
-{
+- (void)setTableView:(UITableView *)tableView {
     super.tableView = tableView;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -28,8 +27,7 @@
 
 #pragma mark - Fetched results controller
 
-- (NSFetchedResultsController *)setupFRC
-{
+- (NSFetchedResultsController *)setupFRC {
     NSFetchedResultsController *aFetchedResultsController;
     if (self.mother.session) {
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -72,23 +70,23 @@
 
 #pragma mark - Table view data source
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
+- (NSString *)tableView:(UITableView *)tableView
+titleForHeaderInSection:(NSInteger)section {
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         return [NSString stringWithFormat:@"PUBs"];
     } else {
         return nil;
     }
 }
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"publication" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
+- (void)configureCell:(UITableViewCell *)cell
+          atIndexPath:(NSIndexPath *)indexPath {
     Publication *publication = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = publication.name;
     
@@ -98,13 +96,14 @@
     
 }
 
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (BOOL)tableView:(UITableView *)tableView
+canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
-{
+- (void)tableView:(UITableView *)tableView
+moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
+      toIndexPath:(NSIndexPath *)destinationIndexPath {
     DDLogVerbose(@"PUBs moveRowAtIndexPath %ld > %ld",
                  (long)sourceIndexPath.row, (long)destinationIndexPath.row);
     self.noupdate = TRUE;
@@ -141,8 +140,8 @@
     self.noupdate = FALSE;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Publication *publication = [self.fetchedResultsController objectAtIndexPath:indexPath];
     if (self.mother.mqttSession.status == MQTTSessionStatusConnected) {
         [self.mother publish:publication];

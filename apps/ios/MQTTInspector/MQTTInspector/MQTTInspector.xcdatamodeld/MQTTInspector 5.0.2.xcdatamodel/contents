@@ -36,7 +36,7 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="payloadFormatIndicator" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="position" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="publicationExpiryInterval" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="publicationExpiryInterval" optional="YES" attributeType="Integer 64" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="qos" optional="YES" attributeType="Integer 16" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="responseTopic" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="retained" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
