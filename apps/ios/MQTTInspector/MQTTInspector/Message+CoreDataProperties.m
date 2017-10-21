@@ -2,7 +2,7 @@
 //  Message+CoreDataProperties.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 10.10.17.
+//  Created by Christoph Krey on 21.10.17.
 //  Copyright © 2017 Christoph Krey. All rights reserved.
 //
 //
@@ -15,21 +15,21 @@
 	return [[NSFetchRequest alloc] initWithEntityName:@"Message"];
 }
 
+@dynamic contentType;
+@dynamic correlationData;
 @dynamic data;
 @dynamic mid;
+@dynamic payloadFormatIndicator;
+@dynamic messageExpiryInterval;
 @dynamic qos;
+@dynamic responstTopic;
 @dynamic retained;
 @dynamic state;
+@dynamic subscriptionIdentifiers;
 @dynamic timestamp;
 @dynamic topic;
-@dynamic payloadFormatIndicator;
-@dynamic publicationExpiryInterval;
 @dynamic topicAlias;
-@dynamic subscriptionIdentifiers;
 @dynamic userProperties;
-@dynamic responstTopic;
-@dynamic correlationData;
-@dynamic contentType;
 @dynamic belongsTo;
 
 @end

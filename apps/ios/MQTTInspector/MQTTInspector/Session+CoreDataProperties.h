@@ -2,7 +2,7 @@
 //  Session+CoreDataProperties.h
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 15.10.17.
+//  Created by Christoph Krey on 21.10.17.
 //  Copyright © 2017 Christoph Krey. All rights reserved.
 //
 //
@@ -45,7 +45,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSString *user;
 @property (nullable, nonatomic, retain) NSData *userProperties;
 @property (nullable, nonatomic, copy) NSNumber *websocket;
-@property (nullable, nonatomic, copy) NSNumber *willDelay;
 @property (nullable, nonatomic, retain) NSOrderedSet<Command *> *hasCommands;
 @property (nullable, nonatomic, retain) NSOrderedSet<Message *> *hasMesssages;
 @property (nullable, nonatomic, retain) NSOrderedSet<Publication *> *hasPubs;

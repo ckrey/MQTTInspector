@@ -95,6 +95,7 @@
 		84147D12183673A70018E601 /* AdHocPubTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdHocPubTVC.m; sourceTree = "<group>"; };
 		84147D141838CB720018E601 /* MessagesTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessagesTVC.h; sourceTree = "<group>"; };
 		84147D151838CB720018E601 /* MessagesTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagesTVC.m; sourceTree = "<group>"; };
+		841F52C01F9B7AFD00232189 /* MQTTInspector 5.0.3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 5.0.3.xcdatamodel"; sourceTree = "<group>"; };
 		8423B4AF187BE726006B08AC /* MQTTInspector 1.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 1.2.xcdatamodel"; sourceTree = "<group>"; };
 		8423B4B6187C5B8D006B08AC /* MQTTInspector 1.2a.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 1.2a.xcdatamodel"; sourceTree = "<group>"; };
 		84283FF71846ABD70078DA05 /* MQTTInspector 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 5.xcdatamodel"; sourceTree = "<group>"; };
@@ -720,6 +721,7 @@
 		8492C96C182E63D300A40D8B /* MQTTInspector.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				841F52C01F9B7AFD00232189 /* MQTTInspector 5.0.3.xcdatamodel */,
 				847A30D91F90A611002F90C3 /* MQTTInspector 5.0.2.xcdatamodel */,
 				848DAB691F8A653800D97927 /* MQTTInspector 5.1.xcdatamodel */,
 				84E8A0441F5E742200E3BFCA /* MQTTInspector 5.0.xcdatamodel */,
@@ -740,7 +742,7 @@
 				84BB7125183A82FC005AF544 /* MQTTInspector 4.xcdatamodel */,
 				8492C96D182E63D300A40D8B /* MQTTInspector.xcdatamodel */,
 			);
-			currentVersion = 847A30D91F90A611002F90C3 /* MQTTInspector 5.0.2.xcdatamodel */;
+			currentVersion = 841F52C01F9B7AFD00232189 /* MQTTInspector 5.0.3.xcdatamodel */;
 			path = MQTTInspector.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

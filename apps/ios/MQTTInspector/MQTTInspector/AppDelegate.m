@@ -219,9 +219,6 @@
                 string = dictionary[@"topicfilter"];
                 if (string) session.topicfilter = string;
 
-                string = dictionary[@"willDelay"];
-                if (string) session.willDelay = @(string.integerValue);
-
                 string = dictionary[@"sessionExpiryInterval"];
                 if (string) session.sessionExpiryInterval = @(string.integerValue);
 

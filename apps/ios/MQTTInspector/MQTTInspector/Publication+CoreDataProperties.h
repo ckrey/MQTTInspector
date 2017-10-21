@@ -2,7 +2,7 @@
 //  Publication+CoreDataProperties.h
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 11.10.17.
+//  Created by Christoph Krey on 21.10.17.
 //  Copyright © 2017 Christoph Krey. All rights reserved.
 //
 //
@@ -22,13 +22,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSString *name;
 @property (nullable, nonatomic, copy) NSNumber *payloadFormatIndicator;
 @property (nullable, nonatomic, copy) NSNumber *position;
+@property (nullable, nonatomic, copy) NSNumber *messageExpiryInterval;
 @property (nullable, nonatomic, copy) NSNumber *qos;
 @property (nullable, nonatomic, copy) NSString *responseTopic;
 @property (nullable, nonatomic, copy) NSNumber *retained;
 @property (nullable, nonatomic, copy) NSString *topic;
 @property (nullable, nonatomic, copy) NSNumber *topicAlias;
 @property (nullable, nonatomic, retain) NSData *userProperties;
-@property (nullable, nonatomic, copy) NSNumber *publicationExpiryInterval;
 @property (nullable, nonatomic, retain) Session *belongsTo;
 
 @end

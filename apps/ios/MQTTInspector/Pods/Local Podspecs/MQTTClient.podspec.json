@@ -55,8 +55,6 @@
         "MQTTClient/MQTTClient/MQTTSSLSecurityPolicyTransport.{h,m}",
         "MQTTClient/MQTTClient/MQTTProperties.{h,m}",
         "MQTTClient/MQTTClient/MQTTSession.{h,m}",
-        "MQTTClient/MQTTClient/MQTTSessionLegacy.{h,m}",
-        "MQTTClient/MQTTClient/MQTTSessionSynchron.{h,m}",
         "MQTTClient/MQTTClient/MQTTTransport.{h,m}"
       ]
     },
@@ -86,8 +84,6 @@
         "MQTTClient/MQTTClient/MQTTSSLSecurityPolicyTransport.{h,m}",
         "MQTTClient/MQTTClient/MQTTProperties.{h,m}",
         "MQTTClient/MQTTClient/MQTTSession.{h,m}",
-        "MQTTClient/MQTTClient/MQTTSessionLegacy.{h,m}",
-        "MQTTClient/MQTTClient/MQTTSessionSynchron.{h,m}",
         "MQTTClient/MQTTClient/MQTTTransport.{h,m}"
       ],
       "xcconfig": {

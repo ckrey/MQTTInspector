@@ -39,7 +39,6 @@
         session.includefilter = @(true);
         session.sizelimit = @(0);
         session.sessionExpiryInterval = nil;
-        session.willDelay = nil;
         session.receiveMaximum = nil;
         session.maximumPacketSize = nil;
         session.topicAliasMaximum = nil;

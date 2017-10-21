@@ -2,7 +2,7 @@
 //  Session+CoreDataProperties.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 15.10.17.
+//  Created by Christoph Krey on 21.10.17.
 //  Copyright © 2017 Christoph Krey. All rights reserved.
 //
 //
@@ -44,7 +44,6 @@
 @dynamic user;
 @dynamic userProperties;
 @dynamic websocket;
-@dynamic willDelay;
 @dynamic hasCommands;
 @dynamic hasMesssages;
 @dynamic hasPubs;

@@ -19,7 +19,7 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *qosSegment;
 @property (weak, nonatomic) IBOutlet UISwitch *retainSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *payloadFormatIndicatorSwitch;
-@property (weak, nonatomic) IBOutlet UITextField *publicationExpiryIntervalText;
+@property (weak, nonatomic) IBOutlet UITextField *messageExpiryIntervalText;
 @property (weak, nonatomic) IBOutlet UITextField *topicAliasText;
 @property (weak, nonatomic) IBOutlet UITextField *responseTopicText;
 @property (weak, nonatomic) IBOutlet UITextField *correlationDataText;
@@ -37,7 +37,7 @@
 
     self.topicText.delegate = self;
     self.dataText.delegate = self;
-    self.publicationExpiryIntervalText.delegate = self;
+    self.messageExpiryIntervalText.delegate = self;
     self.topicAliasText.delegate = self;
     self.responseTopicText.delegate = self;
     self.correlationDataText.delegate = self;
@@ -59,7 +59,7 @@
     self.qosSegment.selectedSegmentIndex = (self.pub.qos).intValue;
     self.retainSwitch.on = (self.pub.retained).boolValue;
     self.payloadFormatIndicatorSwitch.on = (self.pub.payloadFormatIndicator).boolValue;
-    self.publicationExpiryIntervalText.text = self.pub.publicationExpiryInterval ? self.pub.publicationExpiryInterval.stringValue : nil;
+    self.messageExpiryIntervalText.text = self.pub.messageExpiryInterval ? self.pub.messageExpiryInterval.stringValue : nil;
     self.topicAliasText.text = self.pub.topicAlias ? self.pub.topicAlias.stringValue : nil;
     self.responseTopicText.text = self.pub.responseTopic;
     self.correlationDataText.text = [[NSString alloc] initWithData:self.pub.correlationData
@@ -153,10 +153,10 @@
         self.pub.topicAlias = nil;
     }
 
-    if (self.publicationExpiryIntervalText.text.length) {
-        self.pub.publicationExpiryInterval = @(self.publicationExpiryIntervalText.text.intValue);
+    if (self.messageExpiryIntervalText.text.length) {
+        self.pub.messageExpiryInterval = @(self.messageExpiryIntervalText.text.intValue);
     } else {
-        self.pub.publicationExpiryInterval = nil;
+        self.pub.messageExpiryInterval = nil;
     }
 
     [self.mother publish:self.pub];

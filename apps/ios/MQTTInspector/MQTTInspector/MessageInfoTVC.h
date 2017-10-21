@@ -10,7 +10,7 @@
 
 @interface MessageInfoTVC : UITableViewController
 @property (strong, nonatomic, nullable) NSNumber *payloadFormatIndicator;
-@property (strong, nonatomic, nullable) NSNumber *publicationExpiryInterval;
+@property (strong, nonatomic, nullable) NSNumber *messageExpiryInterval;
 @property (strong, nonatomic, nullable) NSNumber *topicAlias;
 @property (strong, nonatomic, nullable) NSData *userProperties;
 @property (strong, nonatomic, nullable) NSData *subscriptionIdentifiers;

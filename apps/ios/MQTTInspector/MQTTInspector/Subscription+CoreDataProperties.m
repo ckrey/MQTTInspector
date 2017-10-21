@@ -2,7 +2,7 @@
 //  Subscription+CoreDataProperties.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 13.10.17.
+//  Created by Christoph Krey on 21.10.17.
 //  Copyright © 2017 Christoph Krey. All rights reserved.
 //
 //

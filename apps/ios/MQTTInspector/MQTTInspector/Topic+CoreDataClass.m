@@ -52,7 +52,7 @@ inManagedObjectContext:(NSManagedObjectContext *)context {
         topic.count = @(0);
         topic.justupdated = [NSNumber numberWithBool:TRUE];
         topic.payloadFormatIndicator = nil;
-        topic.publicationExpiryInterval = nil;
+        topic.messageExpiryInterval = nil;
         topic.topicAlias = nil;
         topic.responseTopic = nil;
         topic.correlationData = nil;

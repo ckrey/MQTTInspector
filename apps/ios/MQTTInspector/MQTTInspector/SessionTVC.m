@@ -112,7 +112,6 @@
     self.receiveMaximumText.text = self.session.receiveMaximum ? self.session.receiveMaximum.stringValue : nil;
     self.maximumPacketSizeText.text = self.session.maximumPacketSize ? self.session.maximumPacketSize.stringValue : nil;
     self.sessionExpiryIntervalText.text = self.session.sessionExpiryInterval ? self.session.sessionExpiryInterval.stringValue : nil;
-    self.willDelayIntervalText.text = self.session.willDelay ? self.session.willDelay.stringValue : nil;
     self.topicAliasMaximumText.text = self.session.topicAliasMaximum ? self.session.topicAliasMaximum.stringValue : nil;
     self.authMethodText.text = self.session.authMethod ? self.session.authMethod : nil;
     self.authDataText.text = self.session.authData ? [[NSString alloc] initWithData:self.session.authData encoding:NSUTF8StringEncoding] : nil;
@@ -289,14 +288,6 @@
     }
 }
 
-- (IBAction)willDelayIntervalChanged:(UITextField *)sender {
-    if (sender.text.length > 0) {
-        self.session.willDelay = @(sender.text.intValue);
-    } else {
-        self.session.willDelay= nil;
-    }
-}
-
 - (IBAction)receiveMaximumChanged:(UITextField *)sender {
     if (sender.text.length > 0) {
         self.session.receiveMaximum = @(sender.text.intValue);
@@ -395,7 +386,6 @@
     dict[@"sessionExpiryInterval"] = self.session.sessionExpiryInterval;
     dict[@"receiveMaximum"] = self.session.receiveMaximum;
     dict[@"maximumPacketSize"] = self.session.maximumPacketSize;
-    dict[@"willDelay"] = self.session.willDelay;
     dict[@"topicAliasMaximum"] = self.session.topicAliasMaximum;
     dict[@"requestProblemInformation"] = self.session.requestProblemInformation;
     dict[@"requestResponseInformation"] = self.session.requestResponseInformatino;

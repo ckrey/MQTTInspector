@@ -200,9 +200,9 @@
             [segue.destinationViewController performSelector:@selector(setPayloadFormatIndicator:)
                                                   withObject:topic.payloadFormatIndicator];
         }
-        if ([segue.destinationViewController respondsToSelector:@selector(setPublicationExpiryInterval:)]) {
-            [segue.destinationViewController performSelector:@selector(setPublicationExpiryInterval:)
-                                                  withObject:topic.publicationExpiryInterval];
+        if ([segue.destinationViewController respondsToSelector:@selector(setMessageExpiryInterval:)]) {
+            [segue.destinationViewController performSelector:@selector(setMessageExpiryInterval:)
+                                                  withObject:topic.messageExpiryInterval];
         }
         if ([segue.destinationViewController respondsToSelector:@selector(setTopicAlias:)]) {
             [segue.destinationViewController performSelector:@selector(setTopicAlias:)
@@ -234,9 +234,9 @@
             [segue.destinationViewController performSelector:@selector(setPayloadFormatIndicator:)
                                                   withObject:message.payloadFormatIndicator];
         }
-        if ([segue.destinationViewController respondsToSelector:@selector(setPublicationExpiryInterval:)]) {
-            [segue.destinationViewController performSelector:@selector(setPublicationExpiryInterval:)
-                                                  withObject:message.publicationExpiryInterval];
+        if ([segue.destinationViewController respondsToSelector:@selector(setMessageExpiryInterval:)]) {
+            [segue.destinationViewController performSelector:@selector(setMessageExpiryInterval:)
+                                                  withObject:message.messageExpiryInterval];
         }
         if ([segue.destinationViewController respondsToSelector:@selector(setTopicAlias:)]) {
             [segue.destinationViewController performSelector:@selector(setTopicAlias:)

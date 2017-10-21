@@ -286,7 +286,7 @@
                              retain:(pub.retained).boolValue
                                 qos:(pub.qos).intValue
              payloadFormatIndicator:pub.payloadFormatIndicator
-          publicationExpiryInterval:pub.publicationExpiryInterval
+              messageExpiryInterval:pub.messageExpiryInterval
                          topicAlias:pub.topicAlias
                       responseTopic:pub.responseTopic
                     correlationData:pub.correlationData
@@ -523,7 +523,6 @@
         self.mqttSession.sessionExpiryInterval = self.session.sessionExpiryInterval;
         self.mqttSession.receiveMaximum = self.session.receiveMaximum;
         self.mqttSession.maximumPacketSize = self.session.maximumPacketSize;
-        self.mqttSession.willDelayInterval = self.session.willDelay;
         self.mqttSession.topicAliasMaximum = self.session.topicAliasMaximum;
         self.mqttSession.requestProblemInformation = self.session.requestProblemInformation;
         self.mqttSession.requestResponseInformation = self.session.requestResponseInformatino;
@@ -778,7 +777,7 @@
            retained:(BOOL)retained
                 mid:(unsigned int)mid
 payloadFormatIndicator:(NSNumber *)payloadFormatIndicator
-publicationExpiryInterval:(NSNumber *)publicationExpiryInterval
+messageExpiryInterval:(NSNumber *)messageExpiryInterval
          topicAlias:(NSNumber *)topicAlias
       responseTopic:(NSString *)responseTopic
     correlationData:(NSData *)correlationData
@@ -883,7 +882,7 @@ subscriptionIdentifiers:(NSArray<NSNumber *> *)subscriptionIdentifiers {
                 theMessage.retained = @(retained);
                 theMessage.mid = @(mid);
                 theMessage.payloadFormatIndicator = payloadFormatIndicator;
-                theMessage.publicationExpiryInterval = publicationExpiryInterval;
+                theMessage.messageExpiryInterval = messageExpiryInterval;
                 theMessage.topicAlias = topicAlias;
                 theMessage.responstTopic = responseTopic;
                 theMessage.correlationData = correlationData;
@@ -921,7 +920,7 @@ subscriptionIdentifiers:(NSArray<NSNumber *> *)subscriptionIdentifiers {
                 theTopic.timestamp = timestamp;
                 theTopic.justupdated = theTopic.count;
                 theTopic.payloadFormatIndicator = payloadFormatIndicator;
-                theTopic.publicationExpiryInterval = publicationExpiryInterval;
+                theTopic.messageExpiryInterval = messageExpiryInterval;
                 theTopic.topicAlias = topicAlias;
                 theTopic.responseTopic = responseTopic;
                 theTopic.correlationData = correlationData;
@@ -1061,7 +1060,7 @@ subscriptionIdentifiers:(NSArray<NSNumber *> *)subscriptionIdentifiers {
     });
 }
 
-- (void)messageDeliveredV5:(MQTTSession *)session msgID:(UInt16)msgID topic:(NSString *)topic data:(NSData *)data qos:(MQTTQosLevel)qos retainFlag:(BOOL)retainFlag payloadFormatIndicator:(NSNumber *)payloadFormatIndicator publicationExpiryInterval:(NSNumber *)publicationExpiryInterval topicAlias:(NSNumber *)topicAlias responseTopic:(NSString *)responseTopic correlationData:(NSData *)correlationData userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties contentType:(NSString *)contentType {
+- (void)messageDeliveredV5:(MQTTSession *)session msgID:(UInt16)msgID topic:(NSString *)topic data:(NSData *)data qos:(MQTTQosLevel)qos retainFlag:(BOOL)retainFlag payloadFormatIndicator:(NSNumber *)payloadFormatIndicator messageExpiryInterval:(NSNumber *)messageExpiryInterval topicAlias:(NSNumber *)topicAlias responseTopic:(NSString *)responseTopic correlationData:(NSData *)correlationData userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties contentType:(NSString *)contentType {
     //
 }
 

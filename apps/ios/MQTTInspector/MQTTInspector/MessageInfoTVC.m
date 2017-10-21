@@ -12,7 +12,7 @@
 
 @interface MessageInfoTVC ()
 @property (weak, nonatomic) IBOutlet UILabel *payloadFormatIndicatorLabel;
-@property (weak, nonatomic) IBOutlet UILabel *publicationExpiryIntervalLabel;
+@property (weak, nonatomic) IBOutlet UILabel *messageExpiryIntervalLabel;
 @property (weak, nonatomic) IBOutlet UILabel *topicAliasLabel;
 @property (weak, nonatomic) IBOutlet UILabel *subscriptionIdentifiersLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userPropertiesLabel;
@@ -30,7 +30,7 @@
     self.payloadFormatIndicatorLabel.text = self.payloadFormatIndicator ? self.payloadFormatIndicator.stringValue : @"(not specified)";
 
 
-    self.publicationExpiryIntervalLabel.text = self.publicationExpiryInterval ? self.publicationExpiryInterval.stringValue : @"(not specified)";
+    self.messageExpiryIntervalLabel.text = self.messageExpiryInterval ? self.messageExpiryInterval.stringValue : @"(not specified)";
 
     self.topicAliasLabel.text = self.topicAlias ? self.topicAlias.stringValue : @"(not specified)";
 

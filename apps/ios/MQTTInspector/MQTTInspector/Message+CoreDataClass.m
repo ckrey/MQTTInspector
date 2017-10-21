@@ -37,7 +37,7 @@ inManagedObjectContext:(NSManagedObjectContext *)context
             message.retained = @(false);
             message.mid = @(0);
             message.payloadFormatIndicator = nil;
-            message.publicationExpiryInterval = nil;
+            message.messageExpiryInterval = nil;
             message.topicAlias = nil;
             message.subscriptionIdentifiers = nil;
             message.userProperties = nil;
