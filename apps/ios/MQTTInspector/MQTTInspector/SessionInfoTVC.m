@@ -9,7 +9,7 @@
 #import "SessionInfoTVC.h"
 #import "UserPropertiesTVC.h"
 #import "TopicAliasesTVC.h"
-#import <MQTTClient/MQTTWebSocketTransport.h>
+#import <mqttc/MQTTWebSocketTransport.h>
 
 @interface SessionInfoTVC ()
 @property (weak, nonatomic) IBOutlet UILabel *subscriptionIdentifiersAvailable;

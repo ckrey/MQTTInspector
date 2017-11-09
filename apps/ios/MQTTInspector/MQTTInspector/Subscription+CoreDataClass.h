@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import <MQTTClient/MQTTMessage.h>
+#import <mqttc/MQTTMessage.h>
 
 @class Session;
 

@@ -10,7 +10,7 @@
 #import "Session+CoreDataClass.h"
 #import "Session+CoreDataProperties.h"
 #import "Publication+CoreDataClass.h"
-#import <MQTTClient/MQTTClient.h>
+#import <mqttc/MQTTClient.h>
 
 @interface DetailVC : UIViewController <MQTTSessionDelegate, UISplitViewControllerDelegate>
 

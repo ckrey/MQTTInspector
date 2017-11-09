@@ -2,8 +2,8 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
 pod 'CocoaLumberjack'
-pod 'MQTTClient', :path => '~/MQTT-Client-Framework'
-pod 'MQTTClient/Websocket', :path => '~/MQTT-Client-Framework'
+pod 'mqttc', :path => '~/mqttc'
+pod 'mqttc/Websocket', :path => '~/mqttc'
 
 target 'MQTTInspector' do
 end

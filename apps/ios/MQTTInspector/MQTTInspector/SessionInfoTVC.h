@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Session+CoreDataClass.h"
-#import <MQTTClient/MQTTClient.h>
+#import <mqttc/MQTTClient.h>
 
 @interface SessionInfoTVC : UITableViewController
 @property Session *session;

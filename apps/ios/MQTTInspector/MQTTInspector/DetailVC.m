@@ -7,8 +7,8 @@
 //
 
 #import "DetailVC.h"
-#import <MQTTClient/MQTTWebsocketTransport.h>
-#import <MQTTClient/MQTTInMemoryPersistence.h>
+#import <mqttc/MQTTWebsocketTransport.h>
+#import <mqttc/MQTTInMemoryPersistence.h>
 
 #import "Model.h"
 
