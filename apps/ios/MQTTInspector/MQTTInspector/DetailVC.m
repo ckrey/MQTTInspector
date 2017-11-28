@@ -108,6 +108,7 @@
 @property (strong, nonatomic) NSTimer *connectTimer;
 @property (nonatomic) float queueIn;
 @property (nonatomic) float queueOut;
+@property (nonatomic) BOOL running;
 
 @end
 
@@ -184,6 +185,8 @@
         (self.splitViewController).preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
     }
     [self setSubViews];
+
+    self.running = self.runningSwitch.on;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -424,7 +427,7 @@
 }
 
 - (IBAction)runningChanged:(UISwitch *)sender {
-    //
+    self.running = self.runningSwitch.on;
 }
 
 /*
@@ -628,8 +631,7 @@
 #define MAX_TOPIC 256
 #define MAX_COMMAND 1024
 
-- (NSManagedObjectContext *)queueManagedObjectContext
-{
+- (NSManagedObjectContext *)queueManagedObjectContext {
     if (!_queueManagedObjectContext) {
         _queueManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
         _queueManagedObjectContext.parentContext = self.session.managedObjectContext;
@@ -637,23 +639,20 @@
     return _queueManagedObjectContext;
 }
 
-- (void)startQueue
-{
+- (void)startQueue {
     self.queueIn += 1;
     [self showQueue];
 }
 
-- (void)finishQueue
-{
-    while (!self.runningSwitch.on) {
+- (void)finishQueue {
+    while (!self.running) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
     }
     self.queueOut += 1;
     [self performSelectorOnMainThread:@selector(showQueue) withObject:nil waitUntilDone:FALSE];
 }
 
-- (void)showQueue
-{
+- (void)showQueue {
     if (self.queueIn == self.queueOut) {
         self.queueIn = 1;
         self.queueOut = 1;
@@ -727,10 +726,11 @@
                         @"MQTTSessionEventConnectionClosedByBroker"
                         ];
     
-    DDLogVerbose(@"handleEvent: %@ (%ld) %@",
+    DDLogVerbose(@"handleEvent: %@ (%ld) %@ (%ld)",
                  events[eventCode % [events count]],
                  (long)eventCode,
-                 [error description]);
+                 [error description],
+                 error.code);
     
     if (eventCode == MQTTSessionEventConnected) {
         [self.subsTVC.tableView reloadData];
@@ -744,10 +744,12 @@
     }
     
     if (error) {
-        [DetailVC alert:[NSString stringWithFormat: @"Error %@ (%ld) %@",
-                                                  events[eventCode % events.count],
-                                                  (long)eventCode,
-                                                  error.description]];
+        [DetailVC alert:[NSString stringWithFormat: @"Error %@ (%ld) %@ (%ld)",
+                         events[eventCode % events.count],
+                         (long)eventCode,
+                         error.localizedDescription,
+                         error.code
+                         ]];
     }
     
     if (self.connectTimer && self.connectTimer.isValid) {

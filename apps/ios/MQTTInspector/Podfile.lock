@@ -5,23 +5,17 @@ PODS:
   - CocoaLumberjack/Default (3.3.0)
   - CocoaLumberjack/Extensions (3.3.0):
     - CocoaLumberjack/Default
-  - mqttc (5.0.0):
-    - mqttc/Core (= 5.0.0)
-  - mqttc/Core (5.0.0):
-    - mqttc/Manager
-    - mqttc/Min
-  - mqttc/Manager (5.0.0):
-    - mqttc/Min
-  - mqttc/Min (5.0.0)
-  - mqttc/Websocket (5.0.0):
-    - mqttc/Min
+  - mqttc/MinL (5.0.0):
+    - CocoaLumberjack
+  - mqttc/WebsocketL (5.0.0):
+    - mqttc/MinL
     - SocketRocket
   - SocketRocket (0.5.1)
 
 DEPENDENCIES:
   - CocoaLumberjack
-  - mqttc (from `~/mqttc`)
-  - mqttc/Websocket (from `~/mqttc`)
+  - mqttc/MinL (from `~/mqttc`)
+  - mqttc/WebsocketL (from `~/mqttc`)
 
 EXTERNAL SOURCES:
   mqttc:
@@ -32,6 +26,6 @@ SPEC CHECKSUMS:
   mqttc: 70765e3add951d9d307399fb2fea985aa04c903d
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
 
-PODFILE CHECKSUM: 42056e642d21063e71e433ece89e630eb253459c
+PODFILE CHECKSUM: 804dd315c84ea8bcf4e6ee52268c57b8e0384741
 
 COCOAPODS: 1.4.0.beta.1
