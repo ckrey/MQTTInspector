@@ -55,6 +55,7 @@
 		84B435631C4C08B700D7FBD3 /* FilterTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B435621C4C08B700D7FBD3 /* FilterTVC.m */; };
 		84B435661C4C08CF00D7FBD3 /* LogsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B435651C4C08CF00D7FBD3 /* LogsTVC.m */; };
 		84B97F9F1A8CF23200F04760 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84B97F9E1A8CF23200F04760 /* Launch Screen.xib */; };
+		84E73E84207BCC42005B54D3 /* CertificateTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E73E83207BCC42005B54D3 /* CertificateTVC.m */; };
 		84E8A0471F5E74CD00E3BFCA /* Subscription+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E8A0461F5E74CD00E3BFCA /* Subscription+CoreDataClass.m */; };
 		9FC9B5894A21E9AFF92FF5B8 /* libPods-MQTTInspector.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D34FA708C28D447FBD7ACE2A /* libPods-MQTTInspector.a */; };
 /* End PBXBuildFile section */
@@ -171,6 +172,9 @@
 		84BB7125183A82FC005AF544 /* MQTTInspector 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 4.xcdatamodel"; sourceTree = "<group>"; };
 		84C308F1183A2F6B0031C606 /* MQTTInspector 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 2.xcdatamodel"; sourceTree = "<group>"; };
 		84CF33591918BEDE00E433A1 /* MQTTInspector 1.4.2.3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 1.4.2.3.xcdatamodel"; sourceTree = "<group>"; };
+		84E73E81207BC389005B54D3 /* MQTTInspector 5.0.4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 5.0.4.xcdatamodel"; sourceTree = "<group>"; };
+		84E73E82207BCC42005B54D3 /* CertificateTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CertificateTVC.h; sourceTree = "<group>"; };
+		84E73E83207BCC42005B54D3 /* CertificateTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CertificateTVC.m; sourceTree = "<group>"; };
 		84E8A0441F5E742200E3BFCA /* MQTTInspector 5.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 5.0.xcdatamodel"; sourceTree = "<group>"; };
 		84E8A0451F5E74CD00E3BFCA /* Subscription+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Subscription+CoreDataClass.h"; sourceTree = "<group>"; };
 		84E8A0461F5E74CD00E3BFCA /* Subscription+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Subscription+CoreDataClass.m"; sourceTree = "<group>"; };
@@ -345,6 +349,8 @@
 				8492C970182E63D300A40D8B /* MasterVC.m */,
 				84147CFC1834D3AD0018E601 /* SessionTVC.h */,
 				84147CFD1834D3AD0018E601 /* SessionTVC.m */,
+				84E73E82207BCC42005B54D3 /* CertificateTVC.h */,
+				84E73E83207BCC42005B54D3 /* CertificateTVC.m */,
 				847355E31897032E0028FE7A /* CoreDataTVC.h */,
 				847355E41897032E0028FE7A /* CoreDataTVC.m */,
 				84147CF51834CDD10018E601 /* PubsTVC.h */,
@@ -393,7 +399,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = MQTTInspector;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Christoph Krey";
 				TargetAttributes = {
 					8492C94E182E63D300A40D8B = {
@@ -518,6 +524,7 @@
 				8474D0C31F56F70000FE9BFA /* SessionInfoTVC.m in Sources */,
 				847A30D51F8F3A8B002F90C3 /* SubscriptionIdentifiersTVC.m in Sources */,
 				8492705C1F8D344000FC2EDE /* UserPropertyTVC.m in Sources */,
+				84E73E84207BCC42005B54D3 /* CertificateTVC.m in Sources */,
 				84147D041835203D0018E601 /* SubsTVC.m in Sources */,
 				84147CFA1834CDE70018E601 /* PubTVC.m in Sources */,
 				8492C961182E63D300A40D8B /* main.m in Sources */,
@@ -567,12 +574,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -618,12 +627,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -721,6 +732,7 @@
 		8492C96C182E63D300A40D8B /* MQTTInspector.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				84E73E81207BC389005B54D3 /* MQTTInspector 5.0.4.xcdatamodel */,
 				841F52C01F9B7AFD00232189 /* MQTTInspector 5.0.3.xcdatamodel */,
 				847A30D91F90A611002F90C3 /* MQTTInspector 5.0.2.xcdatamodel */,
 				848DAB691F8A653800D97927 /* MQTTInspector 5.1.xcdatamodel */,
@@ -742,7 +754,7 @@
 				84BB7125183A82FC005AF544 /* MQTTInspector 4.xcdatamodel */,
 				8492C96D182E63D300A40D8B /* MQTTInspector.xcdatamodel */,
 			);
-			currentVersion = 841F52C01F9B7AFD00232189 /* MQTTInspector 5.0.3.xcdatamodel */;
+			currentVersion = 84E73E81207BC389005B54D3 /* MQTTInspector 5.0.4.xcdatamodel */;
 			path = MQTTInspector.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

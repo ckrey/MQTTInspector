@@ -2,8 +2,8 @@
 //  Session+CoreDataProperties.m
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 21.10.17.
-//  Copyright © 2017 Christoph Krey. All rights reserved.
+//  Created by Christoph Krey on 09.04.18.
+//  Copyright © 2018 Christoph Krey. All rights reserved.
 //
 //
 
@@ -12,7 +12,7 @@
 @implementation Session (CoreDataProperties)
 
 + (NSFetchRequest<Session *> *)fetchRequest {
-	return [[NSFetchRequest alloc] initWithEntityName:@"Session"];
+	return [NSFetchRequest fetchRequestWithEntityName:@"Session"];
 }
 
 @dynamic allowUntrustedCertificates;
@@ -44,6 +44,8 @@
 @dynamic user;
 @dynamic userProperties;
 @dynamic websocket;
+@dynamic pkcsfile;
+@dynamic pkcspassword;
 @dynamic hasCommands;
 @dynamic hasMesssages;
 @dynamic hasPubs;

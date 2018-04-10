@@ -514,6 +514,19 @@
                 cfSocketTransport.tls = (self.session.tls).boolValue;
                 self.mqttSession.transport = cfSocketTransport;
             }
+
+            NSArray *certificates = nil;
+            NSURL *directoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory
+                                                                         inDomain:NSUserDomainMask
+                                                                appropriateForURL:nil
+                                                                           create:YES
+                                                                            error:nil];
+            if (self.session.pkcsfile && self.session.pkcsfile.length) {
+                NSString *clientPKCSPath = [directoryURL.path stringByAppendingPathComponent:self.session.pkcsfile];
+                certificates = [MQTTCFSocketTransport clientCertsFromP12:clientPKCSPath
+                                                              passphrase:self.session.pkcspassword];
+            }
+            self.mqttSession.certificates = certificates;
         }
         
         

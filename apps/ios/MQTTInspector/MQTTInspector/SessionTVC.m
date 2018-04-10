@@ -10,6 +10,7 @@
 #import "Model.h"
 #import "DetailVC.h"
 #import "UserPropertiesTVC.h"
+#import "CertificateTVC.h"
 
 @interface SessionTVC ()
 @property (weak, nonatomic) IBOutlet UITextField *nameText;
@@ -39,6 +40,9 @@
 @property (weak, nonatomic) IBOutlet UITextField *authDataText;
 @property (weak, nonatomic) IBOutlet UILabel *userProperties;
 @property (strong, nonatomic) UIDocumentInteractionController *dic;
+@property (weak, nonatomic) IBOutlet UITableViewCell *clientCertificateCell;
+@property (weak, nonatomic) IBOutlet UILabel *clientCertificateText;
+@property (weak, nonatomic) IBOutlet UITextField *passphraseText;
 
 @end
 
@@ -66,6 +70,7 @@
     self.topicAliasMaximumText.delegate = self;
     self.authMethodText.delegate = self;
     self.authDataText.delegate = self;
+    self.passphraseText.delegate = self;
 
     [self show];
 }
@@ -77,8 +82,16 @@
     self.hostText.text = self.session.host;
     self.portText.text = [NSString stringWithFormat:@"%@", self.session.port];
     self.tlsSwitch.on = (self.session.tls).boolValue;
+
     self.allowUntrustedCertificatesSwitch.enabled = self.tlsSwitch.on;
     self.allowUntrustedCertificatesSwitch.on = (self.session.allowUntrustedCertificates).boolValue;
+
+    self.clientCertificateCell.accessoryType = self.tlsSwitch.on ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+    self.clientCertificateText.text = self.session.pkcsfile;
+    
+    self.passphraseText.enabled = self.tlsSwitch.on;
+    self.passphraseText.text = self.session.pkcspassword;
+
     self.useWebsocketsSwitch.on = (self.session.websocket).boolValue;
     self.authSwitch.on = (self.session.auth).boolValue;
     if ((self.session.auth).boolValue) {
@@ -162,6 +175,11 @@
             [segue.destinationViewController performSelector:@selector(setEdit:)
                                                   withObject:@(true)];
         }
+    } else if ([segue.identifier isEqualToString:@"ClientCertificate"]) {
+        if ([segue.destinationViewController respondsToSelector:@selector(setSelectedFileName:)]) {
+            [segue.destinationViewController performSelector:@selector(setSelectedFileName:)
+                                                  withObject:self.session.pkcsfile];
+        }
     }
 }
 
@@ -178,6 +196,17 @@
     }
     [self show];
 }
+
+- (IBAction)setName:(UIStoryboardSegue *)segue {
+    if ([segue.sourceViewController respondsToSelector:@selector(selectedFileName)]) {
+        NSString *name = [segue.sourceViewController performSelector:@selector(selectedFileName)];
+
+        self.session.pkcsfile = name;
+        [self show];
+    }
+}
+
+
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -210,6 +239,9 @@
     }
     self.portText.text = [NSString stringWithFormat:@"%@", self.session.port];
     self.allowUntrustedCertificatesSwitch.enabled = self.tlsSwitch.on;
+    self.clientCertificateCell.accessoryType = self.tlsSwitch.on ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+    self.passphraseText.enabled = self.tlsSwitch.on;
+
 }
 
 - (IBAction)allowUntrustedCertificatesChanged:(UISwitch *)sender {
@@ -237,6 +269,10 @@
 
 - (IBAction)passwdChanged:(UITextField *)sender {
     self.session.passwd = sender.text;
+}
+
+- (IBAction)passphraseChanged:(UITextField *)sender {
+    self.session.pkcspassword = sender.text;
 }
 
 - (IBAction)clientIdSwitched:(UISwitch *)sender {
@@ -371,6 +407,8 @@
     dict[@"auth"] = self.session.auth;
     dict[@"user"] = self.session.user;
     dict[@"passwd"] = self.session.passwd;
+    dict[@"pkcsfile"] = self.session.pkcsfile;
+    dict[@"pkcspassword"] = self.session.pkcspassword;
     dict[@"clientid"] = self.session.clientid;
     dict[@"cleansession"] = self.session.cleansession;
     dict[@"keepalive"] = self.session.keepalive;
