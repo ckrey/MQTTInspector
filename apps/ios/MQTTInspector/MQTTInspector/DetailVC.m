@@ -743,7 +743,7 @@
                  events[eventCode % [events count]],
                  (long)eventCode,
                  [error description],
-                 error.code);
+                 (long)error.code);
     
     if (eventCode == MQTTSessionEventConnected) {
         [self.subsTVC.tableView reloadData];
@@ -761,7 +761,7 @@
                          events[eventCode % events.count],
                          (long)eventCode,
                          error.localizedDescription,
-                         error.code
+                         (long)error.code
                          ]];
     }
     
