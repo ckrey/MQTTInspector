@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 
 #import "Model.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface MasterVC ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
@@ -18,6 +19,7 @@
 @end
 
 @implementation MasterVC
+static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (void)viewDidLoad {
     [super viewDidLoad];

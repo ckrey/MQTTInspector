@@ -11,12 +11,14 @@
 #import "Model.h"
 
 #import "DataVC.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface TopicsTVC ()
 
 @end
 
 @implementation TopicsTVC
+static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (NSFetchRequest *)fetchRequestForTableView
 {

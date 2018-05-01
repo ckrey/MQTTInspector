@@ -10,12 +10,15 @@
 #import "MessageInfoTVC.h"
 
 #import "Model.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface NSJSONSerialization (sorted)
 + (NSString *)sortedJson:(id)json indent:(unsigned int)indent final:(BOOL)final;
 @end
 
 @implementation NSJSONSerialization (sorted)
+static const DDLogLevel ddLogLevel = DDLogLevelError;
+
 + (NSString *)sortedJson:(id)json indent:(unsigned int)indent final:(BOOL) final {
     DDLogVerbose(@"json %lu (%@) %@", (unsigned long)indent, [json class], json);
     

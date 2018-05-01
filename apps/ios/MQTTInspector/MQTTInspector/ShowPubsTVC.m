@@ -12,11 +12,13 @@
 
 #import "DataVC.h"
 #import "DetailVC.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface ShowPubsTVC ()
 @end
 
 @implementation ShowPubsTVC
+static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (void)setTableView:(UITableView *)tableView {
     super.tableView = tableView;

@@ -9,6 +9,8 @@
 #import "DetailVC.h"
 #import <mqttc/MQTTWebsocketTransport.h>
 #import <mqttc/MQTTInMemoryPersistence.h>
+#import <mqttc/MQTTLog.h>
+#import <mqttc/MQTTStrict.h>
 
 #import "Model.h"
 
@@ -135,6 +137,9 @@
                                                object:nil];
     self.masterView.portrait = true;
     self.masterView.offset = CGPointMake(0, 0);
+
+    MQTTLog.logLevel = DDLogLevelVerbose;
+    MQTTStrict.strict = false;
 }
 
 - (void)orientationChanged:(NSNotification *)notification {

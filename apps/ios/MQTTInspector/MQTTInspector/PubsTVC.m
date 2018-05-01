@@ -10,11 +10,13 @@
 #import "PubTVC.h"
 
 #import "Model.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface PubsTVC ()
 @end
 
 @implementation PubsTVC
+static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"setPub:"]) {

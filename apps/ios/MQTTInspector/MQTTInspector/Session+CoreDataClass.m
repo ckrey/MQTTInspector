@@ -8,8 +8,11 @@
 //
 
 #import "Session+CoreDataClass.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @implementation Session
+static const DDLogLevel ddLogLevel = DDLogLevelError;
+
 + (Session *)sessionWithName:(NSString *)name
       inManagedObjectContext:(NSManagedObjectContext *)context {
     Session *session = [Session existSessionWithName:name inManagedObjectContext:context];

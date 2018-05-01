@@ -11,11 +11,15 @@
 
 #import "Model.h"
 
+#import <CocoaLumberjack/CocoaLumberjack.h>
+
+
 @interface AppDelegate ()
 @property (nonatomic) UIBackgroundTaskIdentifier bgTask;
 @end
 
 @implementation AppDelegate
+static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;

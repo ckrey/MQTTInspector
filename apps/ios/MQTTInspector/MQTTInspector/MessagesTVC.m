@@ -9,6 +9,7 @@
 #import "MessagesTVC.h"
 
 #import "Model.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface MessagesTVC ()
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
@@ -17,6 +18,7 @@
 @end
 
 @implementation MessagesTVC
+static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (void)setTableView:(UITableView *)tableView
 {

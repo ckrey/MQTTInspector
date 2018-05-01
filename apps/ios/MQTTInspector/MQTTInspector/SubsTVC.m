@@ -10,11 +10,13 @@
 #import "SubTVC.h"
 
 #import "Model.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface SubsTVC ()
 @end
 
 @implementation SubsTVC
+static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {

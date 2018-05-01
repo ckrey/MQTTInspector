@@ -7,11 +7,13 @@
 //
 
 #import "CoreDataTVC.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface CoreDataTVC ()
 @end
 
 @implementation CoreDataTVC
+static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 #pragma mark - Table View
 

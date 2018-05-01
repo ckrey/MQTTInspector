@@ -8,8 +8,10 @@
 
 #import "Subscription+CoreDataClass.h"
 #import "Session+CoreDataClass.h"
+#import <CocoaLumberjack/CocoaLumberjack.h>
 
 @implementation Subscription
+static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 + (Subscription *)subscriptionWithName:(NSString *)name
                                  topic:(NSString *)topic
