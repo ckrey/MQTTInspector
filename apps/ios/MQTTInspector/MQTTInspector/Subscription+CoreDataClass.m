@@ -3,7 +3,7 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 05.09.17.
-//  Copyright © 2017 Christoph Krey. All rights reserved.
+//  Copyright © 2017-2018 Christoph Krey. All rights reserved.
 //
 
 #import "Subscription+CoreDataClass.h"

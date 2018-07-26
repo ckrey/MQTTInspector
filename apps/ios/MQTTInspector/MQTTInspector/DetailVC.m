@@ -3,7 +3,7 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 09.11.13.
-//  Copyright © 2013-2017 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2018 Christoph Krey. All rights reserved.
 //
 
 #import "DetailVC.h"
@@ -95,7 +95,6 @@
 @property (weak, nonatomic) IBOutlet UITableView *subs;
 @property (weak, nonatomic) IBOutlet UITableView *pubs;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *level;
-@property (strong, nonatomic) UIPopoverController *masterPopoverController;
 @property (weak, nonatomic) IBOutlet UISwitch *runningSwitch;
 @property (weak, nonatomic) IBOutlet MasterView *masterView;
 
@@ -115,9 +114,11 @@
 @end
 
 @implementation DetailVC
+static DetailVC *theDetailVC;
 
 - (void)viewDidLoad {
     DDLogVerbose(@"viewDidLoad");
+    theDetailVC = self;
     
     [super viewDidLoad];
     
@@ -1096,31 +1097,57 @@ subscriptionIdentifiers:(NSArray<NSNumber *> *)subscriptionIdentifiers {
 
 #pragma mark - Alerts
 
-+ (void)alert:(NSString *)message
-{
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSBundle mainBundle].infoDictionary[@"CFBundleName"]
-                                                        message:message
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-    [alertView show];
+- (void)message:(NSString *)message {
+    [self alert:[NSBundle mainBundle].infoDictionary[@"CFBundleName"]
+        message:message
+   dismissAfter:0.5];
+}
+
++ (void)alert:(NSString *)message {
+    [theDetailVC alert:[NSBundle mainBundle].infoDictionary[@"CFBundleName"]
+               message:message
+   dismissAfter:0];
+}
+
+- (void)alert:(NSString *)title
+      message:(NSString *)message
+ dismissAfter:(NSTimeInterval)interval {
+    [self performSelectorOnMainThread:@selector(alert:)
+                           withObject:@{
+                                        @"title": title,
+                                        @"message": message,
+                                        @"interval": [NSNumber numberWithFloat:interval]
+                                        }
+                        waitUntilDone:NO];
+}
+
+- (void)alert:(NSDictionary *)parameters {
+    UIAlertController *ac = [UIAlertController
+                             alertControllerWithTitle:parameters[@"title"]
+                             message:parameters[@"message"]
+                             preferredStyle:UIAlertControllerStyleAlert];
+    NSNumber *interval = parameters[@"interval"];
+    if (!interval || interval.floatValue == 0.0) {
+        UIAlertAction *ok = [UIAlertAction
+                             actionWithTitle:NSLocalizedString(@"Continue",
+                                                               @"Continue button title")
+
+                             style:UIAlertActionStyleDefault
+                             handler:nil];
+        [ac addAction:ok];
+    }
+    [self presentViewController:ac animated:TRUE completion:nil];
+
+    if (interval && interval.floatValue > 0.0) {
+        [self performSelector:@selector(dismiss) withObject:nil afterDelay:interval.floatValue];
+    }
+}
+
+- (void)dismiss {
+    [self dismissViewControllerAnimated:TRUE completion:nil];
 }
 
 
-- (void)message:(NSString *)message
-{
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSBundle mainBundle].infoDictionary[@"CFBundleName"]
-                                                        message:message
-                                                       delegate:nil
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:nil];
-    [alertView show];
-    [self performSelector:@selector(messageDismiss:) withObject:alertView afterDelay:0.5];
-}
-
-- (void)messageDismiss:(UIAlertView *)alertView {
-    [alertView dismissWithClickedButtonIndex:0 animated:true];
-}
 
 
 - (NSString *)url {

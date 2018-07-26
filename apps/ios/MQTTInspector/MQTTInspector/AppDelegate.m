@@ -3,7 +3,7 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 09.11.13.
-//  Copyright © 2013-2017 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2018 Christoph Krey. All rights reserved.
 //
 
 #import "AppDelegate.h"
@@ -26,7 +26,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:ddLogLevel];
+#if DEBUG
+    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelVerbose];
+#else
+    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelWarning];
+#endif
     DDLogVerbose(@"didFinishLaunchingWithOptions");
     
     [[UIApplication sharedApplication] setIdleTimerDisabled:TRUE];
@@ -135,11 +139,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     return [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].lastObject;
 }
 
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
-    DDLogVerbose(@"UIApplication openURL:%@ sourceApplication:%@ annotation:%@",
-                 url, sourceApplication, annotation);
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    DDLogVerbose(@"UIApplication openURL:%@ options:%@",
+                 url, options);
     
     if (url && [url.scheme isEqualToString:@"file"]) {
 
