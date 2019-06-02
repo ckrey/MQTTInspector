@@ -80,7 +80,7 @@
         
         /* eclipse.org */
         session = [Session sessionWithName:@"eclipse.org"
-                                      host:@"iot.eclipse.org"
+                                      host:@"mqtt.eclipse.org"
                                       port:1883
                                        tls:NO
                                       auth:NO
