@@ -77,6 +77,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Publication *pub = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = pub.name;
+    cell.textLabel.textColor = [UIColor blackColor];
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {

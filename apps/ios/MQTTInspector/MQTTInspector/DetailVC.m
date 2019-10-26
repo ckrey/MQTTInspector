@@ -14,9 +14,7 @@
 
 #import "Model.h"
 
-#import "LogsTVC.h"
-#import "TopicsTVC.h"
-#import "CommandsTVC.h"
+#import "MessagesTVC.h"
 #import "ShowSubsTVC.h"
 #import "ShowPubsTVC.h"
 #import "DataVC.h"
@@ -98,9 +96,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *runningSwitch;
 @property (weak, nonatomic) IBOutlet MasterView *masterView;
 
-@property (strong, nonatomic) LogsTVC *logsTVC;
-@property (strong, nonatomic) TopicsTVC *topicsTVC;
-@property (strong, nonatomic) CommandsTVC *commandsTVC;
+@property (strong, nonatomic) MessagesTVC *messagesTVC;
 @property (strong, nonatomic) ShowSubsTVC *subsTVC;
 @property (strong, nonatomic) ShowPubsTVC *pubsTVC;
 @property (weak, nonatomic) IBOutlet UITextField *countText;
@@ -124,22 +120,25 @@ static DetailVC *theDetailVC;
     
     self.splitViewController.delegate = self;
 
-    [[NSNotificationCenter defaultCenter ]addObserver:self
-                                             selector:@selector(orientationChanged:)
-                                                 name:UIApplicationDidChangeStatusBarOrientationNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter ]addObserver:self
-                                             selector:@selector(willResign:)
-                                                 name:UIApplicationWillResignActiveNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter ]addObserver:self
-                                             selector:@selector(willEnter:)
-                                                 name:UIApplicationWillEnterForegroundNotification
-                                               object:nil];
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(orientationChanged:)
+     name:UIApplicationDidChangeStatusBarOrientationNotification
+     object:nil];
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(willResign:)
+     name:UIApplicationWillResignActiveNotification
+     object:nil];
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(willEnter:)
+     name:UIApplicationWillEnterForegroundNotification
+     object:nil];
     self.masterView.portrait = true;
     self.masterView.offset = CGPointMake(0, 0);
 
-    MQTTLog.logLevel = DDLogLevelVerbose;
+    MQTTLog.logLevel = DDLogLevelWarning;
     MQTTStrict.strict = false;
 }
 
@@ -180,7 +179,13 @@ static DetailVC *theDetailVC;
         self.pubsTVC.mother = self;
         self.pubsTVC.tableView = self.pubs;
     }
-    
+
+    if (!self.messagesTVC) {
+        self.messagesTVC = [[MessagesTVC alloc] init];
+        self.messagesTVC.mother = self;
+        self.messagesTVC.tableView = self.messages;
+    }
+
     self.masterView.subs = self.subs;
     self.masterView.pubs = self.pubs;
     self.masterView.messages = self.messages;
@@ -238,34 +243,13 @@ static DetailVC *theDetailVC;
     NSIndexPath *indexPath = nil;
     
     if ([sender isKindOfClass:[UITableViewCell class]]) {
-        if (self.logsTVC) {
-            indexPath = [self.logsTVC.tableView indexPathForCell:sender];
-        }
-        if (self.topicsTVC) {
-            indexPath = [self.topicsTVC.tableView indexPathForCell:sender];
-        }
-        if (self.commandsTVC) {
-            indexPath = [self.commandsTVC.tableView indexPathForCell:sender];
-        }
+        indexPath = [self.messages indexPathForCell:sender];
     }
     
     if (indexPath) {
         if ([segue.identifier isEqualToString:@"setMessage:"]) {
-            id theObject;
-            
-            if (self.logsTVC) {
-                Message *message = [(self.logsTVC).fetchedResultsController objectAtIndexPath:indexPath];
-                theObject = message;
-            }
-            if (self.topicsTVC) {
-                Topic *topic = [(self.topicsTVC).fetchedResultsController objectAtIndexPath:indexPath];
-                theObject = topic;
-            }
-            if (self.commandsTVC) {
-                Command *command = [(self.commandsTVC).fetchedResultsController objectAtIndexPath:indexPath];
-                theObject = command;
-            }
-            
+            id theObject = [self.messagesTVC.fetchedResultsController objectAtIndexPath:indexPath];;
+
             if ([segue.destinationViewController respondsToSelector:@selector(setObject:)]) {
                 [segue.destinationViewController performSelector:@selector(setObject:)
                                                       withObject:theObject];
@@ -328,50 +312,6 @@ static DetailVC *theDetailVC;
 - (void)setSubViews {
     DDLogVerbose(@"setSubViews");
     [self.masterView setNeedsLayout];
-/*
-    CGRect vrect = self.masterView.frame;
-    CGRect mrect = self.messages.frame;
-    CGRect srect = self.subs.frame;
-    CGRect prect = self.pubs.frame;
-    
-    if (fabs(offset.x) > vrect.size.width / 2 - 4) offset.x = 0;
-    if (fabs(offset.y) > vrect.size.height / 2 - 4) offset.y = 0;
-    
-    srect = CGRectMake(0,
-                       0,
-                       vrect.size.width / 2 - 4 + offset.x,
-                       vrect.size.height / 2 - 4 + offset.y);
-    
-    if (portrait) {
-        mrect = CGRectMake(vrect.size.width / 2 + 4 + offset.x,
-                           0,
-                           vrect.size.width - (vrect.size.width / 2 - 4 + offset.x),
-                           vrect.size.height);
-        prect = CGRectMake(0,
-                           vrect.size.height / 2 + 4 + offset.y,
-                           vrect.size.width / 2 - 4 + offset.x,
-                           vrect.size.height - (vrect.size.height / 2 - 4 + offset.y + 8));
-    } else {
-        mrect = CGRectMake(0,
-                           vrect.size.height / 2 + 4 + offset.y,
-                           vrect.size.width,
-                           vrect.size.height - (vrect.size.height / 2 - 4 + offset.y + 8));
-        prect = CGRectMake(vrect.size.width / 2 + 4 + offset.x,
-                           0,
-                           vrect.size.width - (vrect.size.width / 2 - 4 + offset.x),
-                           vrect.size.height / 2 - 4 + offset.y);
-    }
-    
-    DDLogVerbose(@"v=%f/%f/%f/%f, s=%f/%f/%f/%f, p=%f/%f/%f/%f, m=%f/%f/%f/%f",
-                 vrect.origin.x, vrect.origin.y, vrect.size.width, vrect.size.height,
-                 srect.origin.x, srect.origin.y, srect.size.width, srect.size.height,
-                 prect.origin.x, prect.origin.y, prect.size.width, prect.size.height,
-                 mrect.origin.x, mrect.origin.y, mrect.size.width, mrect.size.height);
-
-    self.messages.frame = mrect;
-    self.subs.frame = srect;
-    self.pubs.frame = prect;
- */
 }
 
 - (IBAction)rotate:(UILongPressGestureRecognizer *)sender {
@@ -463,6 +403,7 @@ static DetailVC *theDetailVC;
     self.title = session.name;
     [self.subsTVC.tableView reloadData];
     [self.pubsTVC.tableView reloadData];
+    self.messagesTVC.messagesType = MessagesTopics;
     [self showCount];
     [self enableButtons];
 }
@@ -597,31 +538,17 @@ static DetailVC *theDetailVC;
 }
 
 - (IBAction)viewChanged:(UISegmentedControl *)sender {
-    if (self.session) {
-        [self.logsTVC dismissViewControllerAnimated:YES completion:nil];
-        self.logsTVC = nil;
-        [self.topicsTVC dismissViewControllerAnimated:YES completion:nil];
-        self.topicsTVC = nil;
-        [self.commandsTVC dismissViewControllerAnimated:YES completion:nil];
-        self.commandsTVC = nil;
-        switch (self.level.selectedSegmentIndex) {
-            case 2:
-                self.commandsTVC = [[CommandsTVC alloc] init];
-                self.commandsTVC.mother = self;
-                self.commandsTVC.tableView = self.messages;
-                break;
-            case 1:
-                self.logsTVC = [[LogsTVC alloc] init];
-                self.logsTVC.mother = self;
-                self.logsTVC.tableView = self.messages;
-                break;
-            case 0:
-            default:
-                self.topicsTVC = [[TopicsTVC alloc] init];
-                self.topicsTVC.mother = self;
-                self.topicsTVC.tableView = self.messages;
-                break;
-        }
+    switch (self.level.selectedSegmentIndex) {
+        case 2:
+            self.messagesTVC.messagesType = MessagesCommands;
+            break;
+        case 1:
+            self.messagesTVC.messagesType = MessagesLogs;
+            break;
+        case 0:
+        default:
+            self.messagesTVC.messagesType = MessagesTopics;
+            break;
     }
     [self showCount];
 }
@@ -754,6 +681,7 @@ static DetailVC *theDetailVC;
     if (eventCode == MQTTSessionEventConnected) {
         [self.subsTVC.tableView reloadData];
         [self.pubsTVC.tableView reloadData];
+        [self.messagesTVC.tableView reloadData];
     }
     
     if (eventCode == MQTTSessionEventConnectionClosed ||
@@ -1088,11 +1016,13 @@ subscriptionIdentifiers:(NSArray<NSNumber *> *)subscriptionIdentifiers {
 - (void)buffered:(MQTTSession *)session flowingIn:(NSUInteger)flowingIn flowingOut:(NSUInteger)flowingOut
 {
     DDLogVerbose(@"Connection buffered i%lu o%lu", (unsigned long)flowingIn, (unsigned long)flowingOut);
+#if !TARGET_OS_MACCATALYST
     if (flowingIn + flowingOut) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = TRUE;
     } else {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = FALSE;
     }
+#endif
 }
 
 #pragma mark - Alerts

@@ -16,14 +16,6 @@
 
 @implementation CommandsTVC
 
-- (void)setTableView:(UITableView *)tableView
-{
-    super.tableView = tableView;
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self.tableView reloadData];
-}
-
 - (NSFetchRequest *)fetchRequestForTableView
 {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];

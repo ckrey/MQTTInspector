@@ -12,42 +12,88 @@
 #import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface MessagesTVC ()
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
-@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSFetchRequest *fetchRequestForTableView;
 @end
 
 @implementation MessagesTVC
 static const DDLogLevel ddLogLevel = DDLogLevelError;
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.messagesType = MessagesTopics;
+        self.fetchedResultsController = nil;
+    }
+    return self;
+}
+
 - (void)setTableView:(UITableView *)tableView
 {
-    super.tableView = tableView;
+    [super setTableView:tableView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView reloadData];
 }
 
-#pragma mark - Fetched results controller
-
-- (NSFetchRequest *)fetchRequestForTableView
-{
-    // abstract
-    return nil;
+- (void)setMessagesType:(MessagesType)messagesType {
+    self.fetchedResultsController = nil;
+    _messagesType = messagesType;
+    [self.tableView reloadData];
 }
 
-- (NSFetchedResultsController *)fetchedResultsController
-{
+#pragma mark - Fetched results controller
+
+- (NSFetchRequest *)fetchRequestForTableView {
+    NSFetchRequest *fetchRequest;
+    if (!self.mother.session) {
+        return nil;
+    }
+
+    switch (self.messagesType) {
+        case MessagesCommands:
+            fetchRequest = [[NSFetchRequest alloc] init];
+            fetchRequest.entity = [NSEntityDescription entityForName:@"Command"
+                                              inManagedObjectContext:self.mother.session.managedObjectContext];
+            fetchRequest.predicate = [NSPredicate predicateWithFormat:@"belongsTo = %@", self.mother.session];
+            fetchRequest.fetchBatchSize = 20;
+            fetchRequest.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO]];
+            break;
+        case MessagesLogs:
+            fetchRequest = [[NSFetchRequest alloc] init];
+            fetchRequest.entity = [NSEntityDescription entityForName:@"Message"
+                                                      inManagedObjectContext:self.mother.session.managedObjectContext];
+            fetchRequest.predicate = [NSPredicate predicateWithFormat:@"belongsTo = %@", self.mother.session];
+            fetchRequest.fetchBatchSize = 20;
+            fetchRequest.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO]];
+            break;
+        case MessagesTopics:
+        default:
+            fetchRequest = [[NSFetchRequest alloc] init];
+            fetchRequest.entity = [NSEntityDescription entityForName:@"Topic"
+                                              inManagedObjectContext:self.mother.session.managedObjectContext];;
+            fetchRequest.predicate = [NSPredicate predicateWithFormat:@"belongsTo = %@", self.mother.session];
+            fetchRequest.fetchBatchSize = 20;
+            fetchRequest.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"topic" ascending:YES]];
+            break;
+    }
+
+    return fetchRequest;
+}
+
+- (NSFetchedResultsController *)fetchedResultsController {
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
     }
-    
+
+    if (!self.mother.session) {
+        return _fetchedResultsController;
+    }
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
-                                                             initWithFetchRequest:self.fetchRequestForTableView
-                                                             managedObjectContext:self.mother.session.managedObjectContext
-                                                             sectionNameKeyPath:nil cacheName:nil];
+    NSFetchedResultsController *aFetchedResultsController =
+    [[NSFetchedResultsController alloc] initWithFetchRequest:self.fetchRequestForTableView
+                                        managedObjectContext:self.mother.session.managedObjectContext
+                                          sectionNameKeyPath:nil
+                                                   cacheName:nil];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     
@@ -63,16 +109,14 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     return _fetchedResultsController;
 }
 
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
-{
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     [self.tableView beginUpdates];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller
   didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex
-     forChangeType:(NSFetchedResultsChangeType)type
-{
+     forChangeType:(NSFetchedResultsChangeType)type {
     switch(type) {
         case NSFetchedResultsChangeInsert:
             [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]
@@ -92,8 +136,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
    didChangeObject:(id)anObject
        atIndexPath:(NSIndexPath *)indexPath
      forChangeType:(NSFetchedResultsChangeType)type
-      newIndexPath:(NSIndexPath *)newIndexPath
-{
+      newIndexPath:(NSIndexPath *)newIndexPath {
     UITableView *tableView = self.tableView;
     
     switch(type) {
@@ -121,64 +164,163 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     }
 }
 
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
     [self.tableView endUpdates];
 }
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return (self.fetchedResultsController).sections.count;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     id <NSFetchedResultsSectionInfo> sectionInfo = (self.fetchedResultsController).sections[section];
     return sectionInfo.numberOfObjects;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"message" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView
+commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         NSManagedObjectContext *context = (self.fetchedResultsController).managedObjectContext;
         [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
     }
 }
 
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     // The table view should not be re-orderable.
     return NO;
 }
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
-    // abstract
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    UIFont *fontBold = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+    NSDictionary *attributesBold = @{NSFontAttributeName: fontBold};
+
+    UIFont *fontLight = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+    NSDictionary *attributesLight = @{NSFontAttributeName: fontLight};
+
+    if ([UIDevice currentDevice].userInterfaceIdiom != UIUserInterfaceIdiomPad) {
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+    }
+
+    cell.imageView.image = nil;
+    cell.imageView.animationImages = nil;
+    [cell.imageView stopAnimating];
+
+    cell.accessoryType = UITableViewCellAccessoryDetailButton;
+
+    switch (self.messagesType) {
+        case MessagesCommands:
+        {
+            Command *command = [self.fetchedResultsController objectAtIndexPath:indexPath];
+
+            NSMutableAttributedString *as = [[NSMutableAttributedString alloc]
+                                             initWithString:command.attributeTextPart1 attributes:attributesLight];
+
+            [as appendAttributedString:[[NSAttributedString alloc]
+                                        initWithString:command.attributeTextPart2 attributes:attributesBold]];
+
+
+            [as appendAttributedString:[[NSAttributedString alloc]
+                                        initWithString:command.attributeTextPart3
+                                             attributes:attributesLight]];
+
+            cell.detailTextLabel.attributedText = as;
+            cell.textLabel.text = command.dataText;
+            if ((command.inbound).boolValue) {
+                cell.backgroundColor = [UIColor colorWithHue:.666 saturation:0.333 brightness:1.0 alpha:1.0];
+            } else {
+                cell.backgroundColor = [UIColor colorWithHue:.333 saturation:0.333 brightness:1.0 alpha:1.0];
+            }
+            break;
+        }
+        case MessagesLogs:
+        {
+            Message *message = [self.fetchedResultsController objectAtIndexPath:indexPath];
+
+            NSMutableAttributedString *as = [[NSMutableAttributedString alloc]
+                                             initWithString:message.attributeTextPart1
+                                             attributes:attributesLight];
+
+            [as appendAttributedString:[[NSAttributedString alloc]
+                                        initWithString:message.attributeTextPart2
+                                        attributes:attributesBold]];
+
+            [as appendAttributedString:[[NSAttributedString alloc]
+                                        initWithString:message.attributeTextPart3
+                                        attributes:attributesLight]];
+
+            cell.detailTextLabel.attributedText = as;
+            cell.textLabel.text = message.dataText;
+            cell.backgroundColor = [self matchingTopicColor:message.topic inSession:self.mother.session];
+            break;
+        }
+        case MessagesTopics:
+        default:
+        {
+            Topic *topic = [self.fetchedResultsController objectAtIndexPath:indexPath];
+
+            NSMutableAttributedString *as = [[NSMutableAttributedString alloc]
+                                             initWithString:topic.attributeTextPart1 attributes:attributesLight];
+
+            [as appendAttributedString:[[NSAttributedString alloc]
+                                        initWithString:topic.attributeTextPart2
+                                        attributes:attributesBold]];
+
+
+            [as appendAttributedString:[[NSAttributedString alloc]
+                                        initWithString:topic.attributeTextPart3
+                                        attributes:attributesLight]];
+
+            cell.detailTextLabel.attributedText = as;
+            cell.textLabel.text = topic.dataText;
+            cell.backgroundColor = [self matchingTopicColor:topic.topic inSession:self.mother.session];
+
+            DDLogVerbose(@"topic %@ is %d", topic.topic, [topic.justupdated boolValue]);
+            if (topic.justupdated.boolValue) {
+                cell.imageView.image = [UIImage imageNamed:@"new.png"];
+                cell.imageView.animationImages = @[[UIImage imageNamed:@"new.png"],
+                                                   [UIImage imageNamed:@"old.png"]];
+                cell.imageView.animationDuration = 1.0;
+                [cell.imageView startAnimating];
+                [topic performSelector:@selector(setOld) withObject:nil afterDelay:3.0];
+            } else  {
+                cell.imageView.image = [UIImage imageNamed:@"old.png"];
+            }
+            break;
+        }
+    }
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    // abstract
-    return nil;
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        switch (self.messagesType) {
+            case MessagesCommands:
+                return [NSString stringWithFormat:@"Commands"];
+            case MessagesLogs:
+                return [NSString stringWithFormat:@"Messages"];
+            case MessagesTopics:
+            default:
+                return [NSString stringWithFormat:@"Topics"];
+        }
+    } else {
+        return nil;
+    }
 }
 
-- (UIColor *)matchingTopicColor:(NSString *)topic inSession:(Session *)session
-{
+- (UIColor *)matchingTopicColor:(NSString *)topic inSession:(Session *)session {
     UIColor *color = [UIColor whiteColor];
     int best = -1;
     
@@ -193,8 +335,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     return color;
 }
 
-- (int)pointsTopic:(NSString *)topic matchingSub:(NSString *)subscription
-{
+- (int)pointsTopic:(NSString *)topic matchingSub:(NSString *)subscription {
     int points = -1;
     
     NSArray *topicComponents = topic.pathComponents;

@@ -77,8 +77,6 @@
     
     cell.textLabel.text = message.dataText;
     
-    cell.backgroundColor = [self matchingTopicColor:message.topic inSession:self.mother.session];
-    
     cell.accessoryType = UITableViewCellAccessoryDetailButton;
 
     if ([UIDevice currentDevice].userInterfaceIdiom != UIUserInterfaceIdiomPad) {

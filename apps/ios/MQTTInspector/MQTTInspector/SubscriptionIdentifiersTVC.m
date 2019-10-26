@@ -17,7 +17,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (self.subscriptionIdentifiersArray) {
+    if (self.subscriptionIdentifiers) {
         self.subscriptionIdentifiersArray = [NSJSONSerialization JSONObjectWithData:self.subscriptionIdentifiers
                                                                             options:0
                                                                               error:nil];

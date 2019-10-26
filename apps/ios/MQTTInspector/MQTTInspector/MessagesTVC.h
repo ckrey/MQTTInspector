@@ -10,10 +10,15 @@
 #import "DetailVC.h"
 #import "Session+CoreDataClass.h"
 
+typedef NS_ENUM(UInt8, MessagesType) {
+    MessagesTopics = 0,
+    MessagesLogs = 1,
+    MessagesCommands = 2
+};
+
 @interface MessagesTVC : UITableViewController <NSFetchedResultsControllerDelegate>
 @property (strong, nonatomic) DetailVC *mother;
+@property (nonatomic) MessagesType messagesType;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-
-- (UIColor *)matchingTopicColor:(NSString *)topic inSession:(Session *)session;
 
 @end

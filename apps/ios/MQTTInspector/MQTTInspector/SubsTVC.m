@@ -76,6 +76,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
         sub.name = sub.topic;
     }
     cell.textLabel.text = sub.name;
+    cell.textLabel.textColor = [UIColor blackColor];
     cell.backgroundColor = sub.UIcolor;
 }
 

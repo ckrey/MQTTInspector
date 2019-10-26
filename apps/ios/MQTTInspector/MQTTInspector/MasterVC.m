@@ -15,7 +15,6 @@
 
 @interface MasterVC ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-
 @end
 
 @implementation MasterVC
@@ -173,6 +172,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
                                 retained:NO
                                     data:[@"ping %t %c" dataUsingEncoding:NSUTF8StringEncoding]
                                  session:session inManagedObjectContext:appDelegate.managedObjectContext];
+    }
+}
+
+- (IBAction)toggleEdit:(UILongPressGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        self.editing = !self.editing;
     }
 }
 

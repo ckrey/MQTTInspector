@@ -117,7 +117,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (UIColor *)getUIColor {
     DDLogInfo(@"getColor %@:%@", self.topic, self.color);
-    return [UIColor colorWithHue:(self.color).floatValue saturation:0.3 brightness:1.0 alpha:1.0];
+    CGFloat brightness = 1.0;
+    
+    if ([UITraitCollection currentTraitCollection].userInterfaceStyle == UIUserInterfaceStyleDark) {
+        brightness = 0.75;
+    }
+    return [UIColor colorWithHue:(self.color).floatValue saturation:0.3 brightness:brightness alpha:1.0];
 }
 
 

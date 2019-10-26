@@ -17,6 +17,12 @@
 
 @implementation UserPropertiesTVC
 
+- (IBAction)toggleEdit:(UILongPressGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        self.editing = !self.editing;
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.saveButton.enabled = self.edit.boolValue;

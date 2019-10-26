@@ -79,7 +79,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     
     cell.textLabel.text = topic.dataText;
     
-    cell.backgroundColor = [self matchingTopicColor:topic.topic inSession:self.mother.session];
     
     cell.accessoryType = UITableViewCellAccessoryDetailButton;
        if ([UIDevice currentDevice].userInterfaceIdiom != UIUserInterfaceIdiomPad) {
