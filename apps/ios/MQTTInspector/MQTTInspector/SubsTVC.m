@@ -13,13 +13,25 @@
 #import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface SubsTVC ()
+@property (strong, nonatomic) UIBarButtonItem *extraButton;
+
 @end
 
 @implementation SubsTVC
 static const DDLogLevel ddLogLevel = DDLogLevelError;
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)viewDidAppear:(BOOL)animated {
+    if (self.extraButton) {
+        NSMutableArray<UIBarButtonItem *> *a = [self.navigationItem.rightBarButtonItems mutableCopy];
+        if (a) {
+            [a removeObject:self.extraButton];
+            [self.navigationItem setRightBarButtonItems:a animated:FALSE];
+        }
+        self.extraButton = nil;
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"setSub:"]) {
         
         NSIndexPath *indexPath = nil;
@@ -38,8 +50,18 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     }
     
     if ([segue.identifier isEqualToString:@"newSub"]) {
-        Subscription *sub = [Subscription subscriptionWithName:@"new-sub"
-                                                         topic:@"new-sub"
+        NSInteger i = 0;
+        NSString *newName;
+        do {
+            i++;
+            newName = [NSString stringWithFormat:@"new-sub-%ld",
+                       i];
+        } while ([Subscription existsSubscriptionWithName:newName
+                                                   session:self.session
+                                    inManagedObjectContext:self.session.managedObjectContext]);
+
+        Subscription *sub = [Subscription subscriptionWithName:newName
+                                                         topic:newName
                                                            qos:0
                                                        noLocal:false
                                              retainAsPublished:false
@@ -60,17 +82,42 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     }
 }
 
+- (void)copyEntry {
+    NSIndexPath *selected = self.tableView.indexPathForSelectedRow;
+    Subscription *sub = [self.fetchedResultsController objectAtIndexPath:selected];
+
+    NSInteger i = 0;
+    NSString *newName;
+    do {
+        i++;
+        newName = [NSString stringWithFormat:@"%@-%ld",
+                   sub.name, i];
+    } while ([Subscription existsSubscriptionWithName:newName
+                                               session:self.session
+                                inManagedObjectContext:self.session.managedObjectContext]);
+
+    [Subscription subscriptionWithName:newName
+                                 topic:sub.topic
+                                   qos:sub.qos.unsignedCharValue
+                               noLocal:sub.noLocal.boolValue
+                     retainAsPublished:sub.retainAsPublished.boolValue
+                        retainHandling:sub.retainHandling.unsignedCharValue
+                subscriptionIdentifier:sub.susbscriptionIdentifier.unsignedShortValue
+                               session:self.session
+                inManagedObjectContext:self.session.managedObjectContext];
+}
+
 #pragma mark - Table View
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"sub" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
+- (void)configureCell:(UITableViewCell *)cell
+          atIndexPath:(NSIndexPath *)indexPath {
     Subscription *sub = [self.fetchedResultsController objectAtIndexPath:indexPath];
     if (!sub.name || sub.name.length == 0) {
         sub.name = sub.topic;
@@ -80,8 +127,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     cell.backgroundColor = sub.UIcolor;
 }
 
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
-{
+- (void)tableView:(UITableView *)tableView
+moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
+      toIndexPath:(NSIndexPath *)destinationIndexPath {
     DDLogVerbose(@"SUBs moveRowAtIndexPath %ld > %ld",
                  (long)sourceIndexPath.row, (long)destinationIndexPath.row);
 
@@ -118,11 +166,26 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     self.noupdate = FALSE;
 }
 
+- (void)tableView:(UITableView *)tableView
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (!self.extraButton) {
+        self.extraButton =
+        [[UIBarButtonItem alloc] initWithTitle:@"Copy"
+                                         style:UIBarButtonItemStylePlain
+                                        target:self
+                                        action:@selector(copyEntry)];
+        NSMutableArray<UIBarButtonItem *> *a = [self.navigationItem.rightBarButtonItems mutableCopy];
+        if (!a) {
+            a = [[NSMutableArray alloc] init];
+        }
+        [a addObject:self.extraButton];
+        [self.navigationItem setRightBarButtonItems:a animated:TRUE];
+    }
+}
 
 #pragma mark - Fetched results controller
 
-- (NSFetchedResultsController *)setupFRC
-{
+- (NSFetchedResultsController *)setupFRC {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Subscription" inManagedObjectContext:self.session.managedObjectContext];
@@ -135,7 +198,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     
     // Edit the sort key as appropriate.
     NSSortDescriptor *sortDescriptor1 = [[NSSortDescriptor alloc] initWithKey:@"position" ascending:YES];
-    NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"topic" ascending:YES];
+    NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor1, sortDescriptor2];
     
     fetchRequest.sortDescriptors = sortDescriptors;

@@ -13,10 +13,23 @@
 #import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface PubsTVC ()
+@property (strong, nonatomic) UIBarButtonItem *extraButton;
+
 @end
 
 @implementation PubsTVC
 static const DDLogLevel ddLogLevel = DDLogLevelError;
+
+- (void)viewDidAppear:(BOOL)animated {
+    if (self.extraButton) {
+        NSMutableArray<UIBarButtonItem *> *a = [self.navigationItem.rightBarButtonItems mutableCopy];
+        if (a) {
+            [a removeObject:self.extraButton];
+            [self.navigationItem setRightBarButtonItems:a animated:FALSE];
+        }
+        self.extraButton = nil;
+    }
+}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"setPub:"]) {
@@ -66,6 +79,29 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     }
 }
 
+- (void)copyEntry {
+    NSIndexPath *selected = self.tableView.indexPathForSelectedRow;
+    Publication *pub = [self.fetchedResultsController objectAtIndexPath:selected];
+
+    NSInteger i = 0;
+    NSString *newName;
+    do {
+        i++;
+        newName = [NSString stringWithFormat:@"%@-%ld",
+                   pub.name, i];
+    } while ([Publication existsPublicationWithName:newName
+                                            session:self.session
+                             inManagedObjectContext:self.session.managedObjectContext]);
+
+    [Publication publicationWithName:newName
+                               topic:pub.topic
+                                 qos:pub.qos.unsignedCharValue
+                            retained:pub.retained.boolValue
+                                data:pub.data
+                             session:self.session
+              inManagedObjectContext:self.session.managedObjectContext];
+}
+
 #pragma mark - Table View
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -113,6 +149,23 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
         }
     }
     self.noupdate = FALSE;
+}
+
+- (void)tableView:(UITableView *)tableView
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (!self.extraButton) {
+        self.extraButton =
+        [[UIBarButtonItem alloc] initWithTitle:@"Copy"
+                                         style:UIBarButtonItemStylePlain
+                                        target:self
+                                        action:@selector(copyEntry)];
+        NSMutableArray<UIBarButtonItem *> *a = [self.navigationItem.rightBarButtonItems mutableCopy];
+        if (!a) {
+            a = [[NSMutableArray alloc] init];
+        }
+        [a addObject:self.extraButton];
+        [self.navigationItem setRightBarButtonItems:a animated:TRUE];
+    }
 }
 
 #pragma mark - Fetched results controller

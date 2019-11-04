@@ -120,11 +120,13 @@ static DetailVC *theDetailVC;
     
     self.splitViewController.delegate = self;
 
+#if !TARGET_OS_MACCATALYST
     [[NSNotificationCenter defaultCenter]
      addObserver:self
      selector:@selector(orientationChanged:)
      name:UIApplicationDidChangeStatusBarOrientationNotification
      object:nil];
+#endif
     [[NSNotificationCenter defaultCenter]
      addObserver:self
      selector:@selector(willResign:)
@@ -712,11 +714,15 @@ static DetailVC *theDetailVC;
              reasonCodes:(NSArray<NSNumber *> *)reasonCodes {
     DDLogVerbose(@"subAckReceived m%d r%@ u%@ c%@",
                  msgID, reasonString, userProperties, reasonCodes);
-
 }
 
-- (void)unsubAckReceivedV5:(MQTTSession *)session msgID:(UInt16)msgID reasonString:(NSString *)reasonString userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties reasonCodes:(NSArray<NSNumber *> *)reasonCodes {
-    //
+- (void)unsubAckReceivedV5:(MQTTSession *)session
+                     msgID:(UInt16)msgID
+              reasonString:(NSString *)reasonString
+            userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties
+               reasonCodes:(NSArray<NSNumber *> *)reasonCodes {
+    DDLogVerbose(@"unsubAckReceived m%d r%@ u%@ c%@",
+                 msgID, reasonString, userProperties, reasonCodes);
 }
 
 -(void)newMessageV5:(MQTTSession *)session

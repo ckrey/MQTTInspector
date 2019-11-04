@@ -25,7 +25,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     Subscription *subscription = nil;
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Subscription"];
-    request.predicate = [NSPredicate predicateWithFormat:@"topic = %@ AND belongsTo = %@", topic, session];
+    request.predicate = [NSPredicate predicateWithFormat:@"name = %@ AND belongsTo = %@",
+                         name, session];
     
     NSError *error = nil;
     
@@ -36,7 +37,8 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     } else {
         if (!matches.count) {
             subscription = [NSEntityDescription insertNewObjectForEntityForName:@"Subscription" inManagedObjectContext:context];
-            
+
+            subscription.name = name;
             subscription.topic = topic;
             subscription.qos = @(qos);
             

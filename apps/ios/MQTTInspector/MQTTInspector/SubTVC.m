@@ -37,7 +37,7 @@
 }
 
 - (void)show {
-    self.title = self.sub.topic;
+    self.title = self.sub.name;
 
     self.nameText.text = self.sub.name;
     self.topicText.text = self.sub.topic;
