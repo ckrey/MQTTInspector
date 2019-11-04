@@ -21,9 +21,6 @@
 		84147D071835204F0018E601 /* SubTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147D061835204F0018E601 /* SubTVC.m */; };
 		84147D13183673A70018E601 /* AdHocPubTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147D12183673A70018E601 /* AdHocPubTVC.m */; };
 		84147D161838CB720018E601 /* MessagesTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147D151838CB720018E601 /* MessagesTVC.m */; };
-		8423CC612363EA6E00803CBF /* LogsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B435651C4C08CF00D7FBD3 /* LogsTVC.m */; };
-		8423CC622363EA7100803CBF /* CommandsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84147CDD183269D50018E601 /* CommandsTVC.m */; };
-		8423CC632363EA7300803CBF /* TopicsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1987C1831179D00A77080 /* TopicsTVC.m */; };
 		84684E9118321D1200AE13B5 /* ShowPubsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84684E9018321D1200AE13B5 /* ShowPubsTVC.m */; };
 		84684E9418321D2300AE13B5 /* ShowSubsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84684E9318321D2300AE13B5 /* ShowSubsTVC.m */; };
 		8469BE801916DF6100DB43F5 /* old.png in Resources */ = {isa = PBXBuildFile; fileRef = 8469BE7E1916DF6100DB43F5 /* old.png */; };
@@ -75,8 +72,6 @@
 		8403B8571C284D8C007D266F /* Topic+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Topic+CoreDataProperties.m"; sourceTree = "<group>"; };
 		8403B8581C284D8C007D266F /* Session+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Session+CoreDataProperties.h"; sourceTree = "<group>"; };
 		8403B8591C284D8C007D266F /* Session+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Session+CoreDataProperties.m"; sourceTree = "<group>"; };
-		84147CDC183269D50018E601 /* CommandsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandsTVC.h; sourceTree = "<group>"; };
-		84147CDD183269D50018E601 /* CommandsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandsTVC.m; sourceTree = "<group>"; };
 		84147CF51834CDD10018E601 /* PubsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PubsTVC.h; sourceTree = "<group>"; };
 		84147CF61834CDD10018E601 /* PubsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PubsTVC.m; sourceTree = "<group>"; };
 		84147CF81834CDE70018E601 /* PubTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PubTVC.h; sourceTree = "<group>"; };
@@ -162,12 +157,8 @@
 		8492C973182E63D300A40D8B /* DetailVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailVC.m; sourceTree = "<group>"; };
 		8492C975182E63D400A40D8B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		8492C97C182E63D400A40D8B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		84A1987B1831179D00A77080 /* TopicsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicsTVC.h; sourceTree = "<group>"; };
-		84A1987C1831179D00A77080 /* TopicsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicsTVC.m; sourceTree = "<group>"; };
 		84B435611C4C08B700D7FBD3 /* FilterTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterTVC.h; sourceTree = "<group>"; };
 		84B435621C4C08B700D7FBD3 /* FilterTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterTVC.m; sourceTree = "<group>"; };
-		84B435641C4C08CF00D7FBD3 /* LogsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogsTVC.h; sourceTree = "<group>"; };
-		84B435651C4C08CF00D7FBD3 /* LogsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogsTVC.m; sourceTree = "<group>"; };
 		84B97F9E1A8CF23200F04760 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		84BB7121183A3EE7005AF544 /* MQTTInspector 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 3.xcdatamodel"; sourceTree = "<group>"; };
 		84BB7125183A82FC005AF544 /* MQTTInspector 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MQTTInspector 4.xcdatamodel"; sourceTree = "<group>"; };
@@ -334,12 +325,6 @@
 				847A30D41F8F3A8B002F90C3 /* SubscriptionIdentifiersTVC.m */,
 				84147D141838CB720018E601 /* MessagesTVC.h */,
 				84147D151838CB720018E601 /* MessagesTVC.m */,
-				84B435641C4C08CF00D7FBD3 /* LogsTVC.h */,
-				84B435651C4C08CF00D7FBD3 /* LogsTVC.m */,
-				84147CDC183269D50018E601 /* CommandsTVC.h */,
-				84147CDD183269D50018E601 /* CommandsTVC.m */,
-				84A1987B1831179D00A77080 /* TopicsTVC.h */,
-				84A1987C1831179D00A77080 /* TopicsTVC.m */,
 			);
 			name = Monitor;
 			sourceTree = "<group>";
@@ -481,10 +466,8 @@
 				84147D13183673A70018E601 /* AdHocPubTVC.m in Sources */,
 				8474D0C61F58122B00FE9BFA /* UserPropertiesTVC.m in Sources */,
 				8403B85C1C284D8C007D266F /* Publication+CoreDataProperties.m in Sources */,
-				8423CC612363EA6E00803CBF /* LogsTVC.m in Sources */,
 				84147D161838CB720018E601 /* MessagesTVC.m in Sources */,
 				8492C974182E63D300A40D8B /* DetailVC.m in Sources */,
-				8423CC622363EA7100803CBF /* CommandsTVC.m in Sources */,
 				848DAB761F8B866C00D97927 /* Session+CoreDataClass.m in Sources */,
 				848DAB781F8B866C00D97927 /* Message+CoreDataClass.m in Sources */,
 				84147CFE1834D3AD0018E601 /* SessionTVC.m in Sources */,
@@ -496,7 +479,6 @@
 				8492705C1F8D344000FC2EDE /* UserPropertyTVC.m in Sources */,
 				84E73E84207BCC42005B54D3 /* CertificateTVC.m in Sources */,
 				84147D041835203D0018E601 /* SubsTVC.m in Sources */,
-				8423CC632363EA7300803CBF /* TopicsTVC.m in Sources */,
 				84147CFA1834CDE70018E601 /* PubTVC.m in Sources */,
 				8492C961182E63D300A40D8B /* main.m in Sources */,
 				847355E51897032E0028FE7A /* CoreDataTVC.m in Sources */,

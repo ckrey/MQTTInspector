@@ -289,13 +289,19 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
             cell.backgroundColor = [self matchingTopicColor:topic.topic inSession:self.mother.session];
 
             DDLogVerbose(@"topic %@ is %d", topic.topic, [topic.justupdated boolValue]);
+            cell.imageView.image = [UIImage imageNamed:@"old.png"];
+
             if (topic.justupdated.boolValue) {
-                cell.imageView.image = [UIImage imageNamed:@"new.png"];
-                cell.imageView.animationImages = @[[UIImage imageNamed:@"new.png"],
-                                                   [UIImage imageNamed:@"old.png"]];
-                cell.imageView.animationDuration = 1.0;
-                [cell.imageView startAnimating];
-                [topic performSelector:@selector(setOld) withObject:nil afterDelay:3.0];
+                if ([topic.timestamp timeIntervalSinceNow] > -1.0) {
+                    cell.imageView.animationImages = @[[UIImage imageNamed:@"new.png"],
+                                                       [UIImage imageNamed:@"old.png"]];
+                    cell.imageView.animationDuration = 1.0;
+                    cell.imageView.animationRepeatCount = 1;
+                    [cell.imageView startAnimating];
+                    [topic performSelector:@selector(setOld) withObject:nil afterDelay:1.0];
+                } else {
+                    [topic performSelector:@selector(setOld) withObject:nil afterDelay:0.0];
+                }
             } else  {
                 cell.imageView.image = [UIImage imageNamed:@"old.png"];
             }
