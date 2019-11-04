@@ -298,12 +298,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
                     cell.imageView.animationDuration = 1.0;
                     cell.imageView.animationRepeatCount = 1;
                     [cell.imageView startAnimating];
-                    [topic performSelector:@selector(setOld) withObject:nil afterDelay:1.0];
-                } else {
-                    [topic performSelector:@selector(setOld) withObject:nil afterDelay:0.0];
                 }
-            } else  {
-                cell.imageView.image = [UIImage imageNamed:@"old.png"];
             }
             break;
         }

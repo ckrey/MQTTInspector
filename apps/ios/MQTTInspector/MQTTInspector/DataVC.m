@@ -281,16 +281,14 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
         self.justupdatedImageView.image = nil;
         self.justupdatedImageView.animationImages = nil;
         [self.justupdatedImageView stopAnimating];
-        
+        self.justupdatedImageView.image = [UIImage imageNamed:@"old.png"];
+
         if (topic.justupdated.boolValue) {
-            self.justupdatedImageView.image = [UIImage imageNamed:@"new.png"];
             self.justupdatedImageView.animationImages = @[[UIImage imageNamed:@"new.png"],
                                                           [UIImage imageNamed:@"old.png"]];
             self.justupdatedImageView.animationDuration = 1.0;
+            self.justupdatedImageView.animationRepeatCount = 1;
             [self.justupdatedImageView startAnimating];
-            [topic performSelector:@selector(setOld) withObject:nil afterDelay:3.0];
-        } else  {
-            self.justupdatedImageView.image = [UIImage imageNamed:@"old.png"];
         }
     }
     
