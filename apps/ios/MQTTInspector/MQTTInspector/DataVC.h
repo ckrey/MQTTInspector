@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DataVC : UIViewController
+@interface DataVC : UIViewController <UITextFieldDelegate>
 @property (strong, nonatomic) id object;
 @end

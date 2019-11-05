@@ -63,7 +63,7 @@ inManagedObjectContext:(NSManagedObjectContext *)context {
 }
 
 - (NSString *)attributeTextPart1 {
-    return [NSString stringWithFormat:@"%@ %@ :",
+    return [NSString stringWithFormat:@"%@ %@ ",
             [NSDateFormatter localizedStringFromDate:self.timestamp
                                            dateStyle:NSDateFormatterShortStyle
                                            timeStyle:NSDateFormatterMediumStyle],

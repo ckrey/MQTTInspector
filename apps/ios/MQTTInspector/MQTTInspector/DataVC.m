@@ -115,6 +115,14 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 @implementation DataVC
 
+- (void)viewDidLoad {
+    self.attributesTextView.delegate = self;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    return FALSE;
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -149,14 +157,28 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
 }
 
 - (void)show {
+    UIFont *fontBold = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+    NSDictionary *aBold = @{NSFontAttributeName: fontBold};
+
+    UIFont *fontLight = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+    NSDictionary *aLight = @{NSFontAttributeName: fontLight};
+
+    NSMutableAttributedString *as = [[NSMutableAttributedString alloc] init];
+
     if ([self.object isKindOfClass:[Topic class]]) {
         Topic *topic = (Topic *)self.object;
         self.title = topic.attributeTextPart2;
         self.formatSwitch.enabled = TRUE;
         self.infoButton.enabled = TRUE;
-        self.attributesTextView.text = [NSString stringWithFormat:@"%@ %@",
-                                        topic.attributeTextPart1,
-                                        topic.attributeTextPart3];
+        [as appendAttributedString:
+         [[NSAttributedString alloc]
+          initWithString:topic.attributeTextPart1 attributes:aLight]];
+        [as appendAttributedString:
+         [[NSAttributedString alloc]
+          initWithString:topic.attributeTextPart2 attributes:aBold]];
+        [as appendAttributedString:
+         [[NSAttributedString alloc]
+          initWithString:topic.attributeTextPart3 attributes:aLight]];
         self.dataTextView.text = [self dataToPrettyString:topic.data];
         
     } else if ([self.object isKindOfClass:[Message class]]) {
@@ -164,9 +186,15 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
         self.title = message.attributeTextPart2;
         self.formatSwitch.enabled = TRUE;
         self.infoButton.enabled = TRUE;
-        self.attributesTextView.text = [NSString stringWithFormat:@"%@ %@",
-                                        message.attributeTextPart1,
-                                        message.attributeTextPart3];
+        [as appendAttributedString:
+         [[NSAttributedString alloc]
+          initWithString:message.attributeTextPart1 attributes:aLight]];
+        [as appendAttributedString:
+         [[NSAttributedString alloc]
+          initWithString:message.attributeTextPart2 attributes:aBold]];
+        [as appendAttributedString:
+         [[NSAttributedString alloc]
+          initWithString:message.attributeTextPart3 attributes:aLight]];
         self.dataTextView.text = [self dataToPrettyString:message.data];
         
     } else if ([self.object isKindOfClass:[Command class]]) {
@@ -174,11 +202,19 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
         self.title = command.attributeTextPart2;
         self.formatSwitch.enabled = TRUE;
         self.infoButton.enabled = FALSE;
-        self.attributesTextView.text = [NSString stringWithFormat:@"%@ %@",
-                                        command.attributeTextPart1,
-                                        command.attributeTextPart3];
+        [as appendAttributedString:
+         [[NSAttributedString alloc]
+          initWithString:command.attributeTextPart1 attributes:aLight]];
+        [as appendAttributedString:
+         [[NSAttributedString alloc]
+          initWithString:command.attributeTextPart2 attributes:aBold]];
+        [as appendAttributedString:
+         [[NSAttributedString alloc]
+          initWithString:command.attributeTextPart3 attributes:aLight]];
         self.dataTextView.text = [self dissect:command];
     }
+
+    self.attributesTextView.attributedText = as;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
