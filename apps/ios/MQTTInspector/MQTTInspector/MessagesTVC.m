@@ -15,7 +15,7 @@
 @end
 
 @implementation MessagesTVC
-static const DDLogLevel ddLogLevel = DDLogLevelError;
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 - (instancetype)init {
     self = [super init];
@@ -325,8 +325,12 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     UIColor *color = [UIColor whiteColor];
     int best = -1;
     
-    for (Subscription *subscription in session.hasSubs) {
-        
+    for (Subscription *subscription in [session.hasSubs
+                                        sortedArrayUsingDescriptors:@[
+                                            [NSSortDescriptor sortDescriptorWithKey:@"position"
+                                                                          ascending:YES]
+                                        ]
+                                        ]) {
         int points = [self pointsTopic:topic matchingSub:subscription.topic];
         if (points > best) {
             color = subscription.UIcolor;
@@ -379,9 +383,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     }
     DDLogInfo(@"topic %@(%lu) matches %@(%lu) specific:%d match:%d",
               topic, (unsigned long)[topicComponents count],
-              subscription, (unsigned long)[subscriptionComponents count], i, match);
+              subscription, (unsigned long)[subscriptionComponents count],
+              i, match);
     return points;
 }
-
 
 @end
