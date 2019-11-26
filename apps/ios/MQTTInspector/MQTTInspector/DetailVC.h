@@ -16,6 +16,7 @@
 
 @property (strong, nonatomic) Session *session;
 @property (strong, nonatomic) MQTTSession *mqttSession;
+@property (weak, nonatomic) id selectedObject;
 
 + (void)alert:(NSString *)message;
 - (void)publish:(Publication *)pub;

@@ -42,13 +42,43 @@
     self.responseTopicText.delegate = self;
     self.correlationDataText.delegate = self;
     self.contentTypeText.delegate = self;
-    
+
     self.pub = [Publication publicationWithName:@"<last>"
                                           topic:@"MQTTInspector"
                                             qos:0
                                        retained:FALSE
                                            data:[@"manual ping %t %c" dataUsingEncoding:NSUTF8StringEncoding] session:self.mother.session
                          inManagedObjectContext:self.mother.session.managedObjectContext];
+    if (self.mother.selectedObject) {
+        if ([self.mother.selectedObject isKindOfClass:[Topic class]]) {
+            Topic *topic = (Topic *)self.mother.selectedObject;
+            self.pub.topic = topic.topic;
+            self.pub.data = topic.data;
+            self.pub.retained = topic.retained;
+            self.pub.qos = topic.qos;
+            self.pub.messageExpiryInterval = topic.messageExpiryInterval;
+            self.pub.topicAlias = topic.topicAlias;
+            self.pub.responseTopic = topic.responseTopic;
+            self.pub.correlationData = topic.correlationData;
+            self.pub.contentType = topic.contentType;
+            self.pub.payloadFormatIndicator = topic.payloadFormatIndicator;
+            self.pub.userProperties = topic.userProperties;
+        }
+        if ([self.mother.selectedObject isKindOfClass:[Message class]]) {
+            Message *message = (Message *)self.mother.selectedObject;
+            self.pub.topic = message.topic;
+            self.pub.data = message.data;
+            self.pub.retained = message.retained;
+            self.pub.qos = message.qos;
+            self.pub.messageExpiryInterval = message.messageExpiryInterval;
+            self.pub.topicAlias = message.topicAlias;
+            self.pub.responseTopic = message.responstTopic;
+            self.pub.correlationData = message.correlationData;
+            self.pub.contentType = message.contentType;
+            self.pub.payloadFormatIndicator = message.payloadFormatIndicator;
+            self.pub.userProperties = message.userProperties;
+        }
+    }
 
     [self show];
 }

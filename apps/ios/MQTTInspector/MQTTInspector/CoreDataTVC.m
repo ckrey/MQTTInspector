@@ -10,6 +10,7 @@
 #import <CocoaLumberjack/CocoaLumberjack.h>
 
 @interface CoreDataTVC ()
+
 @end
 
 @implementation CoreDataTVC
@@ -17,30 +18,38 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 #pragma mark - Table View
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if ((self.fetchedResultsController).sections.count == 0) {
+        [self empty];
+    } else {
+        NSUInteger totalRows = 0;
+        for (id <NSFetchedResultsSectionInfo> sectionInfo in (self.fetchedResultsController).sections) {
+            totalRows += sectionInfo.numberOfObjects;
+        }
+        if (totalRows == 0) {
+            [self empty];
+        } else {
+            [self nonempty];
+        }
+    }
     return (self.fetchedResultsController).sections.count;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     id <NSFetchedResultsSectionInfo> sectionInfo = (self.fetchedResultsController).sections[section];
     return sectionInfo.numberOfObjects;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     // abstract
     return nil;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         NSManagedObjectContext *context = (self.fetchedResultsController).managedObjectContext;
         [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
@@ -54,42 +63,37 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
         }
     }
 }
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
-{
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
     //abstract
 }
 
 #pragma mark - Fetched results controller
 
-- (NSFetchedResultsController *)fetchedResultsController
-{
+- (NSFetchedResultsController *)fetchedResultsController {
     if (_fetchedResultsController == nil) {
         _fetchedResultsController = [self setupFRC];
     }
     return _fetchedResultsController;
 }
 
-- (NSFetchedResultsController *)setupFRC
-{
+- (NSFetchedResultsController *)setupFRC {
     //abstract
     return nil;
 }
 
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
-{
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     [self.tableView beginUpdates];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller
   didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex
-     forChangeType:(NSFetchedResultsChangeType)type
-{
+     forChangeType:(NSFetchedResultsChangeType)type {
     if (!self.noupdate) {
         switch(type) {
             case NSFetchedResultsChangeInsert:
@@ -109,8 +113,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
    didChangeObject:(id)anObject
        atIndexPath:(NSIndexPath *)indexPath
      forChangeType:(NSFetchedResultsChangeType)type
-      newIndexPath:(NSIndexPath *)newIndexPath
-{
+      newIndexPath:(NSIndexPath *)newIndexPath {
     UITableView *tableView = self.tableView;
     
     if (!self.noupdate) {
@@ -140,13 +143,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     }
 }
 
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
     [self.tableView endUpdates];
 }
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:indexPath
-{
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:indexPath {
     //abstract
 }
 @end

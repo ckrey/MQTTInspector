@@ -95,6 +95,11 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (self.userProperties.count == 0) {
+        [self empty];
+    } else {
+        [self nonempty];
+    }
     return self.userProperties.count;
 }
 

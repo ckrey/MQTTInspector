@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AnyTVC.h"
 
-@interface SubscriptionIdentifiersTVC : UITableViewController
+@interface SubscriptionIdentifiersTVC : AnyTVC
 @property (strong, nonatomic, nullable) NSData *subscriptionIdentifiers;
 
 @end

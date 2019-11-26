@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AnyTVC.h"
 
-@interface TopicAliasesTVC : UITableViewController
+@interface TopicAliasesTVC : AnyTVC
 @property (strong, nonatomic) NSDictionary <NSNumber *, NSString *> * _Nonnull topicAliases;
 
 @end

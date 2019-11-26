@@ -382,6 +382,22 @@
 }
 
 - (IBAction)send:(UIBarButtonItem *)sender {
+#if TARGET_OS_MACCATALYST
+    UIAlertController *ac = [UIAlertController
+                             alertControllerWithTitle:NSLocalizedString(@"Export", @"Export")
+                             message:NSLocalizedString(@"Mac Catalyst does not support export yet",
+                                                       @"content of an alert message regarging missing Mac Catalyst Export")
+                             preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *ok = [UIAlertAction
+                         actionWithTitle:NSLocalizedString(@"Continue",
+                                                           @"Continue button title")
+
+                         style:UIAlertActionStyleDefault
+                         handler:nil];
+    [ac addAction:ok];
+    [self presentViewController:ac animated:TRUE completion:nil];
+    return;
+#else
     NSMutableArray *subs = [[NSMutableArray alloc] init];
     for (Subscription *sub in self.session.hasSubs) {
         [subs addObject:@{@"topic": (sub.topic).description,
@@ -458,11 +474,11 @@
     [[NSFileManager defaultManager] createFileAtPath:fileURL.path
                                             contents:myData
                                           attributes:nil];
-    
+
     self.dic = [UIDocumentInteractionController interactionControllerWithURL:fileURL];
     self.dic.delegate = self;
     [self.dic presentOptionsMenuFromBarButtonItem:sender animated:YES];
-    
+#endif
 }
 
 @end

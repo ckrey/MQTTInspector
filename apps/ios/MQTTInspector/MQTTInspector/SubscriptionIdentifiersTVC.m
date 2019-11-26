@@ -32,6 +32,11 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (self.subscriptionIdentifiersArray.count == 0) {
+        [self empty];
+    } else {
+        [self nonempty];
+    }
     return self.subscriptionIdentifiersArray.count;
 }
 

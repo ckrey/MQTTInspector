@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AnyTVC.h"
 
-@interface UserPropertiesTVC : UITableViewController
+@interface UserPropertiesTVC : AnyTVC
 @property (strong, nonatomic) NSArray <NSDictionary <NSString *, NSString *> *> *userProperties;
 @property (nonatomic) NSNumber *edit;
 

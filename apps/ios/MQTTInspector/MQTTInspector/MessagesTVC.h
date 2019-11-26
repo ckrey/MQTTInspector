@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CoreDataTVC.h"
 #import "DetailVC.h"
 #import "Session+CoreDataClass.h"
 
@@ -16,9 +17,8 @@ typedef NS_ENUM(UInt8, MessagesType) {
     MessagesCommands = 2
 };
 
-@interface MessagesTVC : UITableViewController <NSFetchedResultsControllerDelegate>
+@interface MessagesTVC : CoreDataTVC
 @property (strong, nonatomic) DetailVC *mother;
 @property (nonatomic) MessagesType messagesType;
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 @end

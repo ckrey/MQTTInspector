@@ -79,14 +79,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
     return fetchRequest;
 }
 
-- (NSFetchedResultsController *)fetchedResultsController {
-    if (_fetchedResultsController != nil) {
-        return _fetchedResultsController;
+- (NSFetchedResultsController *)setupFRC {
+    if (!self.mother.session) {
+        return nil;
     }
 
-    if (!self.mother.session) {
-        return _fetchedResultsController;
-    }
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
     NSFetchedResultsController *aFetchedResultsController =
@@ -95,18 +92,16 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
                                           sectionNameKeyPath:nil
                                                    cacheName:nil];
     aFetchedResultsController.delegate = self;
-    self.fetchedResultsController = aFetchedResultsController;
-    
     
     NSError *error = nil;
-    if (![self.fetchedResultsController performFetch:&error]) {
+    if (![aFetchedResultsController performFetch:&error]) {
         // Replace this implementation with code to handle     the error appropriately.
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
         DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
     
-    return _fetchedResultsController;
+    return aFetchedResultsController;
 }
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
@@ -170,15 +165,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return (self.fetchedResultsController).sections.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    id <NSFetchedResultsSectionInfo> sectionInfo = (self.fetchedResultsController).sections[section];
-    return sectionInfo.numberOfObjects;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"message" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
@@ -202,6 +188,14 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     // The table view should not be re-orderable.
     return NO;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.mother.selectedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
+}
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.mother.selectedObject = nil;
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {

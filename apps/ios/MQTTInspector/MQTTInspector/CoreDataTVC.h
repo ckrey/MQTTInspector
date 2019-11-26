@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "AnyTVC.h"
 
-@interface CoreDataTVC : UITableViewController <NSFetchedResultsControllerDelegate>
+@interface CoreDataTVC : AnyTVC <NSFetchedResultsControllerDelegate>
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic) BOOL noupdate;
 
