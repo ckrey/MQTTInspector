@@ -3,7 +3,7 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 09.04.18.
-//  Copyright © 2018 Christoph Krey. All rights reserved.
+//  Copyright © 2018-2019 Christoph Krey. All rights reserved.
 //
 
 #import "CertificateTVC.h"

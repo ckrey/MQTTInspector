@@ -2,9 +2,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '11.0'
 
 pod 'CocoaLumberjack'
-pod 'SocketRocket', :path => '~/SocketRocket'
 pod 'mqttc/MinL', :path => '~/mqttc'
-pod 'mqttc/WebsocketL', :path => '~/mqttc'
 
 target 'MQTTInspector' do
 end

@@ -3,7 +3,7 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 05.09.17.
-//  Copyright © 2017-2018 Christoph Krey. All rights reserved.
+//  Copyright © 2017-2019 Christoph Krey. All rights reserved.
 //
 
 #import "Subscription+CoreDataClass.h"
@@ -120,10 +120,15 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
 - (UIColor *)getUIColor {
     DDLogInfo(@"getColor %@:%@", self.topic, self.color);
     CGFloat brightness = 1.0;
-    
-    if ([UITraitCollection currentTraitCollection].userInterfaceStyle == UIUserInterfaceStyleDark) {
-        brightness = 0.75;
+
+    if (@available(iOS 13.0, macCatalyst 13.0, *)) {
+        if ([UITraitCollection currentTraitCollection].userInterfaceStyle == UIUserInterfaceStyleDark) {
+            brightness = 0.75;
+        }
+    } else {
+        // Fallback on earlier versions
     }
+    
     return [UIColor colorWithHue:(self.color).floatValue saturation:0.3 brightness:brightness alpha:1.0];
 }
 

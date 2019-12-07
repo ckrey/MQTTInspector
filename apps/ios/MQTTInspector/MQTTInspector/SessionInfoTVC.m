@@ -3,13 +3,12 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 30.08.17.
-//  Copyright © 2017-2018 Christoph Krey. All rights reserved.
+//  Copyright © 2017-2019 Christoph Krey. All rights reserved.
 //
 
 #import "SessionInfoTVC.h"
 #import "UserPropertiesTVC.h"
 #import "TopicAliasesTVC.h"
-#import <mqttc/MQTTWebSocketTransport.h>
 
 @interface SessionInfoTVC ()
 @property (weak, nonatomic) IBOutlet UILabel *subscriptionIdentifiersAvailable;
@@ -41,12 +40,13 @@
 
     if (self.mqttSession) {
         NSString *scheme = @"???";
-        if ([self.mqttSession.transport isKindOfClass:[MQTTCFSocketTransport class]]) {
-            MQTTCFSocketTransport *transport = (MQTTCFSocketTransport *)self.mqttSession.transport;
-            scheme = transport.tls ? @"mqtts" : @"mqtt";
-        } else if ([self.mqttSession.transport isKindOfClass:[MQTTWebsocketTransport class]]) {
-            MQTTWebsocketTransport *transport = (MQTTWebsocketTransport *)self.mqttSession.transport;
-            scheme = transport.tls ? @"wss" : @"ws";
+        if ([self.mqttSession.transport isKindOfClass:[MQTTNWTransport class]]) {
+            MQTTNWTransport *transport = (MQTTNWTransport *)self.mqttSession.transport;
+            if (transport.ws) {
+                scheme = transport.tls ? @"wss" : @"ws";
+            } else {
+                scheme = transport.tls ? @"mqtts" : @"mqtt";
+            }
         }
 
         self.url.text = [NSString stringWithFormat:@"%@://%@%@:%ld",

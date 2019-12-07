@@ -3,7 +3,7 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 14.11.13.
-//  Copyright © 2013-2018 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2019 Christoph Krey. All rights reserved.
 //
 
 #import "SessionTVC.h"
@@ -467,7 +467,8 @@
                                                        error:&error];
     
     NSURL *directoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&error];
-    NSString *fileName = [NSString stringWithFormat:@"session.mqti"];
+    NSString *fileName = [NSString stringWithFormat:@"%@.mqti",
+                          self.session.name];
     NSURL *fileURL = [directoryURL URLByAppendingPathComponent:fileName];
     
 

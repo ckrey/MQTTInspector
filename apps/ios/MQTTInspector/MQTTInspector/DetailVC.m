@@ -3,11 +3,10 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 09.11.13.
-//  Copyright © 2013-2018 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2019 Christoph Krey. All rights reserved.
 //
 
 #import "DetailVC.h"
-#import <mqttc/MQTTWebsocketTransport.h>
 #import <mqttc/MQTTInMemoryPersistence.h>
 #import <mqttc/MQTTLog.h>
 #import <mqttc/MQTTStrict.h>
@@ -424,60 +423,33 @@ static DetailVC *theDetailVC;
         }
         
         self.mqttSession = [[MQTTSession alloc] init];
-        
-        //        MQTTInMemoryPersistence *persistence = [[MQTTInMemoryPersistence alloc] init];
-        //        persistence.maxMessages = 1024;
-        //        persistence.maxWindowSize = 16;
-        //        self.mqttSession.persistence = persistence;
-        
-        if ((self.session.websocket).boolValue) {
-            MQTTWebsocketTransport *websocketTransport = [[MQTTWebsocketTransport alloc] init];
-            websocketTransport.host = self.session.host;
-            websocketTransport.port = (self.session.port).unsignedIntValue;
-            websocketTransport.tls = (self.session.tls).boolValue;
-            if ((self.session.tls).boolValue) {
-                websocketTransport.allowUntrustedCertificates = (self.session.allowUntrustedCertificates).boolValue;
-            }
-            self.mqttSession.transport = websocketTransport;
-        } else {
-            if ((self.session.tls).boolValue) {
-                MQTTSSLSecurityPolicyTransport *sslSecurityPolicyTransport = [[MQTTSSLSecurityPolicyTransport alloc] init];
-                sslSecurityPolicyTransport.host = self.session.host;
-                sslSecurityPolicyTransport.port = (self.session.port).unsignedIntValue;
-                sslSecurityPolicyTransport.tls = (self.session.tls).boolValue;
-                
-                MQTTSSLSecurityPolicy *sslSecurityPolicy = [MQTTSSLSecurityPolicy policyWithPinningMode:MQTTSSLPinningModeNone];
-                
-                sslSecurityPolicy.allowInvalidCertificates = (self.session.allowUntrustedCertificates).boolValue;
-                sslSecurityPolicy.validatesCertificateChain = !(self.session.allowUntrustedCertificates).boolValue;
-                sslSecurityPolicy.validatesDomainName = !(self.session.allowUntrustedCertificates).boolValue;
-                
-                sslSecurityPolicyTransport.securityPolicy = sslSecurityPolicy;
-                
-                self.mqttSession.transport = sslSecurityPolicyTransport;
-            } else {
-                MQTTCFSocketTransport *cfSocketTransport = [[MQTTCFSocketTransport alloc] init];
-                cfSocketTransport.host = self.session.host;
-                
-                cfSocketTransport.port = (self.session.port).unsignedIntValue;
-                cfSocketTransport.tls = (self.session.tls).boolValue;
-                self.mqttSession.transport = cfSocketTransport;
-            }
 
-            NSArray *certificates = nil;
-            NSURL *directoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory
-                                                                         inDomain:NSUserDomainMask
-                                                                appropriateForURL:nil
-                                                                           create:YES
-                                                                            error:nil];
-            if (self.session.pkcsfile && self.session.pkcsfile.length) {
-                NSString *clientPKCSPath = [directoryURL.path stringByAppendingPathComponent:self.session.pkcsfile];
-                certificates = [MQTTCFSocketTransport clientCertsFromP12:clientPKCSPath
-                                                              passphrase:self.session.pkcspassword];
-            }
-            self.mqttSession.certificates = certificates;
+        MQTTNWTransport *nwTransport = [[MQTTNWTransport alloc] init];
+        nwTransport.host = self.session.host;
+        nwTransport.port = (self.session.port).unsignedIntValue;
+        nwTransport.tls = (self.session.tls).boolValue;
+        if ((self.session.tls).boolValue) {
+            nwTransport.allowUntrustedCertificates = (self.session.allowUntrustedCertificates).boolValue;
         }
-        
+        nwTransport.ws = (self.session.websocket).boolValue;
+        self.mqttSession.transport = nwTransport;
+
+        self.mqttSession.transport.host = self.session.host;
+        self.mqttSession.transport.port = (self.session.port).unsignedIntValue;
+        self.mqttSession.transport.tls = (self.session.tls).boolValue;
+
+        NSArray *certificates = nil;
+        NSURL *directoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory
+                                                                     inDomain:NSUserDomainMask
+                                                            appropriateForURL:nil
+                                                                       create:YES
+                                                                        error:nil];
+        if (self.session.pkcsfile && self.session.pkcsfile.length) {
+            NSString *clientPKCSPath = [directoryURL.path stringByAppendingPathComponent:self.session.pkcsfile];
+            certificates = [MQTTTransport clientCertsFromP12:clientPKCSPath
+                                                  passphrase:self.session.pkcspassword];
+        }
+        self.mqttSession.certificates = certificates;        
         
         self.mqttSession.clientId = [self effectiveClientId];
         self.mqttSession.userName = (self.session.auth).boolValue ? self.session.user : nil;
@@ -665,6 +637,34 @@ static DetailVC *theDetailVC;
 }
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error {
+
+    NSMutableDictionary *dict = [@{
+        @"eventCode": @(eventCode)
+    } mutableCopy];
+
+    if (error) {
+        dict[@"error"] = error;
+    }
+    
+    [self performSelectorOnMainThread:@selector(handleEventMain:)
+                           withObject:dict
+                        waitUntilDone:NO];
+}
+
+- (void)handleEventMain:(NSDictionary <NSString *, id> *)dict {
+    MQTTSessionEvent eventCode = MQTTSessionEventConnected;
+    NSError *error = nil;
+
+    NSObject *eventCodeObject = [dict objectForKey:@"eventCode"];
+    if (eventCodeObject && [eventCodeObject isKindOfClass:[NSNumber class]]) {
+        NSNumber *n = (NSNumber *)eventCodeObject;
+        eventCode = n.integerValue;
+    }
+    NSObject *errorObject = [dict objectForKey:@"error"];
+    if (errorObject && [errorObject isKindOfClass:[NSError class]]) {
+        error = (NSError *)errorObject;
+    }
+
     NSArray *events = @[
                         @"MQTTSessionEventConnected",
                         @"MQTTSessionEventConnectionRefused",
@@ -673,7 +673,7 @@ static DetailVC *theDetailVC;
                         @"MQTTSessionEventProtocolError",
                         @"MQTTSessionEventConnectionClosedByBroker"
                         ];
-    
+
     DDLogVerbose(@"handleEvent: %@ (%ld) %@ (%ld)",
                  events[eventCode % [events count]],
                  (long)eventCode,
@@ -1019,16 +1019,10 @@ subscriptionIdentifiers:(NSArray<NSNumber *> *)subscriptionIdentifiers {
     //
 }
 
-- (void)buffered:(MQTTSession *)session flowingIn:(NSUInteger)flowingIn flowingOut:(NSUInteger)flowingOut
-{
+- (void)buffered:(MQTTSession *)session
+       flowingIn:(NSUInteger)flowingIn
+      flowingOut:(NSUInteger)flowingOut {
     DDLogVerbose(@"Connection buffered i%lu o%lu", (unsigned long)flowingIn, (unsigned long)flowingOut);
-#if !TARGET_OS_MACCATALYST
-    if (flowingIn + flowingOut) {
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = TRUE;
-    } else {
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = FALSE;
-    }
-#endif
 }
 
 #pragma mark - Alerts
