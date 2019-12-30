@@ -96,7 +96,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
         }
         return numberString;
     } else if ([json isKindOfClass:[NSString class]]) {
-        NSString *string = json;
+        NSString *string = [NSString stringWithFormat:@"\"%@\"", json];
         return string;
     }
     return @"illegal JSON leaf";
