@@ -3,7 +3,7 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 27.01.14.
-//  Copyright © 2014-2019 Christoph Krey. All rights reserved.
+//  Copyright © 2014-2020 Christoph Krey. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="H1p-Uh-vWS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="H1p-Uh-vWS">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -55,7 +55,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="6Qg-qW-wyx"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -88,7 +88,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="6Sd-B5-GTh"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -290,7 +290,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="suP-Yg-94g"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="topicChanged:" destination="RxM-Na-37F" eventType="editingDidEnd" id="kFP-SY-poT"/>
                                                     </connections>
@@ -326,7 +326,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="Jab-KM-F4l"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="dataChanged:" destination="RxM-Na-37F" eventType="editingDidEnd" id="jQI-eL-lZZ"/>
                                                     </connections>
@@ -362,7 +362,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="pjX-Bj-e8a"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="topicChanged:" destination="RxM-Na-37F" eventType="editingDidEnd" id="Igj-TY-Rjh"/>
                                                     </connections>
@@ -523,7 +523,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                                     <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                 </textView>
                                             </subviews>
                                             <constraints>
@@ -549,7 +549,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                                     <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                 </textView>
                                             </subviews>
                                             <constraints>
@@ -575,7 +575,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                                     <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                 </textView>
                                             </subviews>
                                             <constraints>
@@ -2328,7 +2328,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="13a-7y-hQo"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="nameChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="m8J-ri-rJY"/>
                                                     </connections>
@@ -2424,7 +2424,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="bcw-sR-9sB"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="hostChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="bDy-sW-JxQ"/>
                                                     </connections>
@@ -2606,7 +2606,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="hfd-li-yAp"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="passphraseChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="t6A-25-FAH"/>
                                                     </connections>
@@ -2680,7 +2680,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="aLv-NN-nsx"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="clientIdChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="Kag-yD-zpT"/>
                                                     </connections>
@@ -2943,7 +2943,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="5Nj-1b-KC6"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="userChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="HvJ-ng-Oja"/>
                                                     </connections>
@@ -2979,7 +2979,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="Epb-6r-9Uf"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="passwdChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="2ad-nG-qYY"/>
                                                     </connections>
@@ -3270,7 +3270,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="QlG-i5-cDX"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="authMethodChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="r2A-r4-tme"/>
                                                         <action selector="userChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="Gya-3U-IQ4"/>
@@ -3307,7 +3307,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="whh-m4-3bN"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="authDataChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="pto-6E-uRw"/>
                                                         <action selector="passwdChanged:" destination="bJC-yq-4xu" eventType="editingDidEnd" id="Dc1-wN-rj6"/>
@@ -3480,7 +3480,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="3HT-y8-Ahj"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="topicChanged:" destination="K2c-pS-zMv" eventType="editingDidEnd" id="TwK-xm-pu0"/>
                                                     </connections>
@@ -3797,7 +3797,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="zaW-Va-gky"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="topicChanged:" destination="RxM-Na-37F" eventType="editingDidEnd" id="zUN-zr-d57"/>
                                                     </connections>
@@ -4052,7 +4052,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="moe-wv-fQx"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="responseTopicChanged:" destination="RxM-Na-37F" eventType="editingDidEnd" id="G0Y-BB-jNB"/>
                                                     </connections>
@@ -4088,7 +4088,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="eD7-v8-ZQy"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="correlationDataChanged:" destination="RxM-Na-37F" eventType="editingDidEnd" id="K6i-SX-Rg0"/>
                                                     </connections>
@@ -4124,7 +4124,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="BlD-Wc-FUZ"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="contentTypeChanged:" destination="RxM-Na-37F" eventType="editingDidEnd" id="2UW-Qv-3DW"/>
                                                     </connections>
@@ -4245,7 +4245,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="fo8-Af-zUb"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="keyChanged:" destination="uAH-86-sAX" eventType="editingDidEnd" id="keb-CD-q3U"/>
                                                     </connections>
@@ -4282,7 +4282,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="BD1-ym-ORw"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                     <connections>
                                                         <action selector="valueChanged:" destination="uAH-86-sAX" eventType="editingDidEnd" id="g5p-4i-FJi"/>
                                                     </connections>
@@ -4390,11 +4390,11 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="p1O-Eg-vc5"/>
+        <segue reference="Tll-UG-LXB"/>
         <segue reference="Tei-Q8-3oK"/>
         <segue reference="s48-nA-yZ0"/>
         <segue reference="W4N-oW-rBT"/>
-        <segue reference="LT6-TZ-j6I"/>
+        <segue reference="BdJ-Nk-1P6"/>
         <segue reference="YfT-mE-Wax"/>
     </inferredMetricsTieBreakers>
 </document>

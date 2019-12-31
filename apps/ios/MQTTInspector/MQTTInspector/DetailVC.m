@@ -3,7 +3,7 @@
 //  MQTTInspector
 //
 //  Created by Christoph Krey on 09.11.13.
-//  Copyright © 2013-2019 Christoph Krey. All rights reserved.
+//  Copyright © 2013-2020 Christoph Krey. All rights reserved.
 //
 
 #import "DetailVC.h"
@@ -139,7 +139,7 @@ static DetailVC *theDetailVC;
     self.masterView.portrait = true;
     self.masterView.offset = CGPointMake(0, 0);
 
-    MQTTLog.logLevel = DDLogLevelWarning;
+    MQTTLog.logLevel = DDLogLevelVerbose;
     MQTTStrict.strict = false;
 }
 
