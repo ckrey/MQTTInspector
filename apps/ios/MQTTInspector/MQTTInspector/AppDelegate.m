@@ -31,9 +31,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 #if DEBUG
-    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelVerbose];
+    [DDLog addLogger:[DDOSLogger sharedInstance] withLevel:DDLogLevelVerbose];
 #else
-    [DDLog addLogger:[DDTTYLogger sharedInstance] withLevel:DDLogLevelWarning];
+    [DDLog addLogger:[DDOSLogger sharedInstance] withLevel:DDLogLevelWarning];
 #endif
     DDLogVerbose(@"didFinishLaunchingWithOptions");
     
