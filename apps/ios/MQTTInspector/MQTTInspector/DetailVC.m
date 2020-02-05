@@ -139,7 +139,7 @@ static DetailVC *theDetailVC;
     self.masterView.portrait = true;
     self.masterView.offset = CGPointMake(0, 0);
 
-    MQTTLog.logLevel = DDLogLevelVerbose;
+    MQTTLog.logLevel = DDLogLevelInfo;
     MQTTStrict.strict = false;
 }
 
@@ -547,8 +547,8 @@ static DetailVC *theDetailVC;
     [self showCount];
 }
 
-#define MAX_LOG 512
-#define MAX_TOPIC 256
+#define MAX_LOG 1024
+#define MAX_TOPIC 1024
 #define MAX_COMMAND 1024
 
 - (NSManagedObjectContext *)queueManagedObjectContext {
@@ -561,7 +561,7 @@ static DetailVC *theDetailVC;
 
 - (void)startQueue {
     self.queueIn += 1;
-    [self showQueue];
+    [self performSelectorOnMainThread:@selector(showQueue) withObject:nil waitUntilDone:FALSE];
 }
 
 - (void)finishQueue {
@@ -581,8 +581,7 @@ static DetailVC *theDetailVC;
     [self showCount];
 }
 
-- (void)showCount
-{
+- (void)showCount {
     if (self.session) {
         switch (self.level.selectedSegmentIndex) {
             case 2:
@@ -604,8 +603,7 @@ static DetailVC *theDetailVC;
     }
 }
 
-- (void)limit:(NSArray *)array max:(int)max
-{
+- (void)limit:(NSArray *)array max:(int)max {
     DDLogVerbose(@"#count %lu/%d", (unsigned long)[array count], max);
     
     for (NSInteger i = array.count; i > max; i--) {

@@ -366,17 +366,13 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
 }
 
 - (NSString *)dissect:(Command *)command {
-    NSString *formatted = [NSString stringWithFormat:@"%02X",
-                           command.type.intValue << 4 |
-                           command.duped.intValue << 3 |
-                           command.qos.intValue << 1 |
-                           command.retained.intValue];
+    NSString *formatted = [[NSString alloc] init];
 
     for (int i = 0; i < command.data.length; i++) {
         UInt8 u;
         [command.data getBytes:&u range:NSMakeRange(i, 1)];
         formatted = [formatted stringByAppendingString:[NSString stringWithFormat:@"%02X", u]];
-        if ((i + 1) % 16 == 15) {
+        if ((i + 1) % 16 == 0) {
             formatted = [formatted stringByAppendingString:@" "];
         }
     }

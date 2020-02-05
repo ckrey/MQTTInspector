@@ -15,7 +15,7 @@
 @end
 
 @implementation MessagesTVC
-static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+static const DDLogLevel ddLogLevel = DDLogLevelWarning;
 
 - (instancetype)init {
     self = [super init];
