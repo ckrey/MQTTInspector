@@ -2,39 +2,51 @@
 //  Session+CoreDataProperties.h
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 22.12.15.
-//  Copyright © 2015-2016 Christoph Krey. All rights reserved.
+//  Created by Christoph Krey on 09.04.18.
+//  Copyright © 2018-2020 Christoph Krey. All rights reserved.
 //
-//  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
-//  to delete and recreate this implementation file for your updated model.
 //
 
-#import "Session.h"
+#import "Session+CoreDataClass.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Session (CoreDataProperties)
 
-@property (nullable, nonatomic, retain) NSNumber *allowUntrustedCertificates;
-@property (nullable, nonatomic, retain) NSString *attributefilter;
-@property (nullable, nonatomic, retain) NSNumber *auth;
-@property (nullable, nonatomic, retain) NSNumber *autoconnect;
-@property (nullable, nonatomic, retain) NSNumber *cleansession;
-@property (nullable, nonatomic, retain) NSString *clientid;
-@property (nullable, nonatomic, retain) NSString *datafilter;
-@property (nullable, nonatomic, retain) NSString *host;
-@property (nullable, nonatomic, retain) NSNumber *includefilter;
-@property (nullable, nonatomic, retain) NSNumber *keepalive;
-@property (nullable, nonatomic, retain) NSString *name;
-@property (nullable, nonatomic, retain) NSString *passwd;
-@property (nullable, nonatomic, retain) NSNumber *port;
-@property (nullable, nonatomic, retain) NSNumber *protocolLevel;
-@property (nullable, nonatomic, retain) NSNumber *sizelimit;
-@property (nullable, nonatomic, retain) NSNumber *state;
-@property (nullable, nonatomic, retain) NSNumber *tls;
-@property (nullable, nonatomic, retain) NSString *topicfilter;
-@property (nullable, nonatomic, retain) NSString *user;
-@property (nullable, nonatomic, retain) NSNumber *websocket;
++ (NSFetchRequest<Session *> *)fetchRequest;
+
+@property (nullable, nonatomic, copy) NSNumber *allowUntrustedCertificates;
+@property (nullable, nonatomic, copy) NSString *attributefilter;
+@property (nullable, nonatomic, copy) NSNumber *auth;
+@property (nullable, nonatomic, retain) NSData *authData;
+@property (nullable, nonatomic, copy) NSString *authMethod;
+@property (nullable, nonatomic, copy) NSNumber *autoconnect;
+@property (nullable, nonatomic, copy) NSNumber *cleansession;
+@property (nullable, nonatomic, copy) NSString *clientid;
+@property (nullable, nonatomic, copy) NSString *datafilter;
+@property (nullable, nonatomic, copy) NSString *host;
+@property (nullable, nonatomic, copy) NSNumber *includefilter;
+@property (nullable, nonatomic, copy) NSNumber *keepalive;
+@property (nullable, nonatomic, copy) NSNumber *maximumPacketSize;
+@property (nullable, nonatomic, copy) NSString *name;
+@property (nullable, nonatomic, copy) NSString *passwd;
+@property (nullable, nonatomic, copy) NSNumber *port;
+@property (nullable, nonatomic, copy) NSNumber *protocolLevel;
+@property (nullable, nonatomic, copy) NSNumber *receiveMaximum;
+@property (nullable, nonatomic, copy) NSNumber *requestProblemInformation;
+@property (nullable, nonatomic, copy) NSNumber *requestResponseInformatino;
+@property (nullable, nonatomic, copy) NSNumber *sessionExpiryInterval;
+@property (nullable, nonatomic, copy) NSNumber *sizelimit;
+@property (nullable, nonatomic, copy) NSNumber *state;
+@property (nullable, nonatomic, copy) NSNumber *tls;
+@property (nullable, nonatomic, copy) NSNumber *topicAliasMaximum;
+@property (nullable, nonatomic, copy) NSString *topicfilter;
+@property (nullable, nonatomic, copy) NSString *user;
+@property (nullable, nonatomic, retain) NSData *userProperties;
+@property (nullable, nonatomic, copy) NSNumber *websocket;
+@property (nullable, nonatomic, copy) NSString *pkcsfile;
+@property (nullable, nonatomic, copy) NSString *pkcspassword;
 @property (nullable, nonatomic, retain) NSOrderedSet<Command *> *hasCommands;
 @property (nullable, nonatomic, retain) NSOrderedSet<Message *> *hasMesssages;
 @property (nullable, nonatomic, retain) NSOrderedSet<Publication *> *hasPubs;

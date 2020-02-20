@@ -2,24 +2,31 @@
 //  Subscription+CoreDataProperties.h
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 22.12.15.
-//  Copyright © 2015-2016 Christoph Krey. All rights reserved.
+//  Created by Christoph Krey on 21.10.17.
+//  Copyright © 2017-2020 Christoph Krey. All rights reserved.
 //
-//  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
-//  to delete and recreate this implementation file for your updated model.
 //
 
-#import "Subscription.h"
+#import "Subscription+CoreDataClass.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Subscription (CoreDataProperties)
 
-@property (nullable, nonatomic, retain) NSNumber *color;
-@property (nullable, nonatomic, retain) NSNumber *position;
-@property (nullable, nonatomic, retain) NSNumber *qos;
-@property (nullable, nonatomic, retain) NSNumber *state;
-@property (nullable, nonatomic, retain) NSString *topic;
++ (NSFetchRequest<Subscription *> *)fetchRequest;
+
+@property (nullable, nonatomic, copy) NSNumber *color;
+@property (nullable, nonatomic, copy) NSString *name;
+@property (nullable, nonatomic, copy) NSNumber *noLocal;
+@property (nullable, nonatomic, copy) NSNumber *position;
+@property (nullable, nonatomic, copy) NSNumber *qos;
+@property (nullable, nonatomic, copy) NSNumber *retainAsPublished;
+@property (nullable, nonatomic, copy) NSNumber *retainHandling;
+@property (nullable, nonatomic, copy) NSNumber *state;
+@property (nullable, nonatomic, copy) NSNumber *susbscriptionIdentifier;
+@property (nullable, nonatomic, copy) NSString *topic;
+@property (nullable, nonatomic, retain) NSData *userProperties;
 @property (nullable, nonatomic, retain) Session *belongsTo;
 
 @end

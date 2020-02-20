@@ -2,27 +2,36 @@
 //  Topic+CoreDataProperties.h
 //  MQTTInspector
 //
-//  Created by Christoph Krey on 22.12.15.
-//  Copyright © 2015-2016 Christoph Krey. All rights reserved.
+//  Created by Christoph Krey on 21.10.17.
+//  Copyright © 2017-2020 Christoph Krey. All rights reserved.
 //
-//  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
-//  to delete and recreate this implementation file for your updated model.
 //
 
-#import "Topic.h"
+#import "Topic+CoreDataClass.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Topic (CoreDataProperties)
 
-@property (nullable, nonatomic, retain) NSNumber *count;
++ (NSFetchRequest<Topic *> *)fetchRequest;
+
+@property (nullable, nonatomic, copy) NSString *contentType;
+@property (nullable, nonatomic, retain) NSData *correlationData;
+@property (nullable, nonatomic, copy) NSNumber *count;
 @property (nullable, nonatomic, retain) NSData *data;
-@property (nullable, nonatomic, retain) NSNumber *justupdated;
-@property (nullable, nonatomic, retain) NSNumber *mid;
-@property (nullable, nonatomic, retain) NSNumber *qos;
-@property (nullable, nonatomic, retain) NSNumber *retained;
-@property (nullable, nonatomic, retain) NSDate *timestamp;
-@property (nullable, nonatomic, retain) NSString *topic;
+@property (nullable, nonatomic, copy) NSNumber *justupdated;
+@property (nullable, nonatomic, copy) NSNumber *mid;
+@property (nullable, nonatomic, copy) NSNumber *payloadFormatIndicator;
+@property (nullable, nonatomic, copy) NSNumber *messageExpiryInterval;
+@property (nullable, nonatomic, copy) NSNumber *qos;
+@property (nullable, nonatomic, copy) NSString *responseTopic;
+@property (nullable, nonatomic, copy) NSNumber *retained;
+@property (nullable, nonatomic, retain) NSData *subscriptionIdentifiers;
+@property (nullable, nonatomic, copy) NSDate *timestamp;
+@property (nullable, nonatomic, copy) NSString *topic;
+@property (nullable, nonatomic, copy) NSNumber *topicAlias;
+@property (nullable, nonatomic, retain) NSData *userProperties;
 @property (nullable, nonatomic, retain) Session *belongsTo;
 
 @end

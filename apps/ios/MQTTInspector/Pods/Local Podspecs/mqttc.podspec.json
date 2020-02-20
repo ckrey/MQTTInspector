@@ -1,0 +1,112 @@
+{
+  "name": "mqttc",
+  "version": "13.2.1",
+  "summary": "iOS, macOS, watchOS and tvOS native ObjectiveC MQTT Client Framework",
+  "homepage": "https://github.com/ckrey/mqttc",
+  "license": {
+    "type": "EPLv1",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Christoph Krey": "c@ckrey.de"
+  },
+  "source": {
+    "git": "https://github.com/ckrey/mqttc.git",
+    "tag": "13.2.1",
+    "submodules": true
+  },
+  "requires_arc": true,
+  "platforms": {
+    "ios": "13.1",
+    "osx": "10.15",
+    "tvos": "13.1",
+    "watchos": "6.1"
+  },
+  "default_subspecs": "Core",
+  "subspecs": [
+    {
+      "name": "Core",
+      "dependencies": {
+        "mqttc/Min": [
+
+        ],
+        "mqttc/Manager": [
+
+        ]
+      }
+    },
+    {
+      "name": "Min",
+      "source_files": [
+        "MQTTClient/MQTTClient/MQTTNWTransport.{h,m}",
+        "MQTTClient/MQTTClient/MQTTCoreDataPersistence.{h,m}",
+        "MQTTClient/MQTTClient/MQTTDecoder.{h,m}",
+        "MQTTClient/MQTTClient/MQTTInMemoryPersistence.{h,m}",
+        "MQTTClient/MQTTClient/MQTTLog.{h,m}",
+        "MQTTClient/MQTTClient/MQTTWill.{h,m}",
+        "MQTTClient/MQTTClient/MQTTStrict.{h,m}",
+        "MQTTClient/MQTTClient/MQTTClient.h",
+        "MQTTClient/MQTTClient/MQTTMessage.{h,m}",
+        "MQTTClient/MQTTClient/MQTTPersistence.h",
+        "MQTTClient/MQTTClient/MQTTProperties.{h,m}",
+        "MQTTClient/MQTTClient/MQTTSession.{h,m}",
+        "MQTTClient/MQTTClient/MQTTTransport.{h,m}"
+      ]
+    },
+    {
+      "name": "MinL",
+      "dependencies": {
+        "CocoaLumberjack": [
+
+        ]
+      },
+      "source_files": [
+        "MQTTClient/MQTTClient/MQTTNWTransport.{h,m}",
+        "MQTTClient/MQTTClient/MQTTCoreDataPersistence.{h,m}",
+        "MQTTClient/MQTTClient/MQTTDecoder.{h,m}",
+        "MQTTClient/MQTTClient/MQTTInMemoryPersistence.{h,m}",
+        "MQTTClient/MQTTClient/MQTTLog.{h,m}",
+        "MQTTClient/MQTTClient/MQTTWill.{h,m}",
+        "MQTTClient/MQTTClient/MQTTStrict.{h,m}",
+        "MQTTClient/MQTTClient/MQTTClient.h",
+        "MQTTClient/MQTTClient/MQTTMessage.{h,m}",
+        "MQTTClient/MQTTClient/MQTTPersistence.h",
+        "MQTTClient/MQTTClient/MQTTProperties.{h,m}",
+        "MQTTClient/MQTTClient/MQTTSession.{h,m}",
+        "MQTTClient/MQTTClient/MQTTTransport.{h,m}"
+      ],
+      "xcconfig": {
+        "GCC_PREPROCESSOR_DEFINITIONS": "LUMBERJACK=1"
+      }
+    },
+    {
+      "name": "Manager",
+      "source_files": [
+        "MQTTClient/MQTTClient/MQTTSessionManager.{h,m}",
+        "MQTTClient/MQTTClient/ReconnectTimer.{h,m}",
+        "MQTTClient/MQTTClient/ForegroundReconnection.{h,m}"
+      ],
+      "dependencies": {
+        "mqttc/Min": [
+
+        ]
+      }
+    },
+    {
+      "name": "ManagerL",
+      "source_files": [
+        "MQTTClient/MQTTClient/MQTTSessionManager.{h,m}",
+        "MQTTClient/MQTTClient/ReconnectTimer.{h,m}",
+        "MQTTClient/MQTTClient/ForegroundReconnection.{h,m}"
+      ],
+      "dependencies": {
+        "mqttc/MinL": [
+
+        ]
+      },
+      "xcconfig": {
+        "GCC_PREPROCESSOR_DEFINITIONS": "LUMBERJACK=1"
+      }
+    }
+  ]
+}
