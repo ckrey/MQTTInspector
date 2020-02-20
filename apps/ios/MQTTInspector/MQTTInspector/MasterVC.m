@@ -85,6 +85,24 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
 
         /* eclipse.org */
         session = [Session sessionWithName:@"eclipse.org"
+                                      host:@"mqtt.eclipse.org"
+                                      port:1883
+                                       tls:NO
+                                      auth:NO
+                                      user:@""
+                                    passwd:@""
+                                  clientid:nil
+                              cleansession:YES
+                                 keepalive:60
+                               autoconnect:NO
+                                    dnssrv:NO
+                                 dnsdomain:nil
+                             protocolLevel:4
+                           attributefilter:@".*"
+                               topicfilter:@".*"
+                                datafilter:@".*"
+                             includefilter:YES
+                                 sizelimit:0
                     inManagedObjectContext:appDelegate.managedObjectContext];
         session.host = @"iot.eclipse.org";
 
