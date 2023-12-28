@@ -131,25 +131,24 @@ static const DDLogLevel ddLogLevel = DDLogLevelError;
     if ([self.object isKindOfClass:[Topic class]]) {
         Topic *topic = (Topic *)self.object;
         [topic addObserver:self forKeyPath:@"justupdated"
-                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-                   context:nil];
+                   options:NSKeyValueObservingOptionNew                   context:nil];
         [topic addObserver:self forKeyPath:@"timestamp"
-                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                   options:NSKeyValueObservingOptionNew
                    context:nil];
         [topic addObserver:self forKeyPath:@"qos"
-                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                   options:NSKeyValueObservingOptionNew
                    context:nil];
         [topic addObserver:self forKeyPath:@"retain"
-                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                   options:NSKeyValueObservingOptionNew
                    context:nil];
         [topic addObserver:self forKeyPath:@"mid"
-                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                   options:NSKeyValueObservingOptionNew
                    context:nil];
         [topic addObserver:self forKeyPath:@"count"
-                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                   options:NSKeyValueObservingOptionNew
                    context:nil];
         [topic addObserver:self forKeyPath:@"data"
-                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                   options:NSKeyValueObservingOptionNew
                    context:nil];
     }
     
